@@ -12,10 +12,8 @@ import kpaas.dogcat.domain.member.service.AuthCommandService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "멍냥일지 Swagger API")
 @RestController
@@ -52,5 +50,11 @@ public class AuthController {
     public CustomResponse<AuthResponseDTO.ReissueResponseDTO> reissue(@RequestBody AuthRequestDTO.ReissueRequestDTO dto) {
         AuthResponseDTO.ReissueResponseDTO reissue = authCommandService.reissue(dto);
         return CustomResponse.onSuccess(SuccessCode.OK, reissue);
+    }
+
+    @Operation(summary = "깃허브 액션 테스트")
+    @GetMapping("/test")
+    public String test(){
+        return "github actions";
     }
 }
