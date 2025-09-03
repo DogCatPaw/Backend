@@ -24,9 +24,12 @@ bin/
 *.ipr
 out/
 !**/src/main/**/out/
-!**/src/test/**/out/
+!**/src/test/**/out
+/
 application.yml
 *.yml
+.env
+*.env
 
 ### NetBeans ###
 /nbproject/private/
