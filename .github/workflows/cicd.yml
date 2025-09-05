@@ -45,15 +45,25 @@ jobs:
         run: ./gradlew clean build -x test
 
       # JAR 파일 위치 확인 (디버깅용)
-      - name: Check JAR file location
+      - name: Check JAR file location and build result
         run: |
+          echo "=== 현재 디렉토리 구조 ==="
+          find . -type d -name "*build*"
+          echo "=== JAR 파일 찾기 ==="
           find . -name "*.jar" -type f
-          ls -la build/libs/ || echo "build/libs directory not found"
+          echo "=== build 디렉토리 내용 ==="
+          ls -la build/ || echo "No build directory"
+          echo "=== build/libs 디렉토리 내용 ==="
+          ls -la build/libs/ || echo "No build/libs directory"
+          echo "=== 전체 디렉토리 구조 ==="
+          ls -la
 
-      # JAR 파일을 루트로 복사 (Docker 빌드를 위해)
+      # JAR 파일을 루트로 복사 (정확한 파일명 사용)
       - name: Copy JAR to root for Docker build
         run: |
-          cp build/libs/*.jar ./app.jar
+          # -plain.jar가 아닌 메인 JAR 파일 복사
+          cp build/libs/dogcat-0.0.1-SNAPSHOT.jar ./app.jar
+          echo "JAR 복사 성공"
           ls -la app.jar
 
       # Docker 설정
@@ -97,7 +107,7 @@ jobs:
             echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
             
             # 기존 컨테이너 중지
-            docker compose -f docker-compose-dev.yml --env-file .env.dev down || true
+            docker compose -f docker-compose-dev.yml --env-file .env.dev down
             
             # 새 이미지 pull
             docker compose -f docker-compose-dev.yml --env-file .env.dev pull app
