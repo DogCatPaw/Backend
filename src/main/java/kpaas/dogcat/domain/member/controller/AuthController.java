@@ -55,6 +55,6 @@ public class AuthController {
     @Operation(summary = "깃허브 액션 테스트")
     @GetMapping("/test")
     public String test(){
-        return "github actions!";
+        return "github actions!!!!!!!!!";
     }
 }

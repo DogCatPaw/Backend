@@ -1,10 +1,4 @@
-
-FROM eclipse-temurin:17-jdk AS build
+FROM openjdk:17-jdk
 WORKDIR /app
-COPY . .
-RUN ./gradlew clean bootJar -x test
-
-FROM eclipse-temurin:17-jre
-WORKDIR /app
-COPY --from=build /app/build/libs/*.jar app.jar
-ENTRYPOINT ["java","-Dspring.profiles.active=dev","-jar","app.jar"]
+COPY build/libs/*.jar app.jar
+ENTRYPOINT ["java", "-Dspring.profiles.active=dev", "-jar", "app.jar"]
