@@ -50,6 +50,12 @@ jobs:
           find . -name "*.jar" -type f
           ls -la build/libs/ || echo "build/libs directory not found"
 
+      # JAR 파일을 루트로 복사 (Docker 빌드를 위해)
+      - name: Copy JAR to root for Docker build
+        run: |
+          cp build/libs/*.jar ./app.jar
+          ls -la app.jar
+
       # Docker 설정
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
