@@ -57,4 +57,10 @@ public class AuthController {
     public String test(){
         return "github actions!!!!!!!!!";
     }
+
+    @Operation(summary = "네이버클라우드 테스트")
+    @GetMapping("/ncloud")
+    public String test2(){
+        return "naver!!!!!!!!!";
+    }
 }
