@@ -30,6 +30,8 @@ public enum ErrorCode implements BaseCode {
     NULL_TOKEN(HttpStatus.INTERNAL_SERVER_ERROR, "ACCESS_NULL", "액세스토큰이 비어있습니다."),
     DUPLICATED_LOGINID(HttpStatus.CONFLICT, "DUPLICATED_LOGINID" , "중복된 로그인 아이디입니다."),
     DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "DUPLICATED_NICKNAME", "중복된 닉네임입니다."),
+    INCORRECT_PASSWORD(HttpStatus.CONFLICT, "INCORRECT_PASSWORD" , "비밀번호가 일치하지 않습니다."),
+
     BLACKLISTED(HttpStatus.FORBIDDEN, "BLACKLISTED", "블랙리스트 처리된 액세스토큰입니다.");
 
     private final HttpStatus httpStatus;

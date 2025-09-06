@@ -37,6 +37,9 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         if (memberRepository.existsByNickname(dto.getNickname())) {
             throw new CustomException(ErrorCode.DUPLICATED_NICKNAME);
         }
+        if (!dto.getPassword().equals(dto.getPassword2())) {
+            throw new CustomException(ErrorCode.INCORRECT_PASSWORD);
+        }
 
         // 2. 비밀번호 인코딩
         String encoded = passwordEncoder.encode(dto.getPassword());

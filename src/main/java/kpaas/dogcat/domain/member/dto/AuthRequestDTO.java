@@ -17,6 +17,7 @@ public class AuthRequestDTO {
         private Type type;
         private String loginId;
         private String password;
+        private String password2;
         private String email;
     }
 
