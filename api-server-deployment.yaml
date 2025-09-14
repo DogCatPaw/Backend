@@ -17,10 +17,13 @@ spec:
       - name: ncr-secret
       containers:
       - name: spring-api1
-        image: dogcatpaw-registry.kr.ncr.ntruss.com/dogcatpaw_back:test
+        image: dogcatpaw-registry.kr.ncr.ntruss.com/dogcatpaw_api_server:test
         ports:
         - containerPort: 8080
         env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "dev"
+        # Secrets 그대로 사용
         - name: SPRING_DATASOURCE_URL
           valueFrom:
             secretKeyRef:
@@ -51,20 +54,15 @@ spec:
             secretKeyRef:
               name: app-secrets
               key: SPRING_DATA_REDIS_PASSWORD
-        - name: SPRING_PROFILES_ACTIVE
-          valueFrom:
-            secretKeyRef:
-              name: app-secrets
-              key: SPRING_PROFILES_ACTIVE
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
               name: app-secrets
               key: JWT_SECRET
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "125m"
-          limits:
-            memory: "512Mi"
-            cpu: "250m"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: spring-config
