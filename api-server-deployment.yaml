@@ -17,7 +17,7 @@ spec:
       - name: ncr-secret
       containers:
       - name: spring-api1
-        image: dogcatpaw-registry.kr.ncr.ntruss.com/dogcatpaw_api_server:test
+        image: dogcatpaw-registry.kr.ncr.ntruss.com/dogcatpaw_back:test
         ports:
         - containerPort: 8080
         env:
