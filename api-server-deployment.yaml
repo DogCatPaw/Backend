@@ -18,8 +18,6 @@ spec:
       containers:
       - name: spring-api1
         image: dogcatpaw-registry.kr.ncr.ntruss.com/dogcatpaw_api_server:test
-        command: ["java"]
-        args: ["-Dspring.profiles.active=dev", "-jar", "/app.jar"]
         ports:
         - containerPort: 8080
         env:
