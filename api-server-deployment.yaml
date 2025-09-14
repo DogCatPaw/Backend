@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-api-server1
+  namespace: petdid-network
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-api-server1
+  template:
+    metadata:
+      labels:
+        app: spring-api-server1
+    spec:
+      imagePullSecrets:
+      - name: ncr-secret
+      containers:
+      - name: spring-api1
+        image: dogcatpaw-registry.kr.ncr.ntruss.com/dogcatpaw_api_server:test
+        imagePullPolicy: Always
+        command: ["java"]            
+        args: ["-Dspring.profiles.active=dev", "-jar", "app.jar"]
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_DATASOURCE_URL
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: SPRING_DATASOURCE_URL
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: SPRING_DATASOURCE_USERNAME
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: SPRING_DATASOURCE_PASSWORD
+        - name: SPRING_DATA_REDIS_HOST
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: SPRING_DATA_REDIS_HOST
+        - name: SPRING_DATA_REDIS_PORT
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: SPRING_DATA_REDIS_PORT
+        - name: SPRING_DATA_REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: SPRING_DATA_REDIS_PASSWORD
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: SPRING_PROFILES_ACTIVE
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: JWT_SECRET
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"

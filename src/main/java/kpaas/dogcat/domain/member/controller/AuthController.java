@@ -61,6 +61,20 @@ public class AuthController {
     @Operation(summary = "네이버클라우드 테스트")
     @GetMapping("/ncloud")
     public String test2(){
-        return "naver!!!!!!!!!";
+        return "naver!!!!!!";
     }
+
+    @Operation(summary = "네이버클라우드 테스트")
+    @GetMapping("/ncloud2")
+    public String test22(){
+        return "naver pr test!2222222!";
+    }
+
+
+    @Operation(summary = "네이버클라우드 테스트")
+    @GetMapping("/ncloud3")
+    public String test3(){
+        return "naver pr test!2222222!";
+    }
+
 }
