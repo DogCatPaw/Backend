@@ -52,29 +52,10 @@ public class AuthController {
         return CustomResponse.onSuccess(SuccessCode.OK, reissue);
     }
 
-    @Operation(summary = "깃허브 액션 테스트")
-    @GetMapping("/test")
-    public String test(){
-        return "github actions!!!!!!!!!";
-    }
-
     @Operation(summary = "네이버클라우드 테스트")
     @GetMapping("/ncloud")
-    public String test2(){
-        return "naver!!!!!!";
-    }
-
-    @Operation(summary = "네이버클라우드 테스트")
-    @GetMapping("/ncloud2")
-    public String test22(){
-        return "naver pr test!2222222!";
-    }
-
-
-    @Operation(summary = "네이버클라우드 테스트")
-    @GetMapping("/ncloud3")
     public String test3(){
-        return "naver pr test!2222222!";
+        return "SourceDeploy 성공";
     }
 
 }
