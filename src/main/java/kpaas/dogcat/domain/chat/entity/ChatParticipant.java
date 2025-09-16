@@ -1,4 +1,4 @@
-package practice.chatserver.chat.domain;
+package kpaas.dogcat.domain.chat.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import practice.chatserver.member.entity.Member;
+import kpaas.dogcat.domain.member.entity.Member;
+
 
 import java.util.ArrayList;
 import java.util.List;

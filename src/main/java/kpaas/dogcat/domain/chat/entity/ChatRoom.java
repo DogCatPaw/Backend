@@ -1,4 +1,4 @@
-package practice.chatserver.chat.domain;
+package kpaas.dogcat.domain.chat.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,10 +1,10 @@
-package practice.chatserver.chat.repository;
+package kpaas.dogcat.domain.chat.repository;
 
+import kpaas.dogcat.domain.chat.entity.ChatParticipant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import practice.chatserver.chat.domain.ChatParticipant;
-import practice.chatserver.chat.domain.ChatRoom;
-import practice.chatserver.member.entity.Member;
+import kpaas.dogcat.domain.chat.entity.ChatRoom;
+import kpaas.dogcat.domain.member.entity.Member;
 
 import java.util.List;
 import java.util.Optional;
