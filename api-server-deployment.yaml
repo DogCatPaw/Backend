@@ -17,9 +17,9 @@ spec:
       - name: ncr-secret
       containers:
       - name: spring-api1
-        image: dogcatpaw-registry.kr.ncr.ntruss.com/dogcatpaw_api_server:test
+        image: agigora/chat:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 8081
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "dev"
