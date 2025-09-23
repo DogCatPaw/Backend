@@ -2,6 +2,8 @@ package kpaas.dogcat.domain.chat.stomp;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kpaas.dogcat.domain.chat.dto.ChatReqDTO;
+import kpaas.dogcat.domain.chat.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;

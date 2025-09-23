@@ -1,0 +1,64 @@
+package kpaas.dogcat.domain.chat.controller;
+
+import io.swagger.v3.oas.annotations.Operation;
+import kpaas.dogcat.domain.chat.dto.ChatReqDTO;
+import kpaas.dogcat.domain.chat.dto.ChatResDTO;
+import kpaas.dogcat.domain.chat.service.ChatMessageService;
+import kpaas.dogcat.domain.chat.service.ChatRoomService;
+import kpaas.dogcat.global.apiPayload.CustomResponse;
+import kpaas.dogcat.global.apiPayload.code.SuccessCode;
+import kpaas.dogcat.global.jwt.CustomUserDetails;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@Slf4j
+@RequestMapping("/chat")
+public class ChatController {
+
+    private final ChatRoomService chatRoomService;
+    private final ChatMessageService chatMessageService;
+
+    @Operation(summary = "채팅방", description = "채팅방 생성하기 ")
+    @PostMapping("/room/create")
+    public CustomResponse<ChatResDTO.ChatRoomCreatedDTO> createRoom(@RequestBody ChatReqDTO.ChatRoomCreateDTO dto,
+                                                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
+        ChatResDTO.ChatRoomCreatedDTO room = chatRoomService.createRoom(userDetails.getId(), dto.getTargetId(), dto.getRoomName());
+        return CustomResponse.onSuccess(SuccessCode.CREATED, room);
+    }
+
+    @Operation(summary = "채팅방 카드 단일 조회", description = "채팅방 카드 단일 조회하기 ")
+    @GetMapping("/room/card")
+    public CustomResponse<ChatResDTO.ChatRoomCardDTO> getRoomCard(@RequestParam Long roomId,
+                                                                  @AuthenticationPrincipal CustomUserDetails userDetails) {
+        ChatResDTO.ChatRoomCardDTO chatRoom = chatRoomService.getChatRoomCard(roomId, userDetails.getId());
+        return CustomResponse.onSuccess(SuccessCode.OK, chatRoom);
+    }
+
+    @Operation(summary = "채팅방 목록 조회", description = "채팅방 전체 목록 조회하기 ")
+    @GetMapping("/room/list")
+    public CustomResponse<List<ChatResDTO.ChatRoomCardDTO>> getRoomCardList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        List<ChatResDTO.ChatRoomCardDTO> chatRooms = chatRoomService.getChatRoomCards(userDetails.getId());
+        return CustomResponse.onSuccess(SuccessCode.OK, chatRooms);
+    }
+
+    @Operation(summary = "이전 메시지 조회", description = "이전 메시지 조회하기")
+    @GetMapping("/history/{roomId}")
+    public CustomResponse<List<ChatResDTO.ChatMessageResDTO>> getChatHistory(@PathVariable Long roomId,
+                                                                             @AuthenticationPrincipal CustomUserDetails userDetails) {
+        List<ChatResDTO.ChatMessageResDTO> chatMessageList = chatMessageService.getChatMessages(roomId, userDetails.getId());
+        return CustomResponse.onSuccess(SuccessCode.OK, chatMessageList);
+    }
+
+//    @PostMapping("/room/{roomId}/read")
+//    public ResponseEntity<?> readMessage(@PathVariable Long roomId) {
+//        chatService.readMessage(roomId);
+//        return ResponseEntity.ok().build();
+//    }
+
+}
