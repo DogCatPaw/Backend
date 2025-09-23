@@ -1,5 +1,6 @@
 package kpaas.dogcat.global.redis.config;
 
+import kpaas.dogcat.global.redis.service.RedisPubSubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
