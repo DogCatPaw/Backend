@@ -1,15 +1,14 @@
-package practice.chatserver.chat.domain;
+package kpaas.dogcat.domain.chat.entity;
 
 import jakarta.persistence.*;
+import kpaas.dogcat.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
-import practice.chatserver.member.entity.Member;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

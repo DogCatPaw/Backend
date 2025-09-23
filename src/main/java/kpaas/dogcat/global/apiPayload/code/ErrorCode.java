@@ -32,7 +32,17 @@ public enum ErrorCode implements BaseCode {
     DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "DUPLICATED_NICKNAME", "중복된 닉네임입니다."),
     INCORRECT_PASSWORD(HttpStatus.CONFLICT, "INCORRECT_PASSWORD" , "비밀번호가 일치하지 않습니다."),
 
-    BLACKLISTED(HttpStatus.FORBIDDEN, "BLACKLISTED", "블랙리스트 처리된 액세스토큰입니다.");
+    BLACKLISTED(HttpStatus.FORBIDDEN, "BLACKLISTED", "블랙리스트 처리된 액세스토큰입니다."),
+
+    MEMBER_NOTFOUND(HttpStatus.NOT_FOUND, "MEMBER_NOTFOUND", "회원이 없습니다."),
+    ROOM_NOTFOUND(HttpStatus.NOT_FOUND, "ROOM_NOTFOUND", "채팅방이 없습니다."),
+    PARTICIPANT_NOT_FOUND(HttpStatus.NOT_FOUND, "PARTICIPANT_404", "채팅 참여자가 없습니다."),
+    PARTICIPANT_NO_AUTH(HttpStatus.UNAUTHORIZED, "PARTICIPANT_403", "해당 채팅방의 참여자 권한이 없습니다."),
+
+    ROOM_NO_AUTH(HttpStatus.UNAUTHORIZED, "ROOM_403" ,"해당 채팅방에 권한이 없습니다."),
+
+    MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "MESSAGE_404", "채팅 메시지가 없습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String code;

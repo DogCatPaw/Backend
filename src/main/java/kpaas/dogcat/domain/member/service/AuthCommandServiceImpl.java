@@ -128,4 +128,14 @@ public class AuthCommandServiceImpl implements AuthCommandService {
                 .accessToken(jwtUtil.createAccessToken(member))
                 .build();
     }
+
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
+    }
+
+    public Member findByUsername(String username) {
+        return memberRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
+    }
 }

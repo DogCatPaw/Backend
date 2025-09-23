@@ -1,11 +1,12 @@
-package practice.chatserver.chat.domain;
+package kpaas.dogcat.domain.chat.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import practice.chatserver.member.entity.Member;
+import kpaas.dogcat.domain.member.entity.Member;
+
 
 @Entity
 @Getter
