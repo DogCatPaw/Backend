@@ -1,29 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: spring-api-server1
+  name: spring-api-server
   namespace: petdid-network
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: spring-api-server1
+      app: spring-api-server
   template:
     metadata:
       labels:
-        app: spring-api-server1
+        app: spring-api-server
     spec:
       imagePullSecrets:
       - name: ncr-secret
       containers:
-      - name: spring-api1
-        image: agigora/chat:latest
+      - name: spring-api
+        image: dogcatpaw-registry.kr.ncr.ntruss.com/dogcatpaw_back:pubsub
         ports:
-        - containerPort: 8081
+        - containerPort: 8080
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "dev"
-        # Secrets 그대로 사용
         - name: SPRING_DATASOURCE_URL
           valueFrom:
             secretKeyRef:
