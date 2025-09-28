@@ -34,6 +34,7 @@ public enum ErrorCode implements BaseCode {
 
     BLACKLISTED(HttpStatus.FORBIDDEN, "BLACKLISTED", "블랙리스트 처리된 액세스토큰입니다."),
 
+    DUPLICATED_MEMBER(HttpStatus.BAD_REQUEST, "MEMBER400", "이미 가입된 회원입니다."),
     MEMBER_NOTFOUND(HttpStatus.NOT_FOUND, "MEMBER_NOTFOUND", "회원이 없습니다."),
     ROOM_NOTFOUND(HttpStatus.NOT_FOUND, "ROOM_NOTFOUND", "채팅방이 없습니다."),
     PARTICIPANT_NOT_FOUND(HttpStatus.NOT_FOUND, "PARTICIPANT_404", "채팅 참여자가 없습니다."),

@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.chat.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.chat.dto.ChatReqDTO;
 import kpaas.dogcat.domain.chat.dto.ChatResDTO;
 import kpaas.dogcat.domain.chat.service.ChatMessageService;
@@ -18,7 +19,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/chat")
+@Tag(name = "채팅 관련 API")
+@RequestMapping("/api/chat")
 public class ChatController {
 
     private final ChatRoomService chatRoomService;

@@ -18,6 +18,8 @@ public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String walletAddress;
+
     @Column(nullable = false)
     private String username;
 
