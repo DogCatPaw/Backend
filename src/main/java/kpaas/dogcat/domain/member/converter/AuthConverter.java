@@ -15,10 +15,8 @@ public class AuthConverter {
                 .nickname(dto.getNickname())
                 .gender(dto.getGender())
                 .old(dto.getOld())
-                .address(dto.getAddress())
                 .phoneNumber(String.valueOf(dto.getPhoneNumber()))
                 .type(dto.getType())
-                .email(dto.getEmail())
                 .build();
     }
 
