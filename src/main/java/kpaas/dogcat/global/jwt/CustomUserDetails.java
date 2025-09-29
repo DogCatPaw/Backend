@@ -19,9 +19,12 @@ public class CustomUserDetails implements UserDetails {
         return member.getUsername();
     }
 
+    /**
+     * Metamask/DID 기반 인증에서는 비밀번호를 사용하지 않기 때문에 null을 반환합니다.
+     */
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return null;
     }
 
     public Long getId() { return member.getId(); }
