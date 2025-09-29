@@ -36,6 +36,7 @@ public class Member {
     @Column(nullable = false)
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Type type;
+    private Type type = Type.GUARDIAN;
 }
