@@ -18,6 +18,7 @@ public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String walletAddress;
 
     @Column(nullable = false)
@@ -40,12 +41,6 @@ public class Member {
 
     @Column(nullable = false)
     private Type type;
-
-    @Column(nullable = false, unique = true)
-    private String loginId;
-
-    @Column(nullable = false)
-    private String password;
 
     @Column(nullable = false)
     private String email;

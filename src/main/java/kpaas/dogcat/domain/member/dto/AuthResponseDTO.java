@@ -9,6 +9,7 @@ public class AuthResponseDTO {
     @Builder
     public static class SignupResponseDTO {
         private Long id;
+        private String walletAddress;
         private String username;
         private String nickname;
     }
@@ -17,7 +18,6 @@ public class AuthResponseDTO {
     @Builder
     public static class LoginResponseDTO {
         private Long id;
-        private String username;
         private String nickname;
         private String accessToken;
         private String refreshToken;
@@ -27,6 +27,7 @@ public class AuthResponseDTO {
     @Builder
     public static class ReissueResponseDTO {
         private Long id;
+        private String nickname;
         private String accessToken;
     }
 }

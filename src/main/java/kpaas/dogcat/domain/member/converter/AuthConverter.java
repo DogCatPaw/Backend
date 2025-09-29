@@ -8,8 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthConverter {
 
-    public Member toSignupEntity(AuthRequestDTO.SignupRequestDTO dto, String encodedPassword) {
+    public Member toSignupEntity(AuthRequestDTO.SignupRequestDTO dto) {
         return Member.builder()
+                .walletAddress(dto.getWalletAddress())
                 .username(dto.getUsername())
                 .nickname(dto.getNickname())
                 .gender(dto.getGender())
@@ -17,8 +18,6 @@ public class AuthConverter {
                 .address(dto.getAddress())
                 .phoneNumber(String.valueOf(dto.getPhoneNumber()))
                 .type(dto.getType())
-                .loginId(dto.getLoginId())
-                .password(encodedPassword) // ← 인코딩된 비번을 주입
                 .email(dto.getEmail())
                 .build();
     }
@@ -26,7 +25,7 @@ public class AuthConverter {
     public AuthResponseDTO.SignupResponseDTO toSignupResponseDTO(Member member) {
         return AuthResponseDTO.SignupResponseDTO.builder()
                 .id(member.getId())
-                .username(member.getUsername())
+                .walletAddress(member.getWalletAddress())
                 .nickname(member.getNickname())
                 .build();
     }
