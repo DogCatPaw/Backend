@@ -18,10 +18,16 @@ public class AuthService {
 
     public boolean register(String walletAddress){
         log.debug("[ 회원 등록 시도 ]");
-        Auth auth = authRepository.findByWalletAddress(walletAddress)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
-        authRepository.save(auth);
-        return true;
+        Optional<Auth> optAuth = authRepository.findByWalletAddress(walletAddress);
+        if(optAuth.isEmpty()){
+            Auth auth = Auth.builder()
+                    .walletAddress(walletAddress)
+                    .build();
+            authRepository.save(auth);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean login(String walletAddress){
