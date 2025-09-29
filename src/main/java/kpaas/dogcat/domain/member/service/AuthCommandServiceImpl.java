@@ -30,39 +30,24 @@ public class AuthCommandServiceImpl implements AuthCommandService {
     @Override
     public AuthResponseDTO.SignupResponseDTO signUp(AuthRequestDTO.SignupRequestDTO dto) {
 
-        // 1. 유효성, 중복성 체크
-        if (memberRepository.existsByLoginId(dto.getLoginId())) {
-            throw new CustomException(ErrorCode.DUPLICATED_LOGINID);
-        }
+        // 1. 지갑과 닉네임은 고유해야함
+        memberRepository.findByWalletAddress(dto.getWalletAddress())
+                .orElseThrow(() -> new CustomException(ErrorCode.DUPLICATED_WALLET));
         if (memberRepository.existsByNickname(dto.getNickname())) {
             throw new CustomException(ErrorCode.DUPLICATED_NICKNAME);
         }
-        if (!dto.getPassword().equals(dto.getPassword2())) {
-            throw new CustomException(ErrorCode.INCORRECT_PASSWORD);
-        }
 
-        // 2. 비밀번호 인코딩
-        String encoded = passwordEncoder.encode(dto.getPassword());
-
-        // 3. 컨버터 매핑 (dto -> entity)
-        Member entity = authConverter.toSignupEntity(dto, encoded);
-
-        // 4. 저장
+        Member entity = authConverter.toSignupEntity(dto);
         Member saved = memberRepository.save(entity);
-
-        // 5. 응답dto 변환
         return authConverter.toSignupResponseDTO(saved);
     }
 
     @Override
     public AuthResponseDTO.LoginResponseDTO login(AuthRequestDTO.LoginRequestDTO dto) {
-        //DB안에 회원이 없으면 not found 예외
-        Member member = memberRepository.findByLoginId(dto.getLoginId()).orElseThrow(() ->
-                new CustomException(ErrorCode.NOT_FOUND_404));
+        //DB안에 지갑이 있으면 로그인
+        Member member = memberRepository.findByWalletAddress(dto.getWalletAddress()).orElseThrow(() ->
+                new CustomException(ErrorCode.WALLET_NOTFOUND));
 
-        if (!passwordEncoder.matches(dto.getPassword(), member.getPassword())) {
-            throw new CustomException(ErrorCode.VALIDATION_FAILED);
-        }
         //걸리는게 없으면 로그인 시 유저 정보로 토큰 만들기
         return createLoginToken(member);
     }
@@ -115,7 +100,6 @@ public class AuthCommandServiceImpl implements AuthCommandService {
     public AuthResponseDTO.LoginResponseDTO createLoginToken(Member member) {
         return AuthResponseDTO.LoginResponseDTO.builder()
                 .id(member.getId())
-                .username(member.getUsername())
                 .nickname(member.getNickname())
                 .accessToken(jwtUtil.createAccessToken(member))
                 .refreshToken(jwtUtil.createRefreshToken(member))
@@ -125,6 +109,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
     public AuthResponseDTO.ReissueResponseDTO reissueAccessToken(Member member) {
         return AuthResponseDTO.ReissueResponseDTO.builder()
                 .id(member.getId())
+                .nickname(member.getNickname())
                 .accessToken(jwtUtil.createAccessToken(member))
                 .build();
     }

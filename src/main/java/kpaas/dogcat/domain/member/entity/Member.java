@@ -18,6 +18,9 @@ public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String walletAddress;
+
     @Column(nullable = false)
     private String username;
 
@@ -31,20 +34,9 @@ public class Member {
     private int old;
 
     @Column(nullable = false)
-    private String address;
-
-    @Column(nullable = false)
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Type type;
-
-    @Column(nullable = false, unique = true)
-    private String loginId;
-
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
-    private String email;
+    private Type type = Type.GUARDIAN;
 }

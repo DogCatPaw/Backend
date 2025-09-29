@@ -36,7 +36,7 @@ public class JwtUtil {
         Instant now = Instant.now();
         return Jwts.builder()
                 .subject(member.getUsername())  //Subject를 Username으로 설정
-                .claim("id", member.getId())    //claim: 페이로드에 추가할 정보
+                .claim("wallet", member.getWalletAddress())    //claim: 페이로드에 추가할 정보
                 .claim("username", member.getUsername())
                 .claim("type", member.getType())
                 .issuedAt(Date.from(now))

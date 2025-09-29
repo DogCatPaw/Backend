@@ -4,16 +4,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kpaas.dogcat.domain.member.converter.AuthConverter;
 import kpaas.dogcat.domain.member.dto.AuthRequestDTO;
 import kpaas.dogcat.domain.member.dto.AuthResponseDTO;
-import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.service.AuthCommandService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "멍냥일지 Swagger API")
 @RestController
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthCommandService authCommandService;
-    private final AuthConverter authConverter;
 
     @Operation(summary = "회원가입", description = "회원가입합니다.")
     @PostMapping("/signup")
@@ -50,12 +49,6 @@ public class AuthController {
     public CustomResponse<AuthResponseDTO.ReissueResponseDTO> reissue(@RequestBody AuthRequestDTO.ReissueRequestDTO dto) {
         AuthResponseDTO.ReissueResponseDTO reissue = authCommandService.reissue(dto);
         return CustomResponse.onSuccess(SuccessCode.OK, reissue);
-    }
-
-    @Operation(summary = "네이버클라우드 테스트")
-    @GetMapping("/ncloud")
-    public String test3(){
-        return "SourceDeploy 성공";
     }
 
 }
