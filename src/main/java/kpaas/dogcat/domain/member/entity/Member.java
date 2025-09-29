@@ -34,14 +34,8 @@ public class Member {
     private int old;
 
     @Column(nullable = false)
-    private String address;
-
-    @Column(nullable = false)
     private String phoneNumber;
 
     @Column(nullable = false)
     private Type type;
-
-    @Column(nullable = false)
-    private String email;
 }
