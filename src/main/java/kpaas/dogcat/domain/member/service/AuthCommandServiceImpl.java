@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 public class AuthCommandServiceImpl implements AuthCommandService {
 
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
     private final AuthConverter authConverter;
     private final RedisService redisService;
     private final JwtUtil jwtUtil;
@@ -31,8 +30,9 @@ public class AuthCommandServiceImpl implements AuthCommandService {
     public AuthResponseDTO.SignupResponseDTO signUp(AuthRequestDTO.SignupRequestDTO dto) {
 
         // 1. 지갑과 닉네임은 고유해야함
-        memberRepository.findByWalletAddress(dto.getWalletAddress())
-                .orElseThrow(() -> new CustomException(ErrorCode.DUPLICATED_WALLET));
+        if (memberRepository.existsByWalletAddress(dto.getWalletAddress())) {
+            throw new CustomException(ErrorCode.DUPLICATED_WALLET);
+        }
         if (memberRepository.existsByNickname(dto.getNickname())) {
             throw new CustomException(ErrorCode.DUPLICATED_NICKNAME);
         }

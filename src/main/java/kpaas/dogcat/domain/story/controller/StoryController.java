@@ -10,8 +10,10 @@ import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import kpaas.dogcat.global.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "일상 일지 API")
 @RestController
@@ -23,10 +25,11 @@ public class StoryController {
     private final StoryQueryService storyQueryService;
 
     @Operation(summary = "일상 일지 작성", description = "일지 하나를 작성합니다.")
-    @PostMapping("/daily")
+    @PostMapping(value = "/daily", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public CustomResponse<StoryResDTO.writeStoryResDTO> create(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                               @RequestBody StoryReqDTO.writeStoryReqDTO dto) {
-        StoryResDTO.writeStoryResDTO createdStory = storyCommandService.createStory(userDetails.getId(), dto);
+                                                               @RequestPart("story") StoryReqDTO.writeStoryReqDTO dto,   // JSON DTO
+                                                               @RequestPart(value = "image", required = false) MultipartFile image) {
+        StoryResDTO.writeStoryResDTO createdStory = storyCommandService.createStory(userDetails.getId(), dto, image);
         return CustomResponse.onSuccess(SuccessCode.CREATED, createdStory);
     }
 

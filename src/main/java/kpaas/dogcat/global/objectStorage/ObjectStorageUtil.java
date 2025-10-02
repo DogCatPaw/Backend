@@ -27,6 +27,11 @@ public class ObjectStorageUtil {
     private String bucketName;
 
     public String upload(MultipartFile file) {
+        // 추후 더 생각해볼점!!!
+        if (file == null || file.isEmpty()) {
+            return null; // 혹은 default image url 반환
+        }
+
         String fileName = file.getOriginalFilename();
 
         try {
