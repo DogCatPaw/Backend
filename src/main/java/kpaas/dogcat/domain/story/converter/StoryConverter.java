@@ -33,4 +33,22 @@ public class StoryConverter {
                 .content(savedStory.getContent())
                 .build();
     }
+
+    public StoryResDTO.StoryPreviewDTO toStoryPreviewDTO(Story story,
+                                                         Long likeCount,
+                                                         boolean liked,
+                                                         Long commentCount) {
+        return StoryResDTO.StoryPreviewDTO.builder()
+                .memberName(story.getMember().getNickname())
+                .storyId(story.getId())
+                .petDid(story.getPet().getDid())
+                .title(story.getTitle())
+                .images(story.getImages())
+                .content(story.getContent())
+                .likeCount(likeCount)
+                .liked(liked)
+                .commentCount(commentCount)
+                .createdAt(story.getCreated_at())
+                .build();
+    }
 }

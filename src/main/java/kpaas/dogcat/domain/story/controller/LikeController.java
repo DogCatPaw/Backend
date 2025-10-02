@@ -6,6 +6,7 @@ import kpaas.dogcat.domain.story.dto.LikeResDTO;
 import kpaas.dogcat.domain.story.service.LikeCommandService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
+import kpaas.dogcat.global.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
