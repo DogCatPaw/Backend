@@ -40,12 +40,15 @@ public enum ErrorCode implements BaseCode {
     WALLET_NOTFOUND(HttpStatus.NOT_FOUND, "WALLET_404", "회원(지갑)이 없습니다."),
 
     ROOM_NOTFOUND(HttpStatus.NOT_FOUND, "ROOM_NOTFOUND", "채팅방이 없습니다."),
-    PARTICIPANT_NOT_FOUND(HttpStatus.NOT_FOUND, "PARTICIPANT_404", "채팅 참여자가 없습니다."),
+    PARTICIPANT_NOTFOUND(HttpStatus.NOT_FOUND, "PARTICIPANT_404", "채팅 참여자가 없습니다."),
     PARTICIPANT_NO_AUTH(HttpStatus.UNAUTHORIZED, "PARTICIPANT_403", "해당 채팅방의 참여자 권한이 없습니다."),
 
     ROOM_NO_AUTH(HttpStatus.UNAUTHORIZED, "ROOM_403" ,"해당 채팅방에 권한이 없습니다."),
 
-    MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "MESSAGE_404", "채팅 메시지가 없습니다.");
+    MESSAGE_NOTFOUND(HttpStatus.NOT_FOUND, "MESSAGE_404", "채팅 메시지가 없습니다."),
+
+    PET_NOTFOUND(HttpStatus.NOT_FOUND, "PET_404", "등록된 반려동물이 없습니다."),
+    STORY_NOTFOUND(HttpStatus.NOT_FOUND, "STORY_404", "등록된 일상 일지가 없습니다.");
     ;
 
 
