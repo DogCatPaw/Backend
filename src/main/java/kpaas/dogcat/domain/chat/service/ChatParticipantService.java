@@ -38,12 +38,12 @@ public class ChatParticipantService {
                 .map(ChatParticipant::getMember)
                 .filter(member -> !member.getId().equals(loginMember.getId()))
                 .findFirst()
-                .orElseThrow(() -> new CustomException(ErrorCode.PARTICIPANT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.PARTICIPANT_NOTFOUND));
     }
 
     public ChatParticipant findByMemberIdAndChatRoomId(Long memberId, Long roomId) {
         ChatParticipant participant = chatParticipantRepository.findByMemberIdAndChatRoomId(memberId, roomId)
-                .orElseThrow(() -> new CustomException(ErrorCode.PARTICIPANT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.PARTICIPANT_NOTFOUND));
         return participant;
     }
 

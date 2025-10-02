@@ -52,7 +52,7 @@ public class ChatMessageService {
 
     public ChatMessage getLatestMessage(ChatRoom room) {
         return chatMessageRepository.findTop1ByChatRoomOrderByIdDesc(room)
-                .orElseThrow(() -> new CustomException(ErrorCode.MESSAGE_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.MESSAGE_NOTFOUND));
     }
 
     public Long getUnreadCount(ChatRoom room, Member member) {
