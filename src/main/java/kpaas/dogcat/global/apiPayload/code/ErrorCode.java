@@ -48,7 +48,8 @@ public enum ErrorCode implements BaseCode {
     MESSAGE_NOTFOUND(HttpStatus.NOT_FOUND, "MESSAGE_404", "채팅 메시지가 없습니다."),
 
     PET_NOTFOUND(HttpStatus.NOT_FOUND, "PET_404", "등록된 반려동물이 없습니다."),
-    STORY_NOTFOUND(HttpStatus.NOT_FOUND, "STORY_404", "등록된 일상 일지가 없습니다.");
+    STORY_NOTFOUND(HttpStatus.NOT_FOUND, "STORY_404", "등록된 일상 일지가 없습니다."),
+    IMAGE_REQUIRED(HttpStatus.NOT_FOUND, "STORY_404", "선택된 이미지 파일이 없습니다.");
     ;
 
 

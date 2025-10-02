@@ -10,7 +10,6 @@ public class AuthResponseDTO {
     public static class SignupResponseDTO {
         private Long id;
         private String walletAddress;
-        private String username;
         private String nickname;
     }
 
