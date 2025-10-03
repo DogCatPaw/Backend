@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class ReviewReqDTO {
 
@@ -20,6 +20,6 @@ public class ReviewReqDTO {
         private String title;
         private String content;
         private String adoptionAgency;
-        private LocalDateTime adoptionDate;
+        private LocalDate adoptionDate;
     }
 }

@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -26,5 +26,5 @@ public class Review extends Story {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime adoptionDate;
+    private LocalDate adoptionDate;
 }

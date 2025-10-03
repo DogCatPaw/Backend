@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ReviewResDTO {
         private String images;
         private String content;
         private String adoptionAgency;
-        private LocalDateTime adoptionDate;
+        private LocalDate adoptionDate;
     }
 
     @Data
@@ -40,7 +41,7 @@ public class ReviewResDTO {
         private boolean liked;
         private Long commentCount;
         private String adoptionAgency;
-        private LocalDateTime adoptionDate;
+        private LocalDate adoptionDate;
         private LocalDateTime createdAt;
     }
 

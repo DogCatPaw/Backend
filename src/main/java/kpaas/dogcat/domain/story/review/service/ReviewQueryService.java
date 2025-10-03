@@ -24,7 +24,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ReviewQueryService {
-
+    
     private final MemberRepository memberRepository;
     private final ReviewRepository reviewRepository;
     private final ReviewConverter reviewConverter;
@@ -33,7 +33,7 @@ public class ReviewQueryService {
 
     public ReviewResDTO.ReviewDTO getReview(Long reviewId, Long memberId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOTFOUND));
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
