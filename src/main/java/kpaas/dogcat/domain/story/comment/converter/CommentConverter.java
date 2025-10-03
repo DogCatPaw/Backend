@@ -1,10 +1,10 @@
-package kpaas.dogcat.domain.story.converter;
+package kpaas.dogcat.domain.story.comment.converter;
 
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.story.dto.CommentReqDTO;
-import kpaas.dogcat.domain.story.dto.CommentResDTO;
-import kpaas.dogcat.domain.story.entity.Comment;
-import kpaas.dogcat.domain.story.entity.Story;
+import kpaas.dogcat.domain.story.comment.dto.CommentReqDTO;
+import kpaas.dogcat.domain.story.comment.dto.CommentResDTO;
+import kpaas.dogcat.domain.story.comment.entity.Comment;
+import kpaas.dogcat.domain.story.Story;
 import org.springframework.stereotype.Component;
 
 @Component

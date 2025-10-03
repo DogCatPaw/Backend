@@ -1,9 +1,9 @@
-package kpaas.dogcat.domain.story.converter;
+package kpaas.dogcat.domain.story.like.converter;
 
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.story.dto.LikeResDTO;
-import kpaas.dogcat.domain.story.entity.Like;
-import kpaas.dogcat.domain.story.entity.Story;
+import kpaas.dogcat.domain.story.like.dto.LikeResDTO;
+import kpaas.dogcat.domain.story.like.entity.Like;
+import kpaas.dogcat.domain.story.Story;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

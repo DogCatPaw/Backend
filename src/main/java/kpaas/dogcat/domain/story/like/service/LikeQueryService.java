@@ -1,8 +1,8 @@
-package kpaas.dogcat.domain.story.service;
+package kpaas.dogcat.domain.story.like.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.story.entity.Story;
-import kpaas.dogcat.domain.story.repository.LikeRepository;
+import kpaas.dogcat.domain.story.Story;
+import kpaas.dogcat.domain.story.like.repository.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

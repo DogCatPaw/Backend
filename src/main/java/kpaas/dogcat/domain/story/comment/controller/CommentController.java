@@ -1,11 +1,11 @@
-package kpaas.dogcat.domain.story.controller;
+package kpaas.dogcat.domain.story.comment.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kpaas.dogcat.domain.story.dto.CommentReqDTO;
-import kpaas.dogcat.domain.story.dto.CommentResDTO;
-import kpaas.dogcat.domain.story.service.CommentCommandService;
-import kpaas.dogcat.domain.story.service.CommentQueryService;
+import kpaas.dogcat.domain.story.comment.dto.CommentReqDTO;
+import kpaas.dogcat.domain.story.comment.dto.CommentResDTO;
+import kpaas.dogcat.domain.story.comment.service.CommentCommandService;
+import kpaas.dogcat.domain.story.comment.service.CommentQueryService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import kpaas.dogcat.global.jwt.CustomUserDetails;

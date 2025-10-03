@@ -1,13 +1,13 @@
-package kpaas.dogcat.domain.story.service;
+package kpaas.dogcat.domain.story.like.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
-import kpaas.dogcat.domain.story.converter.LikeConverter;
-import kpaas.dogcat.domain.story.dto.LikeResDTO;
-import kpaas.dogcat.domain.story.entity.Like;
-import kpaas.dogcat.domain.story.entity.Story;
-import kpaas.dogcat.domain.story.repository.LikeRepository;
-import kpaas.dogcat.domain.story.repository.StoryRepository;
+import kpaas.dogcat.domain.story.like.converter.LikeConverter;
+import kpaas.dogcat.domain.story.like.dto.LikeResDTO;
+import kpaas.dogcat.domain.story.like.entity.Like;
+import kpaas.dogcat.domain.story.Story;
+import kpaas.dogcat.domain.story.like.repository.LikeRepository;
+import kpaas.dogcat.domain.story.StoryRepository;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class LikeCommandService {
 
     public LikeResDTO createLike(Long storyId, Long memberId) {
         Story story = storyRepository.findById(storyId)
-                .orElseThrow(() -> new CustomException(ErrorCode.STORY_NOTFOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));

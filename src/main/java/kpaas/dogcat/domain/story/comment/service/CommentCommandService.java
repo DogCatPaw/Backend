@@ -1,14 +1,14 @@
-package kpaas.dogcat.domain.story.service;
+package kpaas.dogcat.domain.story.comment.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
-import kpaas.dogcat.domain.story.converter.CommentConverter;
-import kpaas.dogcat.domain.story.dto.CommentReqDTO;
-import kpaas.dogcat.domain.story.dto.CommentResDTO;
-import kpaas.dogcat.domain.story.entity.Comment;
-import kpaas.dogcat.domain.story.entity.Story;
-import kpaas.dogcat.domain.story.repository.CommentRepository;
-import kpaas.dogcat.domain.story.repository.StoryRepository;
+import kpaas.dogcat.domain.story.comment.converter.CommentConverter;
+import kpaas.dogcat.domain.story.comment.dto.CommentReqDTO;
+import kpaas.dogcat.domain.story.comment.dto.CommentResDTO;
+import kpaas.dogcat.domain.story.comment.entity.Comment;
+import kpaas.dogcat.domain.story.Story;
+import kpaas.dogcat.domain.story.comment.repository.CommentRepository;
+import kpaas.dogcat.domain.story.StoryRepository;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class CommentCommandService {
 
     public CommentResDTO.WriteDTO writeComment(Long memberId, CommentReqDTO dto){
         Story story = storyRepository.findById(dto.getStoryId())
-                .orElseThrow(() -> new CustomException(ErrorCode.STORY_NOTFOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 

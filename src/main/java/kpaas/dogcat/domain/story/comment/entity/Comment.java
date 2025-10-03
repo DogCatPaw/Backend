@@ -1,7 +1,8 @@
-package kpaas.dogcat.domain.story.entity;
+package kpaas.dogcat.domain.story.comment.entity;
 
 import jakarta.persistence.*;
 import kpaas.dogcat.domain.member.entity.Member;
+import kpaas.dogcat.domain.story.Story;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

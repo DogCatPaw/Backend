@@ -1,9 +1,9 @@
-package kpaas.dogcat.domain.story.controller;
+package kpaas.dogcat.domain.story.like.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kpaas.dogcat.domain.story.dto.LikeResDTO;
-import kpaas.dogcat.domain.story.service.LikeCommandService;
+import kpaas.dogcat.domain.story.like.dto.LikeResDTO;
+import kpaas.dogcat.domain.story.like.service.LikeCommandService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import kpaas.dogcat.global.jwt.CustomUserDetails;

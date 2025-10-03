@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.story.dto;
+package kpaas.dogcat.domain.story.like.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

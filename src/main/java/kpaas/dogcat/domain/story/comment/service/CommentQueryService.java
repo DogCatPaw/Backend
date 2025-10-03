@@ -1,11 +1,11 @@
-package kpaas.dogcat.domain.story.service;
+package kpaas.dogcat.domain.story.comment.service;
 
-import kpaas.dogcat.domain.story.converter.CommentConverter;
-import kpaas.dogcat.domain.story.dto.CommentResDTO;
-import kpaas.dogcat.domain.story.entity.Comment;
-import kpaas.dogcat.domain.story.entity.Story;
-import kpaas.dogcat.domain.story.repository.CommentRepository;
-import kpaas.dogcat.domain.story.repository.StoryRepository;
+import kpaas.dogcat.domain.story.comment.converter.CommentConverter;
+import kpaas.dogcat.domain.story.comment.dto.CommentResDTO;
+import kpaas.dogcat.domain.story.comment.entity.Comment;
+import kpaas.dogcat.domain.story.Story;
+import kpaas.dogcat.domain.story.comment.repository.CommentRepository;
+import kpaas.dogcat.domain.story.StoryRepository;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -29,14 +29,14 @@ public class CommentQueryService {
 
     public Long getCommentCount(Long storyId){
         if (!storyRepository.existsById(storyId)) {
-            throw new CustomException(ErrorCode.STORY_NOTFOUND);
+            throw new CustomException(ErrorCode.DAILYSTORY_NOTFOUND);
         }
         return commentRepository.countByStoryId(storyId);
     }
 
     public CommentResDTO.GetCommentListDTO getComments(Long storyId, Long cursor, int size) {
         Story story = storyRepository.findById(storyId)
-                .orElseThrow(() -> new CustomException(ErrorCode.STORY_NOTFOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
 
         Pageable pageable = PageRequest.of(0, size);
         List<Comment> comments;
