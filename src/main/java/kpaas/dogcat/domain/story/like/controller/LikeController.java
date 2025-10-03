@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "좋아요 관련 API")
+@Tag(name = "일지 좋아요, 댓글 관련 API")
 @RestController
 @RequestMapping("/api/like")
 @RequiredArgsConstructor
