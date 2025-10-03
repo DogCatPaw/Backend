@@ -6,6 +6,7 @@ import kpaas.dogcat.global.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -39,6 +40,7 @@ public class SecurityConfig {
                 )
                 .csrf(AbstractHttpConfigurer::disable)  //jwt이기에 csrf공격 비활성화
                 .httpBasic(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
