@@ -15,7 +15,7 @@ public class LikeConverter {
         return Like.builder()
                 .story(story)
                 .member(member)
-                .created_at(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 

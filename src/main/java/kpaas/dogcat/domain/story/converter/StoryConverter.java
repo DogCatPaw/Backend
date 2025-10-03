@@ -19,7 +19,7 @@ public class StoryConverter {
                 .pet(pet)
                 .images(url)
                 .content(dto.getContent())
-                .created_at(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 
@@ -48,7 +48,7 @@ public class StoryConverter {
                 .likeCount(likeCount)
                 .liked(liked)
                 .commentCount(commentCount)
-                .createdAt(story.getCreated_at())
+                .createdAt(story.getCreatedAt())
                 .build();
     }
 }

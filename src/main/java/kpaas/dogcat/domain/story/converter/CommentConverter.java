@@ -18,11 +18,22 @@ public class CommentConverter {
                 .build();
     }
 
-    public CommentResDTO toCommentResDTO(Long memberId, Comment comment) {
-        return CommentResDTO.builder()
+    public CommentResDTO.WriteDTO toCommentResDTO(Long memberId, Comment comment) {
+        return CommentResDTO.WriteDTO.builder()
                 .memberId(memberId)
                 .commentId(comment.getId())
                 .savedComment(comment.getComment())
+                .build();
+    }
+
+    public CommentResDTO.GetCommentDTO toGetCommentDTO(Comment comment) {
+        return CommentResDTO.GetCommentDTO.builder()
+                .nickName(comment.getMember().getNickname())
+//                .profileUrl(comment.getMember().getProfileUrl())
+                .storyId(comment.getStory().getId())
+                .commentId(comment.getId())
+                .savedComment(comment.getComment())
+                .createdAt(comment.getCreatedAt())
                 .build();
     }
 }
