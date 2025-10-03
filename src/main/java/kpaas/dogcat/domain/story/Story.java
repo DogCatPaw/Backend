@@ -1,12 +1,14 @@
-package kpaas.dogcat.domain.story.entity;
+package kpaas.dogcat.domain.story;
 
 import jakarta.persistence.*;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.pet.entity.Pet;
+import kpaas.dogcat.domain.story.comment.entity.Comment;
+import kpaas.dogcat.domain.story.like.entity.Like;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,9 +20,11 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "story_type")
 @EntityListeners(AuditingEntityListener.class)
 public class Story {
 

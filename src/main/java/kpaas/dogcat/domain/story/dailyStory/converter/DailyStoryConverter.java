@@ -1,19 +1,19 @@
-package kpaas.dogcat.domain.story.converter;
+package kpaas.dogcat.domain.story.dailyStory.converter;
 
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.pet.entity.Pet;
-import kpaas.dogcat.domain.story.dto.StoryReqDTO;
-import kpaas.dogcat.domain.story.dto.StoryResDTO;
-import kpaas.dogcat.domain.story.entity.Story;
+import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryReqDTO;
+import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDTO;
+import kpaas.dogcat.domain.story.dailyStory.entity.DailyStory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Component
-public class StoryConverter {
+public class DailyStoryConverter {
 
-    public Story toEntity(StoryReqDTO.writeStoryReqDTO dto, Member member, Pet pet, String url) {
-        return Story.builder()
+    public DailyStory toDailyStoryEntity(DailyStoryReqDTO.writeStoryReqDTO dto, Member member, Pet pet, String url) {
+        return DailyStory.builder()
                 .title(dto.getTitle())
                 .member(member)
                 .pet(pet)
@@ -23,8 +23,8 @@ public class StoryConverter {
                 .build();
     }
 
-    public StoryResDTO.writeStoryResDTO toWriteStoryResDTO(Member member, Story savedStory, Pet pet) {
-        return StoryResDTO.writeStoryResDTO.builder()
+    public DailyStoryResDTO.writeStoryResDTO toWriteStoryResDTO(Member member, DailyStory savedStory, Pet pet) {
+        return DailyStoryResDTO.writeStoryResDTO.builder()
                 .memberName((member.getNickname()))
                 .storyId(savedStory.getId())
                 .petDid(pet.getDid())
@@ -34,11 +34,11 @@ public class StoryConverter {
                 .build();
     }
 
-    public StoryResDTO.StoryPreviewDTO toStoryPreviewDTO(Story story,
-                                                         Long likeCount,
-                                                         boolean liked,
-                                                         Long commentCount) {
-        return StoryResDTO.StoryPreviewDTO.builder()
+    public DailyStoryResDTO.StoryPreviewDTO toStoryPreviewDTO(DailyStory story,
+                                                              Long likeCount,
+                                                              boolean liked,
+                                                              Long commentCount) {
+        return DailyStoryResDTO.StoryPreviewDTO.builder()
                 .memberName(story.getMember().getNickname())
                 .storyId(story.getId())
                 .petDid(story.getPet().getDid())

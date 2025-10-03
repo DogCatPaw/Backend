@@ -1,11 +1,13 @@
-package kpaas.dogcat.domain.story.service;
+package kpaas.dogcat.domain.story.dailyStory.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
-import kpaas.dogcat.domain.story.converter.StoryConverter;
-import kpaas.dogcat.domain.story.dto.StoryResDTO;
-import kpaas.dogcat.domain.story.entity.Story;
-import kpaas.dogcat.domain.story.repository.StoryRepository;
+import kpaas.dogcat.domain.story.comment.service.CommentQueryService;
+import kpaas.dogcat.domain.story.dailyStory.converter.DailyStoryConverter;
+import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDTO;
+import kpaas.dogcat.domain.story.dailyStory.entity.DailyStory;
+import kpaas.dogcat.domain.story.like.service.LikeQueryService;
+import kpaas.dogcat.domain.story.dailyStory.repository.DailyStoryRepository;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -21,18 +23,17 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class StoryQueryService {
+public class DailyStoryQueryService {
 
-    private final StoryRepository storyRepository;
     private final MemberRepository memberRepository;
-    private final StoryConverter storyConverter;
+    private final DailyStoryRepository dailyStoryRepository;
+    private final DailyStoryConverter dailyStoryConverter;
     private final LikeQueryService likeQueryService;
-    private final LikeCommandService likeCommandService;
     private final CommentQueryService commentQueryService;
 
-    public StoryResDTO.StoryPreviewDTO getStory(Long storyId, Long memberId) {
-        Story story = storyRepository.findById(storyId)
-                .orElseThrow(() -> new CustomException(ErrorCode.STORY_NOTFOUND));
+    public DailyStoryResDTO.StoryPreviewDTO getStory(Long storyId, Long memberId) {
+        DailyStory story = dailyStoryRepository.findById(storyId)
+                .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
@@ -41,26 +42,26 @@ public class StoryQueryService {
         boolean liked = likeQueryService.isAlreadyLike(story, member);
         Long commentCount = commentQueryService.getCommentCount(storyId);
 
-        return storyConverter.toStoryPreviewDTO(story, likeCount, liked, commentCount);
+        return dailyStoryConverter.toStoryPreviewDTO(story, likeCount, liked, commentCount);
     }
 
-    public StoryResDTO.StoriesListDTO getStories(Long cursorId, int size, Long memberId) {
+    public DailyStoryResDTO.StoriesListDTO getStories(Long cursorId, int size, Long memberId) {
         Pageable pageable = PageRequest.of(0, size);
 
-        List<Story> stories;
+        List<DailyStory> stories;
         if (cursorId == null) {
             // 첫 페이지 요청 (cursor 없음 → 최신순으로 size만큼)
-            stories = storyRepository.findAllByOrderByIdDesc(pageable);
+            stories = dailyStoryRepository.findAllByOrderByIdDesc(pageable);
         } else {
             // cursorId 이전 데이터 조회
-            stories = storyRepository.findByIdLessThanOrderByIdDesc(cursorId, pageable);
+            stories = dailyStoryRepository.findByIdLessThanOrderByIdDesc(cursorId, pageable);
         }
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 
-        List<StoryResDTO.StoryPreviewDTO> storyPreviews = stories.stream()
-                .map(story -> storyConverter.toStoryPreviewDTO(
+        List<DailyStoryResDTO.StoryPreviewDTO> storyPreviews = stories.stream()
+                .map(story -> dailyStoryConverter.toStoryPreviewDTO(
                         story,
                         likeQueryService.getLikeCount(story.getId()),
                         likeQueryService.isAlreadyLike(story, member),
@@ -70,7 +71,7 @@ public class StoryQueryService {
 
         Long nextCursor = storyPreviews.isEmpty() ? null : storyPreviews.get(storyPreviews.size() - 1).getStoryId();
 
-        return StoryResDTO.StoriesListDTO.builder()
+        return DailyStoryResDTO.StoriesListDTO.builder()
                 .stories(storyPreviews)
                 .nextCursor(nextCursor)
                 .build();

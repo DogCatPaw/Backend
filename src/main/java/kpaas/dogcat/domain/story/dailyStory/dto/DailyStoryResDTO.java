@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.story.dto;
+package kpaas.dogcat.domain.story.dailyStory.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class StoryResDTO {
+public class DailyStoryResDTO {
 
     @Data
     @AllArgsConstructor
@@ -17,7 +17,7 @@ public class StoryResDTO {
     public static class writeStoryResDTO {
         private String memberName;
         private Long storyId;
-        private String petDid;   //동물선택
+        private String petDid;
         private String title;
         private String images;
         private String content;
