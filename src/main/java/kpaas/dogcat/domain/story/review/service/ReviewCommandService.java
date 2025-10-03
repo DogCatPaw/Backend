@@ -1,37 +1,32 @@
-package kpaas.dogcat.domain.story.service;
+package kpaas.dogcat.domain.story.review.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.repository.PetRepository;
-import kpaas.dogcat.domain.story.converter.StoryConverter;
-import kpaas.dogcat.domain.story.dto.StoryReqDTO;
-import kpaas.dogcat.domain.story.dto.StoryResDTO;
-import kpaas.dogcat.domain.story.entity.Story;
-import kpaas.dogcat.domain.story.repository.StoryRepository;
+import kpaas.dogcat.domain.story.review.converter.ReviewConverter;
+import kpaas.dogcat.domain.story.review.repository.ReviewRepository;
+import kpaas.dogcat.domain.story.review.dto.ReviewReqDTO;
+import kpaas.dogcat.domain.story.review.dto.ReviewResDTO;
+import kpaas.dogcat.domain.story.review.entity.Review;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import kpaas.dogcat.global.objectStorage.ObjectStorageUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-@Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
-public class StoryCommandService {
+public class ReviewCommandService {
 
+    private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
-    private final StoryRepository storyRepository;
-    private final StoryConverter storyConverter;
+    private final ReviewConverter reviewConverter;
     private final ObjectStorageUtil objectStorageUtil;
 
-    public StoryResDTO.writeStoryResDTO createStory(Long memberId, StoryReqDTO.writeStoryReqDTO dto, MultipartFile image) {
-
+    public ReviewResDTO.WriteReviewResDTO writeReview(Long memberId, ReviewReqDTO.WriteReviewDTO dto, MultipartFile image) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 
@@ -42,9 +37,9 @@ public class StoryCommandService {
 //            throw new CustomException(ErrorCode.IMAGE_REQUIRED);
 //        }
         String url = objectStorageUtil.upload(image);
-        Story story = storyConverter.toEntity(dto, member, pet, url);
-        Story savedStory = storyRepository.save(story);
+        Review review = reviewConverter.toReviewEntity(dto, member, pet, url);
+        Review savedReview = reviewRepository.save(review);
 
-        return storyConverter.toWriteStoryResDTO(member, savedStory, pet);
+        return reviewConverter.toWriteReviewResDTO(member, savedReview, pet);
     }
 }
