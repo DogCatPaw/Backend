@@ -34,6 +34,7 @@ public class DailyStoryConverter {
                 .build();
     }
 
+    // 스토리 조회
     public DailyStoryResDTO.StoryPreviewDTO toStoryPreviewDTO(DailyStory story,
                                                               Long likeCount,
                                                               boolean liked,

@@ -2,6 +2,7 @@ package kpaas.dogcat.domain.story.dailyStory.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
+import kpaas.dogcat.domain.story.Story;
 import kpaas.dogcat.domain.story.comment.service.CommentQueryService;
 import kpaas.dogcat.domain.story.dailyStory.converter.DailyStoryConverter;
 import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDTO;
@@ -38,11 +39,7 @@ public class DailyStoryQueryService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 
-        Long likeCount = likeQueryService.getLikeCount(storyId);
-        boolean liked = likeQueryService.isAlreadyLike(story, member);
-        Long commentCount = commentQueryService.getCommentCount(storyId);
-
-        return dailyStoryConverter.toStoryPreviewDTO(story, likeCount, liked, commentCount);
+        return mapToPreviewDTO(story, member);
     }
 
     public DailyStoryResDTO.StoriesListDTO getStories(Long cursorId, int size, Long memberId) {
@@ -50,30 +47,58 @@ public class DailyStoryQueryService {
 
         List<DailyStory> stories;
         if (cursorId == null) {
-            // 첫 페이지 요청 (cursor 없음 → 최신순으로 size만큼)
             stories = dailyStoryRepository.findAllByOrderByIdDesc(pageable);
         } else {
-            // cursorId 이전 데이터 조회
             stories = dailyStoryRepository.findByIdLessThanOrderByIdDesc(cursorId, pageable);
         }
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 
-        List<DailyStoryResDTO.StoryPreviewDTO> storyPreviews = stories.stream()
-                .map(story -> dailyStoryConverter.toStoryPreviewDTO(
-                        story,
-                        likeQueryService.getLikeCount(story.getId()),
-                        likeQueryService.isAlreadyLike(story, member),
-                        commentQueryService.getCommentCount(story.getId())
-                ))
+        List<DailyStoryResDTO.StoryPreviewDTO> storyList = stories.stream()
+                .map(story -> mapToPreviewDTO(story, member))
                 .toList();
 
-        Long nextCursor = storyPreviews.isEmpty() ? null : storyPreviews.get(storyPreviews.size() - 1).getStoryId();
+        Long nextCursor = stories.size() < size ? null : stories.get(stories.size() - 1).getId();
 
         return DailyStoryResDTO.StoriesListDTO.builder()
-                .stories(storyPreviews)
+                .stories(storyList)
                 .nextCursor(nextCursor)
                 .build();
+    }
+
+    public DailyStoryResDTO.StoriesListDTO search(String keyword, Long cursorId, int size) {
+        Pageable pageable = PageRequest.of(0, size);
+
+        List<DailyStory> stories;
+        if (cursorId == null) {
+            stories = dailyStoryRepository.findByTitleContainingFirstPage(keyword, pageable);
+        } else {
+            stories = dailyStoryRepository.findByTitleContainingAfterCursor(keyword, cursorId, pageable);
+        }
+
+        Member member = null;
+        List<DailyStoryResDTO.StoryPreviewDTO> storyList = stories.stream()
+                .map(story -> mapToPreviewDTO(story, member))
+                .toList();
+
+        Long nextCursor = stories.size() < size ? null : stories.get(stories.size() - 1).getId();
+
+        return DailyStoryResDTO.StoriesListDTO.builder()
+                .stories(storyList)
+                .nextCursor(nextCursor)
+                .build();
+    }
+
+    /** 스토리 하나조회, 전체 조회, 제목 검색
+     * 공통 변환 메서드 */
+    private DailyStoryResDTO.StoryPreviewDTO mapToPreviewDTO(DailyStory story, Member member) {
+        Long storyId = story.getId();
+
+        Long likeCount = likeQueryService.getLikeCount(storyId);
+        Long commentCount = commentQueryService.getCommentCount(storyId);
+        boolean liked = member != null && likeQueryService.isAlreadyLike(story, member);
+
+        return dailyStoryConverter.toStoryPreviewDTO(story, likeCount, liked, commentCount);
     }
 }

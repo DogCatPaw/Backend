@@ -44,7 +44,17 @@ public class DailyStoryController {
     @GetMapping("/daily/stories")
     public CustomResponse<DailyStoryResDTO.StoriesListDTO> getStories(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                       @RequestParam(required = false) Long cursorId,
-                                                                      @RequestParam(defaultValue = "8") int size){
+                                                                      @RequestParam(defaultValue = "9") int size){
         return CustomResponse.onSuccess(SuccessCode.OK, dailyStoryQueryService.getStories(cursorId, size, userDetails.getId()));
+    }
+
+    @Operation(summary = "일상 일지 검색하기", description = "로그인 없이 일상 일지를 검색합니다.")
+    @GetMapping("/daily/search")
+    public CustomResponse<DailyStoryResDTO.StoriesListDTO> search(@RequestParam(required = true) String keyword,
+                                                   @RequestParam(required = false) Long cursorId,
+                                                   @RequestParam(defaultValue = "9") int size){
+        DailyStoryResDTO.StoriesListDTO searchResult = dailyStoryQueryService.search(keyword, cursorId, size);
+        return CustomResponse.onSuccess(SuccessCode.OK, searchResult);
+
     }
 }
