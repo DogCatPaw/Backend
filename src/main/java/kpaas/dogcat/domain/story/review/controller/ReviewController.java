@@ -2,6 +2,7 @@ package kpaas.dogcat.domain.story.review.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDTO;
 import kpaas.dogcat.domain.story.review.service.ReviewCommandService;
 import kpaas.dogcat.domain.story.review.service.ReviewQueryService;
 import kpaas.dogcat.domain.story.review.dto.ReviewReqDTO;
@@ -37,14 +38,27 @@ public class ReviewController {
     @GetMapping("/review/{reviews}")
     public CustomResponse<ReviewResDTO.ReviewDTO> getReview(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                            @PathVariable Long reviews) {
-        return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReview(reviews, userDetails.getId()));
+        Long memberId = (userDetails != null) ? userDetails.getId() : null;
+        return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReview(reviews, memberId));
     }
 
     @Operation(summary = "메인 입양 후기 목록 조회", description = "입양 후기 일지 메인 화면의 목록을 조회합니다.")
     @GetMapping("/review/reviews")
     public CustomResponse<ReviewResDTO.ReviewListDTO> getReviews(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                  @RequestParam(required = false) Long cursorId,
-                                                                 @RequestParam(defaultValue = "8") int size){
-        return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReviews(cursorId, size, userDetails.getId()));
+                                                                 @RequestParam(defaultValue = "9") int size){
+        Long memberId = (userDetails != null) ? userDetails.getId() : null;
+        return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReviews(cursorId, size, memberId));
+    }
+
+    @Operation(summary = "입양 후기 검색하기", description = "로그인 없이 입양 후기를 검색합니다.")
+    @GetMapping("/review/search")
+    public CustomResponse<ReviewResDTO.ReviewListDTO> search(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                  @RequestParam(required = true) String keyword,
+                                                                  @RequestParam(required = false) Long cursorId,
+                                                                  @RequestParam(defaultValue = "9") int size){
+        Long memberId = (userDetails != null) ? userDetails.getId() : null;
+        ReviewResDTO.ReviewListDTO searchResult = reviewQueryService.search(keyword, cursorId, size, memberId);
+        return CustomResponse.onSuccess(SuccessCode.OK, searchResult);
     }
 }

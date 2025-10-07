@@ -59,6 +59,5 @@ public class DailyStoryController {
         Long memberId = (userDetails != null) ? userDetails.getId() : null;
         DailyStoryResDTO.StoriesListDTO searchResult = dailyStoryQueryService.search(keyword, cursorId, size, memberId);
         return CustomResponse.onSuccess(SuccessCode.OK, searchResult);
-
     }
 }

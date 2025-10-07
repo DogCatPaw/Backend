@@ -3,6 +3,8 @@ package kpaas.dogcat.domain.story.review.service;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
 import kpaas.dogcat.domain.story.comment.service.CommentQueryService;
+import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDTO;
+import kpaas.dogcat.domain.story.dailyStory.entity.DailyStory;
 import kpaas.dogcat.domain.story.like.service.LikeQueryService;
 import kpaas.dogcat.domain.story.review.converter.ReviewConverter;
 import kpaas.dogcat.domain.story.review.repository.ReviewRepository;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,45 +38,72 @@ public class ReviewQueryService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOTFOUND));
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
+        Member member = findMemberOrNull(memberId);
 
-        Long likeCount = likeQueryService.getLikeCount(reviewId);
-        boolean liked = likeQueryService.isAlreadyLike(review, member);
-        Long commentCount = commentQueryService.getCommentCount(reviewId);
-
-        return reviewConverter.toReviewPreviewDTO(review, likeCount, liked, commentCount);
+        return mapToPreviewDTO(review, member);
     }
 
     public ReviewResDTO.ReviewListDTO getReviews(Long cursorId, int size, Long memberId) {
         Pageable pageable = PageRequest.of(0, size);
 
-        List<Review> stories;
+        List<Review> reviews;
         if (cursorId == null) {
-            // 첫 페이지 요청 (cursor 없음 → 최신순으로 size만큼)
-            stories = reviewRepository.findAllByOrderByIdDesc(pageable);
+            reviews = reviewRepository.findAllByOrderByIdDesc(pageable);
         } else {
-            // cursorId 이전 데이터 조회
-            stories = reviewRepository.findByIdLessThanOrderByIdDesc(cursorId, pageable);
+            reviews = reviewRepository.findByIdLessThanOrderByIdDesc(cursorId, pageable);
         }
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
-
-        List<ReviewResDTO.ReviewDTO> reviewPreviews = stories.stream()
-                .map(story -> reviewConverter.toReviewPreviewDTO(
-                        story,
-                        likeQueryService.getLikeCount(story.getId()),
-                        likeQueryService.isAlreadyLike(story, member),
-                        commentQueryService.getCommentCount(story.getId())
-                ))
+        Member member = findMemberOrNull(memberId);
+        List<ReviewResDTO.ReviewDTO> reviewList = reviews.stream()
+                .map(review -> mapToPreviewDTO(review, member))
                 .toList();
-
-        Long nextCursor = reviewPreviews.isEmpty() ? null : reviewPreviews.get(reviewPreviews.size() - 1).getStoryId();
+        Long nextCursor = reviews.size() < size ? null : reviews.get(reviews.size() - 1).getId();
+//        Long nextCursor = reviewList.isEmpty() ? null : reviewList.get(reviewList.size() - 1).getId();
 
         return ReviewResDTO.ReviewListDTO.builder()
-                .reviews(reviewPreviews)
+                .reviews(reviewList)
                 .nextCursor(nextCursor)
                 .build();
+    }
+
+    public ReviewResDTO.ReviewListDTO search(String keyword, Long cursorId, int size, Long memberId) {
+        Pageable pageable = PageRequest.of(0, size);
+        List<Review> reviews;
+        if (cursorId == null) {
+            reviews = reviewRepository.findByTitleContainingFirstPage(keyword, pageable);
+        } else {
+            reviews = reviewRepository.findByTitleContainingAfterCursor(keyword, cursorId, pageable);
+        }
+
+        Member member = findMemberOrNull(memberId);
+        List<ReviewResDTO.ReviewDTO> reviewList = reviews.stream()
+                .map(review -> mapToPreviewDTO(review, member))
+                .toList();
+        Long nextCursor = reviews.size() < size ? null : reviews.get(reviews.size() - 1).getId();
+
+        return ReviewResDTO.ReviewListDTO.builder()
+                .reviews(reviewList)
+                .nextCursor(nextCursor)
+                .build();
+    }
+
+
+    // 멤버가 null이면 좋아요 false로 조회가 가능하게끔
+    private Member findMemberOrNull(Long memberId) {
+        if (memberId == null) return null;
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
+    }
+
+    /** 스토리 하나조회, 전체 조회, 제목 검색
+     * 공통 변환 메서드 */
+    private ReviewResDTO.ReviewDTO mapToPreviewDTO(Review review, Member member) {
+        Long storyId = review.getId();
+
+        Long likeCount = likeQueryService.getLikeCount(storyId);
+        Long commentCount = commentQueryService.getCommentCount(storyId);
+        boolean liked = member != null && likeQueryService.isAlreadyLike(review, member);
+
+        return reviewConverter.toReviewPreviewDTO(review, likeCount, liked, commentCount);
     }
 }
