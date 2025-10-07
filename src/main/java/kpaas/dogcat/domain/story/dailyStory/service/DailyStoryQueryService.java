@@ -35,9 +35,7 @@ public class DailyStoryQueryService {
     public DailyStoryResDTO.StoryPreviewDTO getStory(Long storyId, Long memberId) {
         DailyStory story = dailyStoryRepository.findById(storyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
-
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
+        Member member = findMemberOrNull(memberId);
 
         return mapToPreviewDTO(story, member);
     }
@@ -52,13 +50,10 @@ public class DailyStoryQueryService {
             stories = dailyStoryRepository.findByIdLessThanOrderByIdDesc(cursorId, pageable);
         }
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
-
+        Member member = findMemberOrNull(memberId);
         List<DailyStoryResDTO.StoryPreviewDTO> storyList = stories.stream()
                 .map(story -> mapToPreviewDTO(story, member))
                 .toList();
-
         Long nextCursor = stories.size() < size ? null : stories.get(stories.size() - 1).getId();
 
         return DailyStoryResDTO.StoriesListDTO.builder()
@@ -67,9 +62,8 @@ public class DailyStoryQueryService {
                 .build();
     }
 
-    public DailyStoryResDTO.StoriesListDTO search(String keyword, Long cursorId, int size) {
+    public DailyStoryResDTO.StoriesListDTO search(String keyword, Long cursorId, int size, Long memberId) {
         Pageable pageable = PageRequest.of(0, size);
-
         List<DailyStory> stories;
         if (cursorId == null) {
             stories = dailyStoryRepository.findByTitleContainingFirstPage(keyword, pageable);
@@ -77,17 +71,23 @@ public class DailyStoryQueryService {
             stories = dailyStoryRepository.findByTitleContainingAfterCursor(keyword, cursorId, pageable);
         }
 
-        Member member = null;
+        Member member = findMemberOrNull(memberId);
         List<DailyStoryResDTO.StoryPreviewDTO> storyList = stories.stream()
                 .map(story -> mapToPreviewDTO(story, member))
                 .toList();
-
         Long nextCursor = stories.size() < size ? null : stories.get(stories.size() - 1).getId();
 
         return DailyStoryResDTO.StoriesListDTO.builder()
                 .stories(storyList)
                 .nextCursor(nextCursor)
                 .build();
+    }
+
+    // 멤버가 null이면 좋아요 false로 조회가 가능하게끔
+    private Member findMemberOrNull(Long memberId) {
+        if (memberId == null) return null;
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
     }
 
     /** 스토리 하나조회, 전체 조회, 제목 검색

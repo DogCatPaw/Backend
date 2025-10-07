@@ -37,7 +37,8 @@ public class DailyStoryController {
     @GetMapping("/daily/{stories}")
     public CustomResponse<DailyStoryResDTO.StoryPreviewDTO> getStory(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                      @PathVariable Long stories) {
-        return CustomResponse.onSuccess(SuccessCode.OK, dailyStoryQueryService.getStory(stories, userDetails.getId()));
+        Long memberId = (userDetails != null) ? userDetails.getId() : null;
+        return CustomResponse.onSuccess(SuccessCode.OK, dailyStoryQueryService.getStory(stories, memberId));
     }
 
     @Operation(summary = "메인 일상 일지 목록 조회", description = "일지 메인 화면의 일지 목록을 조회합니다.")
@@ -45,15 +46,18 @@ public class DailyStoryController {
     public CustomResponse<DailyStoryResDTO.StoriesListDTO> getStories(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                       @RequestParam(required = false) Long cursorId,
                                                                       @RequestParam(defaultValue = "9") int size){
-        return CustomResponse.onSuccess(SuccessCode.OK, dailyStoryQueryService.getStories(cursorId, size, userDetails.getId()));
+        Long memberId = (userDetails != null) ? userDetails.getId() : null;
+        return CustomResponse.onSuccess(SuccessCode.OK, dailyStoryQueryService.getStories(cursorId, size, memberId));
     }
 
     @Operation(summary = "일상 일지 검색하기", description = "로그인 없이 일상 일지를 검색합니다.")
     @GetMapping("/daily/search")
-    public CustomResponse<DailyStoryResDTO.StoriesListDTO> search(@RequestParam(required = true) String keyword,
-                                                   @RequestParam(required = false) Long cursorId,
-                                                   @RequestParam(defaultValue = "9") int size){
-        DailyStoryResDTO.StoriesListDTO searchResult = dailyStoryQueryService.search(keyword, cursorId, size);
+    public CustomResponse<DailyStoryResDTO.StoriesListDTO> search(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                  @RequestParam(required = true) String keyword,
+                                                                  @RequestParam(required = false) Long cursorId,
+                                                                  @RequestParam(defaultValue = "9") int size){
+        Long memberId = (userDetails != null) ? userDetails.getId() : null;
+        DailyStoryResDTO.StoriesListDTO searchResult = dailyStoryQueryService.search(keyword, cursorId, size, memberId);
         return CustomResponse.onSuccess(SuccessCode.OK, searchResult);
 
     }
