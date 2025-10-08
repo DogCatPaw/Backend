@@ -45,7 +45,7 @@ public class Pet {
     @Column(nullable = false)
     private String feature;
 
-    private Boolean isNeutral;      //중성화
+    private String health;      //중성화
     private String specifics;
 
     @CreatedDate
