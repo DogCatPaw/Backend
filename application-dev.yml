@@ -22,3 +22,11 @@ data:
       time:
         access-expiration: 3600000
         refresh-expiration: 2592000000
+        
+    ncp:
+      storage:
+        region: kr-standard
+        endpoint: https://kr.object.ncloudstorage.com
+        bucket-name: dogcatpaw-backend
+        access-key: ${NCP_ACCESS_KEY}
+        secret-key: ${NCP_SECRET_KEY}

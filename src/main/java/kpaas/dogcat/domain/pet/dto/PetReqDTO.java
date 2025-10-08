@@ -23,7 +23,7 @@ public class PetReqDTO {
         private Gender gender;
         private String color;
         private String feature;
-        private String health;
+        private String health;      // 중성화 여부
         private String specifics;
     }
 }

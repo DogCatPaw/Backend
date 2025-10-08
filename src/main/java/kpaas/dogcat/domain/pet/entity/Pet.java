@@ -30,7 +30,6 @@ public class Pet {
 
     @Enumerated(EnumType.STRING)
     private Breed breed;
-    private String customBreed;  // breed == OTHER 일 경우 사용자가 직접 입력한 품종
 
     @Column(nullable = false)
     private int old;
@@ -46,9 +45,7 @@ public class Pet {
     @Column(nullable = false)
     private String feature;
 
-    @Column(nullable = false)
-    private String health;
-
+    private Boolean isNeutral;      //중성화
     private String specifics;
 
     @CreatedDate
