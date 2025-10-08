@@ -10,10 +10,7 @@ import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import kpaas.dogcat.global.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "반려동물 API")
 @RestController
@@ -28,5 +25,10 @@ public class PetController {
     public CustomResponse<PetResDTO.registerPetResDTO> register(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                 @RequestBody PetReqDTO.registerPetReqDTO dto) {
         return CustomResponse.onSuccess(SuccessCode.CREATED, petCommandService.register(userDetails.getId(), dto));
+    }
+
+    @GetMapping
+    public CustomResponse<?> test(){
+        return CustomResponse.onSuccess(SuccessCode.OK, "SourcePipeline");
     }
 }
