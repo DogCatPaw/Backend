@@ -52,6 +52,6 @@ public class Pet {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "wallet_address", nullable = false)
     private Member member;
 }

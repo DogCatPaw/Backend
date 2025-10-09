@@ -35,7 +35,7 @@ public class ChatMessage {
     private ChatParticipant participant;
 
     @ManyToOne(fetch = FetchType.LAZY) // 메시지 보낸 회원
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "wallet_address", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY) // 메시지가 속한 채팅방

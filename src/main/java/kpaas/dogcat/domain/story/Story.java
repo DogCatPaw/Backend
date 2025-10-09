@@ -33,7 +33,7 @@ public class Story {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "wallet_address")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 

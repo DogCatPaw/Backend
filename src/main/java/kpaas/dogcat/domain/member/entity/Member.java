@@ -3,10 +3,16 @@ package kpaas.dogcat.domain.member.entity;
 import jakarta.persistence.*;
 import kpaas.dogcat.domain.member.enums.Gender;
 import kpaas.dogcat.domain.member.enums.Type;
+import kpaas.dogcat.domain.payment.entity.Payment;
+import kpaas.dogcat.domain.pet.entity.Pet;
+import kpaas.dogcat.global.apiPayload.code.CustomException;
+import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @Entity
@@ -15,10 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Member {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true)
+    @Id @Column(name = "wallet_address", nullable = false, unique = true)
     private String walletAddress;
 
     @Column(nullable = false)
@@ -36,7 +39,19 @@ public class Member {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Type type = Type.GUARDIAN;
+    private Integer boneBalance = 0;    // 보유한 뼈다귀 수량, 1뼈다귀 = 1000원
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Pet> petList;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    List<Payment> payments;
+
+    public void chargePoint(Integer amount) {
+        if (!amount.equals(1000) && !amount.equals(5000)
+                && !amount.equals(10000) && !amount.equals(20000)) {
+            throw new CustomException(ErrorCode.INSUFFICIENT_BALANCE);
+        }
+        this.boneBalance += amount / 1000;
+    }
 }

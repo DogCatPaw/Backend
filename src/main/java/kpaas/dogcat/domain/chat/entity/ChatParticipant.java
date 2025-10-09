@@ -25,7 +25,7 @@ public class ChatParticipant {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "wallet_address")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
