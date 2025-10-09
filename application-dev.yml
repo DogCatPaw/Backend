@@ -30,3 +30,7 @@ data:
         bucket-name: dogcatpaw-backend
         access-key: ${NCP_ACCESS_KEY}
         secret-key: ${NCP_SECRET_KEY}
+        
+    toss:
+      client-key: ${TOSS_PAYMENT_CLIENT_KEY}
+      secret-key: ${TOSS_PAYMENT_SECRET_KEY}

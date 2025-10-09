@@ -74,6 +74,16 @@ spec:
             secretKeyRef:
               key: NCP_SECRET_KEY
               name: app-secrets
+        - name: TOSS_PAYMENT_CLIENT_KEY
+          valueFrom:
+            secretKeyRef:
+              key: TOSS_PAYMENT_CLIENT_KEY
+              name: app-secrets
+        - name: TOSS_PAYMENT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: TOSS_PAYMENT_SECRET_KEY
+              name: app-secrets
         resources:
           requests:
             memory: "256Mi"
