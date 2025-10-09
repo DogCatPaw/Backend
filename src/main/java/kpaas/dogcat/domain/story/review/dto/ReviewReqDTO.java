@@ -16,7 +16,7 @@ public class ReviewReqDTO {
     @Builder
     @Schema(name = "review")
     public static class WriteReviewDTO {
-        private String petDid;
+        private Long petId;
         private String title;
         private String content;
         private String adoptionAgency;

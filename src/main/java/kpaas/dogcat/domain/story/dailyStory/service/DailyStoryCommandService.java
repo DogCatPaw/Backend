@@ -30,7 +30,7 @@ public class DailyStoryCommandService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 
-        Pet pet = petRepository.findById(dto.getPetDid())
+        Pet pet = petRepository.findById(dto.getPetId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PET_NOTFOUND));
 
 //        if (image == null || image.isEmpty()) {

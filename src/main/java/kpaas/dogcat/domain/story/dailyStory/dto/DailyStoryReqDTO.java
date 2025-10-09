@@ -14,7 +14,7 @@ public class DailyStoryReqDTO {
     @Builder
     @Schema(name = "story")
     public static class writeStoryReqDTO {
-        private String petDid;
+        private Long petId;
         private String title;
         private String content;
     }

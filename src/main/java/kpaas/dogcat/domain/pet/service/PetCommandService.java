@@ -33,12 +33,11 @@ public class PetCommandService {
                 .weight(dto.getWeight())
                 .gender(dto.getGender())
                 .color(dto.getColor())
-                .feature(dto.getFeature())
-                .health(dto.getHealth())
+                .isNeutral(dto.isNeutral())
                 .specifics(dto.getSpecifics())
                 .build();
         Pet savedPet = petRepository.save(pet);
         log.info("[ Pet registered successfully ]");
-        return new PetResDTO.registerPetResDTO(memberId, savedPet.getDid(), savedPet.getPetName());
+        return new PetResDTO.registerPetResDTO(memberId, savedPet.getId(), savedPet.getDid(), savedPet.getPetName());
     }
 }

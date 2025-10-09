@@ -17,7 +17,8 @@ public class DailyStoryResDTO {
     public static class writeStoryResDTO {
         private String memberName;
         private Long storyId;
-        private String petDid;
+        private Long petId;
+        private String DID;
         private String title;
         private String images;
         private String content;
@@ -30,7 +31,8 @@ public class DailyStoryResDTO {
     public static class StoryPreviewDTO {
         private String memberName;
         private Long storyId;
-        private String petDid;
+        private Long petId;
+        private String DID;
         private String title;
         private String images;
         private String content;

@@ -13,6 +13,7 @@ public class PetResDTO {
     @Builder
     public static class registerPetResDTO {
         private Long memberId;
+        private Long petId;
         private String did;
         private String petName;
     }

@@ -18,7 +18,8 @@ public class ReviewResDTO {
     public static class WriteReviewResDTO {
         private String memberName;
         private Long storyId;
-        private String petDid;
+        private Long petId;
+        private String DID;
         private String title;
         private String images;
         private String content;
@@ -33,7 +34,8 @@ public class ReviewResDTO {
     public static class ReviewDTO {
         private String memberName;
         private Long storyId;
-        private String petDid;
+        private Long petId;
+        private String DID;
         private String title;
         private String images;
         private String content;

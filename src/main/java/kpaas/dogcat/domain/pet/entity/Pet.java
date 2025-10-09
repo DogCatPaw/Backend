@@ -22,10 +22,12 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class Pet {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
     private String did;
 
-    @Column(nullable = false)
     private String petName;
 
     @Enumerated(EnumType.STRING)
@@ -41,12 +43,9 @@ public class Pet {
     private Gender gender;
 
     private String color;
-
-    @Column(nullable = false)
-    private String feature;
-
-    private String health;      //중성화
-    private String specifics;
+    private boolean isNeutral;      //중성화
+    private String specifics;       //특이사항
+    private String issuer;
 
     @CreatedDate
     @Column(updatable = false)
