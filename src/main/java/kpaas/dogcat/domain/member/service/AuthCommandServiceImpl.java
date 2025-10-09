@@ -13,7 +13,6 @@ import kpaas.dogcat.global.jwt.JwtUtil;
 import kpaas.dogcat.global.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -45,8 +44,8 @@ public class AuthCommandServiceImpl implements AuthCommandService {
     @Override
     public AuthResponseDTO.LoginResponseDTO login(AuthRequestDTO.LoginRequestDTO dto) {
         //DB안에 지갑이 있으면 로그인
-        Member member = memberRepository.findByWalletAddress(dto.getWalletAddress()).orElseThrow(() ->
-                new CustomException(ErrorCode.WALLET_NOTFOUND));
+        Member member = memberRepository.findByWalletAddress(dto.getWalletAddress())
+                .orElseThrow(() -> new CustomException(ErrorCode.WALLET_NOTFOUND));
 
         //걸리는게 없으면 로그인 시 유저 정보로 토큰 만들기
         return createLoginToken(member);

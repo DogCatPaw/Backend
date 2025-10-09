@@ -21,7 +21,10 @@ import java.util.List;
 @AllArgsConstructor
 public class Member {
 
-    @Id @Column(name = "wallet_address", nullable = false, unique = true)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "wallet_address", nullable = false, unique = true)
     private String walletAddress;
 
     @Column(nullable = false)

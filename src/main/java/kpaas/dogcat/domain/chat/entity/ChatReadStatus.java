@@ -25,7 +25,7 @@ public class ChatReadStatus {
     //메세지와 읽음은 일대일이라 생각했는데, 참여자가 둘이므로 메세지 1: 읽음상태 2
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "wallet_address")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)

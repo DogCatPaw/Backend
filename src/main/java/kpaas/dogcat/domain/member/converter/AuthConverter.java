@@ -16,7 +16,6 @@ public class AuthConverter {
                 .gender(dto.getGender())
                 .old(dto.getOld())
                 .phoneNumber(String.valueOf(dto.getPhoneNumber()))
-                .type(dto.getType())
                 .build();
     }
 

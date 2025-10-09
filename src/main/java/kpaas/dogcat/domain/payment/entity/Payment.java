@@ -36,7 +36,7 @@ public class Payment {
     private OffsetDateTime approvedAt; // 결제 승인 시각
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "wallet_address")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     public void updateStatus(OrderStatus orderStatus) {

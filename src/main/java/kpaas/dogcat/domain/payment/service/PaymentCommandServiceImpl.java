@@ -1,5 +1,6 @@
 package kpaas.dogcat.domain.payment.service;
 
+import kpaas.dogcat.domain.member.service.AuthCommandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -36,16 +37,16 @@ public class PaymentCommandServiceImpl {
 
     private final PaymentRepository paymentRepository;
     private final MemberRepository memberRepository;
+    private final AuthCommandService authCommandService;
     private final ItemRepository itemRepository;
     private final PaymentConverter paymentConverter;
     private final RestTemplate restTemplate;
     private final PaymentConfig paymentConfig;
 
-    public PaymentResDTO.PrepareDTO preparePayment(PaymentReqDTO.PrepareDTO dto, String memberId) {
+    public PaymentResDTO.PrepareDTO preparePayment(PaymentReqDTO.PrepareDTO dto, Long memberId) {
         log.info("[ 결제 준비 시작 - 회원ID: {}, ItemId: {} ]", memberId, dto.getItemId());
 
-        Member member = memberRepository.findByWalletAddress(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
+        Member member = authCommandService.findById(memberId);
         Item item = itemRepository.findById(dto.getItemId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOTFOUND));
 
@@ -58,11 +59,10 @@ public class PaymentCommandServiceImpl {
         return paymentConverter.toPrepareDTO(savedPayment);
     }
 
-    public PaymentResDTO.ApproveDTO approvePayment(PaymentReqDTO.ApproveDTO dto, String memberId) {
+    public PaymentResDTO.ApproveDTO approvePayment(PaymentReqDTO.ApproveDTO dto, Long memberId) {
         log.info("[ 결제 승인 시작 - 회원ID: {}, orderId: {} ]", memberId, dto.getOrderId());
 
-        Member member = memberRepository.findByWalletAddress(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
+        Member member = authCommandService.findById(memberId);
         Payment payment = paymentRepository.findByOrderId(dto.getOrderId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PAYMENT_NOTFOUND));
 

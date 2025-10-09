@@ -37,8 +37,6 @@ public class JwtUtil {
         return Jwts.builder()
                 .subject(member.getUsername())  //Subject를 Username으로 설정
                 .claim("wallet", member.getWalletAddress())    //claim: 페이로드에 추가할 정보
-                .claim("username", member.getUsername())
-                .claim("type", member.getType())
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plus(expiration)))
                 .signWith(secretKey)
