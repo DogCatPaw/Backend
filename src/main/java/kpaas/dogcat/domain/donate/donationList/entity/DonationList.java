@@ -1,7 +1,7 @@
-package kpaas.dogcat.domain.donate.donationList;
+package kpaas.dogcat.domain.donate.donationList.entity;
 
 import jakarta.persistence.*;
-import kpaas.dogcat.domain.donate.donation.Donation;
+import kpaas.dogcat.domain.donate.donation.entity.Donation;
 import kpaas.dogcat.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

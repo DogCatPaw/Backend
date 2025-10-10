@@ -1,8 +1,12 @@
-package kpaas.dogcat.domain.donate.donationList;
+package kpaas.dogcat.domain.donate.donationList.service;
 
-import kpaas.dogcat.domain.donate.donation.Donation;
-import kpaas.dogcat.domain.donate.donation.DonationService;
+import kpaas.dogcat.domain.donate.donation.entity.Donation;
+import kpaas.dogcat.domain.donate.donation.service.DonationQueryService;
+import kpaas.dogcat.domain.donate.donationList.dto.DonationListReqDto;
+import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
 import kpaas.dogcat.domain.donate.donationList.converter.DonationListConverter;
+import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
+import kpaas.dogcat.domain.donate.donationList.repository.DonationListRepository;
 import kpaas.dogcat.domain.donate.item.Item;
 import kpaas.dogcat.domain.donate.item.ItemRepository;
 import kpaas.dogcat.domain.member.entity.Member;
@@ -19,17 +23,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DonationListCommandService {
 
-    private final DonationService donationService;
+    private final DonationQueryService donationQueryService;
     private final DonationListRepository donationListRepository;
     private final AuthCommandService authCommandService;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
     private final DonationListConverter donationListConverter;
 
-    public DonationListResDTO.Donate donate(DonationListReqDTO.Donate dto){
+    public DonationListResDto.Donate donate(DonationListReqDto.Donate dto){
 
         // 후원 공고 확인 및 결제한 뼈다귀가 있는지 확인
-        Donation donation = donationService.findDonation(dto.getDonationId());
+        Donation donation = donationQueryService.findDonation(dto.getDonationId());
         Member member = authCommandService.findById(dto.getMemberId());
         Integer bones = member.getBoneBalance();
         log.info("[ 현재 잔액: {} ]", bones);

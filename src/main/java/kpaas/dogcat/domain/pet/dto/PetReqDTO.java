@@ -16,7 +16,6 @@ public class PetReqDTO {
     @NoArgsConstructor
     @Builder
     public static class registerPetReqDTO {
-        private Long id;
         private String did;
         private String petName;
         private Breed breed;

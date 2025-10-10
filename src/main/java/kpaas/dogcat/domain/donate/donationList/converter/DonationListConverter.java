@@ -1,8 +1,8 @@
 package kpaas.dogcat.domain.donate.donationList.converter;
 
-import kpaas.dogcat.domain.donate.donation.Donation;
-import kpaas.dogcat.domain.donate.donationList.DonationList;
-import kpaas.dogcat.domain.donate.donationList.DonationListResDTO;
+import kpaas.dogcat.domain.donate.donation.entity.Donation;
+import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
+import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
 import kpaas.dogcat.domain.donate.item.Item;
 import kpaas.dogcat.domain.member.entity.Member;
 import org.springframework.stereotype.Component;
@@ -17,8 +17,8 @@ public class DonationListConverter {
                 .build();
     }
 
-    public DonationListResDTO.Donate toDonateDTO(DonationList donationList, Integer bones) {
-         return DonationListResDTO.Donate.builder()
+    public DonationListResDto.Donate toDonateDTO(DonationList donationList, Integer bones) {
+         return DonationListResDto.Donate.builder()
                 .donationId(donationList.getId())
                 .memberId(donationList.getMember().getId())
                 .donationAmount(donationList.getAmount())   // 후원금액

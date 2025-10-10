@@ -26,9 +26,4 @@ public class PetController {
                                                                 @RequestBody PetReqDTO.registerPetReqDTO dto) {
         return CustomResponse.onSuccess(SuccessCode.CREATED, petCommandService.register(userDetails.getId(), dto));
     }
-
-    @GetMapping
-    public CustomResponse<?> test(){
-        return CustomResponse.onSuccess(SuccessCode.OK, "SourcePipeline");
-    }
 }

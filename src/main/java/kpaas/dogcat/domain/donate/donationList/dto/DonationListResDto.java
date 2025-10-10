@@ -1,11 +1,11 @@
-package kpaas.dogcat.domain.donate.donationList;
+package kpaas.dogcat.domain.donate.donationList.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class DonationListResDTO {
+public class DonationListResDto {
 
     @Data
     @AllArgsConstructor

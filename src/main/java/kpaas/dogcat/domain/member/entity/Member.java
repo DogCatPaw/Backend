@@ -1,8 +1,8 @@
 package kpaas.dogcat.domain.member.entity;
 
 import jakarta.persistence.*;
-import kpaas.dogcat.domain.donate.donation.Donation;
-import kpaas.dogcat.domain.donate.donationList.DonationList;
+import kpaas.dogcat.domain.donate.donation.entity.Donation;
+import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
 import kpaas.dogcat.domain.member.enums.Gender;
 import kpaas.dogcat.global.payment.entity.Payment;
 import kpaas.dogcat.domain.pet.entity.Pet;
