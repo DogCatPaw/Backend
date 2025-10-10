@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.item;
+package kpaas.dogcat.domain.donate.item;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,11 +1,11 @@
-package kpaas.dogcat.domain.payment.converter;
+package kpaas.dogcat.global.payment.converter;
 
 import org.springframework.stereotype.Component;
-import kpaas.dogcat.domain.item.Item;
+import kpaas.dogcat.domain.donate.item.Item;
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.payment.dto.PaymentResDTO;
-import kpaas.dogcat.domain.payment.entity.Payment;
-import kpaas.dogcat.domain.payment.enums.OrderStatus;
+import kpaas.dogcat.global.payment.dto.PaymentResDTO;
+import kpaas.dogcat.global.payment.entity.Payment;
+import kpaas.dogcat.global.payment.enums.OrderStatus;
 
 @Component
 public class PaymentConverter {

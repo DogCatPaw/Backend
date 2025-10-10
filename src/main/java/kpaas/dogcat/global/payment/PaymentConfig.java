@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.payment;
+package kpaas.dogcat.global.payment;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

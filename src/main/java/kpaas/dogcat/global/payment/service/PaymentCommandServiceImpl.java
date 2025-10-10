@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.payment.service;
+package kpaas.dogcat.global.payment.service;
 
 import kpaas.dogcat.domain.member.service.AuthCommandService;
 import lombok.RequiredArgsConstructor;
@@ -13,17 +13,17 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
-import kpaas.dogcat.domain.item.Item;
-import kpaas.dogcat.domain.item.ItemRepository;
+import kpaas.dogcat.domain.donate.item.Item;
+import kpaas.dogcat.domain.donate.item.ItemRepository;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
-import kpaas.dogcat.domain.payment.PaymentConfig;
-import kpaas.dogcat.domain.payment.converter.PaymentConverter;
-import kpaas.dogcat.domain.payment.dto.PaymentReqDTO;
-import kpaas.dogcat.domain.payment.dto.PaymentResDTO;
-import kpaas.dogcat.domain.payment.entity.Payment;
-import kpaas.dogcat.domain.payment.enums.OrderStatus;
-import kpaas.dogcat.domain.payment.repository.PaymentRepository;
+import kpaas.dogcat.global.payment.PaymentConfig;
+import kpaas.dogcat.global.payment.converter.PaymentConverter;
+import kpaas.dogcat.global.payment.dto.PaymentReqDTO;
+import kpaas.dogcat.global.payment.dto.PaymentResDTO;
+import kpaas.dogcat.global.payment.entity.Payment;
+import kpaas.dogcat.global.payment.enums.OrderStatus;
+import kpaas.dogcat.global.payment.repository.PaymentRepository;
 
 import java.util.Collections;
 import java.util.HashMap;

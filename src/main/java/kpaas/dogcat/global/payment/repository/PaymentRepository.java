@@ -1,7 +1,7 @@
-package kpaas.dogcat.domain.payment.repository;
+package kpaas.dogcat.global.payment.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import kpaas.dogcat.domain.payment.entity.Payment;
+import kpaas.dogcat.global.payment.entity.Payment;
 
 import java.util.Optional;
 

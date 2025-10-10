@@ -1,11 +1,11 @@
-package kpaas.dogcat.domain.payment.dto;
+package kpaas.dogcat.global.payment.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import kpaas.dogcat.domain.payment.enums.OrderStatus;
+import kpaas.dogcat.global.payment.enums.OrderStatus;
 
 public class PaymentResDTO {
 

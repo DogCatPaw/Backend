@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.item;
+package kpaas.dogcat.domain.donate.item;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,5 +21,5 @@ public class Item {
     private String itemName;
 
     @Column(nullable = false)
-    private int price;
+    private Integer price;
 }

@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.payment.entity;
+package kpaas.dogcat.global.payment.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.payment.enums.OrderStatus;
+import kpaas.dogcat.global.payment.enums.OrderStatus;
 
 import java.time.OffsetDateTime;
 

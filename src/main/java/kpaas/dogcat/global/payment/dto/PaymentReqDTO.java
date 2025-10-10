@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.payment.dto;
+package kpaas.dogcat.global.payment.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

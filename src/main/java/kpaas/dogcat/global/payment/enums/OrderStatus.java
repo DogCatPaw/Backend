@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.payment.enums;
+package kpaas.dogcat.global.payment.enums;
 
 public enum OrderStatus {
     READY,                  // 결제 대기
