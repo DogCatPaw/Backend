@@ -70,7 +70,8 @@ public enum ErrorCode implements BaseCode {
     BONE_NOTFOUND(HttpStatus.NOT_FOUND, "BONE404", "후원 가능한 뼈다귀가 없습니다."),
     // 후원공고글
     DONATION_NOTFOUND(HttpStatus.NOT_FOUND, "DONATION404", "해당되는 후원 공고가 없습니다."),
-    BONE_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "BONE400", "뼈다귀가 충분하지 않습니다.");
+    BONE_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "BONE400", "뼈다귀가 충분하지 않습니다."),
+    DONATIONLIST_NOTFOUND(HttpStatus.NOT_FOUND, "DONATION404", "해당되는 후원 내역이 없습니다.");
 
 
     private final HttpStatus httpStatus;

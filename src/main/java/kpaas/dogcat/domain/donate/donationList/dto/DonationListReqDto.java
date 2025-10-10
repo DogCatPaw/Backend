@@ -11,9 +11,18 @@ public class DonationListReqDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class Donate {
+    public static class DonateDto {
         public Long memberId;
         public Long itemId;
         public Long donationId;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class DonationDto {
+        private Long memberId;
+        private Long donationId;
     }
 }

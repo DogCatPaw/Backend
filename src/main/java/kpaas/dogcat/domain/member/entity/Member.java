@@ -34,6 +34,8 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String nickname;
 
+    private String profileUrl;
+
     @Column(nullable = false)
     private Gender gender;
 

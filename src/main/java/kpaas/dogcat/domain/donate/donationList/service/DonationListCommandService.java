@@ -30,7 +30,7 @@ public class DonationListCommandService {
     private final ItemRepository itemRepository;
     private final DonationListConverter donationListConverter;
 
-    public DonationListResDto.Donate donate(DonationListReqDto.Donate dto){
+    public DonationListResDto.DonateDto donate(DonationListReqDto.DonateDto dto){
 
         // 후원 공고 확인 및 결제한 뼈다귀가 있는지 확인
         Donation donation = donationQueryService.findDonation(dto.getDonationId());
