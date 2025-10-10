@@ -1,9 +1,10 @@
 package kpaas.dogcat.domain.member.entity;
 
 import jakarta.persistence.*;
+import kpaas.dogcat.domain.donate.donation.Donation;
+import kpaas.dogcat.domain.donate.donationList.DonationList;
 import kpaas.dogcat.domain.member.enums.Gender;
-import kpaas.dogcat.domain.member.enums.Type;
-import kpaas.dogcat.domain.payment.entity.Payment;
+import kpaas.dogcat.global.payment.entity.Payment;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
@@ -48,13 +49,26 @@ public class Member {
     private List<Pet> petList;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    List<Payment> payments;
+    private List<Payment> payments;
 
     public void chargePoint(Integer amount) {
         if (!amount.equals(1000) && !amount.equals(5000)
                 && !amount.equals(10000) && !amount.equals(20000)) {
             throw new CustomException(ErrorCode.INSUFFICIENT_BALANCE);
         }
-        this.boneBalance += amount / 1000;
+        this.boneBalance += amount;
     }
+
+    public void decreaseBone(Integer amount) {
+        if (this.boneBalance < amount) {
+            throw new CustomException(ErrorCode.BONE_NOT_ENOUGH);
+        }
+        this.boneBalance -= amount;
+    }
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Donation> donations;
+
+    @OneToMany(mappedBy = "member")
+    private List<DonationList> donationListList;
 }

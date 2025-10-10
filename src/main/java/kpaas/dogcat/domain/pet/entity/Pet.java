@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.pet.entity;
 
 import jakarta.persistence.*;
+import kpaas.dogcat.domain.donate.donation.Donation;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.pet.enums.Breed;
 import kpaas.dogcat.domain.pet.enums.Gender;
@@ -12,6 +13,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -54,4 +56,7 @@ public class Pet {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Donation> donations;
 }

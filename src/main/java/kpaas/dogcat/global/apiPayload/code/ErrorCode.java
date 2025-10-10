@@ -64,7 +64,13 @@ public enum ErrorCode implements BaseCode {
     PAYMENT_EXPIRED(HttpStatus.BAD_REQUEST, "PAYMENT400", "결제 유효 시간이 만료되어 결제가 취소되었습니다."),
     PAYMENT_PARTIAL_CANCELED(HttpStatus.BAD_REQUEST, "PAYMENT400", "결제가 부분 취소되었습니다."),
     PAYMENT_UNSPECIFIED_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "PAYMENT500", "결제/환불 상태가 불분명하여 처리에 실패했습니다."),
-    PAYMENT_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "PAYMENT500", "토스 결제 응답이 없습니다.");
+    PAYMENT_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "PAYMENT500", "토스 결제 응답이 없습니다."),
+
+    // 후원 관련 에러 추가
+    BONE_NOTFOUND(HttpStatus.NOT_FOUND, "BONE404", "후원 가능한 뼈다귀가 없습니다."),
+    // 후원공고글
+    DONATION_NOTFOUND(HttpStatus.NOT_FOUND, "DONATION404", "해당되는 후원 공고가 없습니다."),
+    BONE_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "BONE400", "뼈다귀가 충분하지 않습니다.");
 
 
     private final HttpStatus httpStatus;
