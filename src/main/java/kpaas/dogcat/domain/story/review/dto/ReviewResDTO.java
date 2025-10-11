@@ -16,7 +16,7 @@ public class ReviewResDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class WriteReviewResDTO {
+    public static class WriteReviewResDto {
         private String memberName;
         private Long storyId;
         private Long petId;
@@ -26,10 +26,9 @@ public class ReviewResDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class ReviewDetailDTO {
+    public static class ReviewDetailDto {
         private String profileUrl;
         private String memberName;
-        private Long storyId;
         private Long petId;
         private String DID;
         private String title;
@@ -49,7 +48,7 @@ public class ReviewResDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class ReviewDTO {
+    public static class ReviewDto {
         private String profileUrl;
         private String memberName;
         private String images;
@@ -66,8 +65,8 @@ public class ReviewResDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class ReviewListDTO {
-        private List<ReviewResDTO.ReviewDTO> reviews;
+    public static class ReviewListDto {
+        private List<ReviewDto> reviews;
         private Long nextCursor;
     }
 }

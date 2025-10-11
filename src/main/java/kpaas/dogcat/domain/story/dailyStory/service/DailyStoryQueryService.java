@@ -2,13 +2,15 @@ package kpaas.dogcat.domain.story.dailyStory.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
-import kpaas.dogcat.domain.story.Story;
+import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.story.comment.service.CommentQueryService;
 import kpaas.dogcat.domain.story.dailyStory.converter.DailyStoryConverter;
-import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDTO;
+import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDto;
 import kpaas.dogcat.domain.story.dailyStory.entity.DailyStory;
 import kpaas.dogcat.domain.story.like.service.LikeQueryService;
 import kpaas.dogcat.domain.story.dailyStory.repository.DailyStoryRepository;
+import kpaas.dogcat.domain.story.review.dto.ReviewResDTO;
+import kpaas.dogcat.domain.story.review.entity.Review;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -32,15 +34,22 @@ public class DailyStoryQueryService {
     private final LikeQueryService likeQueryService;
     private final CommentQueryService commentQueryService;
 
-    public DailyStoryResDTO.StoryPreviewDTO getStory(Long storyId, Long memberId) {
+    /** 일상 일지 상세 반환 **/
+    public DailyStoryResDto.StoryDetailDto getStoryDetail(Long storyId, Long memberId) {
         DailyStory story = dailyStoryRepository.findById(storyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
+        Pet pet =  story.getPet();
         Member member = findMemberOrNull(memberId);
 
-        return mapToPreviewDTO(story, member);
+        Long likeCount = likeQueryService.getLikeCount(storyId);
+        Long commentCount = commentQueryService.getCommentCount(storyId);
+        boolean liked = member != null && likeQueryService.isAlreadyLike(story, member);
+
+        return dailyStoryConverter.toStoryDetailDto(story, pet, likeCount, liked, commentCount);
     }
 
-    public DailyStoryResDTO.StoriesListDTO getStories(Long cursorId, int size, Long memberId) {
+    /** 일상 일지 조회용 반환 **/
+    public DailyStoryResDto.StoriesListDto getStories(Long cursorId, int size, Long memberId) {
         Pageable pageable = PageRequest.of(0, size);
 
         List<DailyStory> stories;
@@ -51,18 +60,19 @@ public class DailyStoryQueryService {
         }
 
         Member member = findMemberOrNull(memberId);
-        List<DailyStoryResDTO.StoryPreviewDTO> storyList = stories.stream()
+        List<DailyStoryResDto.StoryPreviewDto> storyList = stories.stream()
                 .map(story -> mapToPreviewDTO(story, member))
                 .toList();
         Long nextCursor = stories.size() < size ? null : stories.get(stories.size() - 1).getId();
 
-        return DailyStoryResDTO.StoriesListDTO.builder()
+        return DailyStoryResDto.StoriesListDto.builder()
                 .stories(storyList)
                 .nextCursor(nextCursor)
                 .build();
     }
 
-    public DailyStoryResDTO.StoriesListDTO search(String keyword, Long cursorId, int size, Long memberId) {
+    /** 일상 일지 키워드 기반 조회 **/
+    public DailyStoryResDto.StoriesListDto search(String keyword, Long cursorId, int size, Long memberId) {
         Pageable pageable = PageRequest.of(0, size);
         List<DailyStory> stories;
         if (cursorId == null) {
@@ -72,12 +82,12 @@ public class DailyStoryQueryService {
         }
 
         Member member = findMemberOrNull(memberId);
-        List<DailyStoryResDTO.StoryPreviewDTO> storyList = stories.stream()
+        List<DailyStoryResDto.StoryPreviewDto> storyList = stories.stream()
                 .map(story -> mapToPreviewDTO(story, member))
                 .toList();
         Long nextCursor = stories.size() < size ? null : stories.get(stories.size() - 1).getId();
 
-        return DailyStoryResDTO.StoriesListDTO.builder()
+        return DailyStoryResDto.StoriesListDto.builder()
                 .stories(storyList)
                 .nextCursor(nextCursor)
                 .build();
@@ -92,7 +102,7 @@ public class DailyStoryQueryService {
 
     /** 스토리 하나조회, 전체 조회, 제목 검색
      * 공통 변환 메서드 */
-    private DailyStoryResDTO.StoryPreviewDTO mapToPreviewDTO(DailyStory story, Member member) {
+    private DailyStoryResDto.StoryPreviewDto mapToPreviewDTO(DailyStory story, Member member) {
         Long storyId = story.getId();
 
         Long likeCount = likeQueryService.getLikeCount(storyId);
@@ -100,5 +110,18 @@ public class DailyStoryQueryService {
         boolean liked = member != null && likeQueryService.isAlreadyLike(story, member);
 
         return dailyStoryConverter.toStoryPreviewDTO(story, likeCount, liked, commentCount);
+    }
+
+    // 홈 - 좋아요와 댓글이 가장 많은 입양 후기 3개 반환
+    public List<DailyStoryResDto.StoryPreviewDto> get3PopularStories() {
+        Pageable pageable = PageRequest.of(0, 3);
+        List<DailyStory> stories = dailyStoryRepository.findTopPopularDailyStories(pageable);
+
+        return stories.stream()
+                .map(r -> dailyStoryConverter.toStoryPreviewDTO(
+                        r, likeQueryService.getLikeCount(r.getId()),
+                        false, commentQueryService.getCommentCount(r.getId())
+                ))
+                .toList();
     }
 }

@@ -25,8 +25,8 @@ public class ReviewConverter {
                 .build();
     }
 
-    public ReviewResDTO.WriteReviewResDTO toWriteReviewResDTO(Member member, Review savedReview, Pet pet) {
-        return ReviewResDTO.WriteReviewResDTO.builder()
+    public ReviewResDTO.WriteReviewResDto toWriteReviewResDTO(Member member, Review savedReview, Pet pet) {
+        return ReviewResDTO.WriteReviewResDto.builder()
                 .memberName((member.getNickname()))
                 .storyId(savedReview.getId())
                 .petId(pet.getId())
@@ -34,11 +34,10 @@ public class ReviewConverter {
     }
 
 
-    public ReviewResDTO.ReviewDetailDTO toReviewDetailDTO(Review review, Pet pet, Long likeCount, boolean liked, Long commentCount) {
-        return ReviewResDTO.ReviewDetailDTO.builder()
+    public ReviewResDTO.ReviewDetailDto toReviewDetailDTO(Review review, Pet pet, Long likeCount, boolean liked, Long commentCount) {
+        return ReviewResDTO.ReviewDetailDto.builder()
                 .profileUrl(review.getMember().getProfileUrl())
                 .memberName(review.getMember().getNickname())
-                .storyId(review.getId())
                 .petId(pet.getId())
                 .DID(pet.getDid())
                 .title(review.getTitle())
@@ -56,11 +55,11 @@ public class ReviewConverter {
     }
 
 
-    public ReviewResDTO.ReviewDTO toReviewPreviewDTO(Review review,
+    public ReviewResDTO.ReviewDto toReviewPreviewDTO(Review review,
                                                      Long likeCount,
                                                      boolean liked,
                                                      Long commentCount) {
-        return ReviewResDTO.ReviewDTO.builder()
+        return ReviewResDTO.ReviewDto.builder()
                 .profileUrl(review.getMember().getProfileUrl())
                 .memberName(review.getMember().getNickname())
                 .title(review.getTitle())

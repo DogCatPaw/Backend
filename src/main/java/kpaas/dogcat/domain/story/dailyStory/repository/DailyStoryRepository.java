@@ -27,4 +27,13 @@ public interface DailyStoryRepository extends JpaRepository<DailyStory, Long> {
                                                       @Param("cursorId") Long cursorId,
                                                       Pageable pageable);
 
+    @Query("""
+        SELECT s
+        FROM DailyStory s
+        LEFT JOIN s.likeList l
+        LEFT JOIN s.commentList c
+        GROUP BY s
+        ORDER BY COUNT(l) + COUNT(c) DESC
+        """)
+    List<DailyStory> findTopPopularDailyStories(Pageable pageable);
 }

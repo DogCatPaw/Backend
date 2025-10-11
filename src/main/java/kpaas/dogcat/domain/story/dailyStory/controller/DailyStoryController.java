@@ -2,8 +2,8 @@ package kpaas.dogcat.domain.story.dailyStory.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryReqDTO;
-import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDTO;
+import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryReqDto;
+import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDto;
 import kpaas.dogcat.domain.story.dailyStory.service.DailyStoryCommandService;
 import kpaas.dogcat.domain.story.dailyStory.service.DailyStoryQueryService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
@@ -26,24 +26,24 @@ public class DailyStoryController {
 
     @Operation(summary = "일상 일지 작성", description = "일지 하나를 작성합니다.")
     @PostMapping(value = "/daily", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public CustomResponse<DailyStoryResDTO.writeStoryResDTO> create(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                    @RequestPart("story") DailyStoryReqDTO.writeStoryReqDTO dto,
+    public CustomResponse<DailyStoryResDto.WriteStoryResDto> create(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                    @RequestPart("story") DailyStoryReqDto.WriteStoryReqDto dto,
                                                                     @RequestPart(value = "image", required = false) MultipartFile image) {
-        DailyStoryResDTO.writeStoryResDTO createdStory = dailyStoryCommandService.writeDailyStory(userDetails.getId(), dto, image);
+        DailyStoryResDto.WriteStoryResDto createdStory = dailyStoryCommandService.writeDailyStory(userDetails.getId(), dto, image);
         return CustomResponse.onSuccess(SuccessCode.CREATED, createdStory);
     }
 
     @Operation(summary = "일상 일지 하나 조회", description = "일지 하나를 조회합니다.")
     @GetMapping("/daily/{stories}")
-    public CustomResponse<DailyStoryResDTO.StoryPreviewDTO> getStory(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public CustomResponse<DailyStoryResDto.StoryDetailDto> getStory(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                      @PathVariable Long stories) {
         Long memberId = (userDetails != null) ? userDetails.getId() : null;
-        return CustomResponse.onSuccess(SuccessCode.OK, dailyStoryQueryService.getStory(stories, memberId));
+        return CustomResponse.onSuccess(SuccessCode.OK, dailyStoryQueryService.getStoryDetail(stories, memberId));
     }
 
     @Operation(summary = "메인 일상 일지 목록 조회", description = "일지 메인 화면의 일지 목록을 조회합니다.")
     @GetMapping("/daily/stories")
-    public CustomResponse<DailyStoryResDTO.StoriesListDTO> getStories(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public CustomResponse<DailyStoryResDto.StoriesListDto> getStories(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                       @RequestParam(required = false) Long cursorId,
                                                                       @RequestParam(defaultValue = "9") int size){
         Long memberId = (userDetails != null) ? userDetails.getId() : null;
@@ -52,12 +52,12 @@ public class DailyStoryController {
 
     @Operation(summary = "일상 일지 검색하기", description = "로그인 없이 일상 일지를 검색합니다.")
     @GetMapping("/daily/search")
-    public CustomResponse<DailyStoryResDTO.StoriesListDTO> search(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public CustomResponse<DailyStoryResDto.StoriesListDto> search(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                   @RequestParam(required = true) String keyword,
                                                                   @RequestParam(required = false) Long cursorId,
                                                                   @RequestParam(defaultValue = "9") int size){
         Long memberId = (userDetails != null) ? userDetails.getId() : null;
-        DailyStoryResDTO.StoriesListDTO searchResult = dailyStoryQueryService.search(keyword, cursorId, size, memberId);
+        DailyStoryResDto.StoriesListDto searchResult = dailyStoryQueryService.search(keyword, cursorId, size, memberId);
         return CustomResponse.onSuccess(SuccessCode.OK, searchResult);
     }
 }

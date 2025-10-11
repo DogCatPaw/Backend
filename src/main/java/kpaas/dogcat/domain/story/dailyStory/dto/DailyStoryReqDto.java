@@ -6,14 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class DailyStoryReqDTO {
+public class DailyStoryReqDto {
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
     @Schema(name = "story")
-    public static class writeStoryReqDTO {
+    public static class WriteStoryReqDto {
         private Long petId;
         private String title;
         private String content;

@@ -26,7 +26,7 @@ public class ReviewCommandService {
     private final ReviewConverter reviewConverter;
     private final ObjectStorageUtil objectStorageUtil;
 
-    public ReviewResDTO.WriteReviewResDTO writeReview(Long memberId, ReviewReqDTO.WriteReviewDTO dto, MultipartFile image) {
+    public ReviewResDTO.WriteReviewResDto writeReview(Long memberId, ReviewReqDTO.WriteReviewDTO dto, MultipartFile image) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 
