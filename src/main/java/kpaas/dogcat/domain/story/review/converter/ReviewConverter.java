@@ -3,7 +3,7 @@ package kpaas.dogcat.domain.story.review.converter;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.story.review.dto.ReviewReqDTO;
-import kpaas.dogcat.domain.story.review.dto.ReviewResDTO;
+import kpaas.dogcat.domain.story.review.dto.ReviewResDto;
 import kpaas.dogcat.domain.story.review.entity.Review;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +25,8 @@ public class ReviewConverter {
                 .build();
     }
 
-    public ReviewResDTO.WriteReviewResDto toWriteReviewResDTO(Member member, Review savedReview, Pet pet) {
-        return ReviewResDTO.WriteReviewResDto.builder()
+    public ReviewResDto.WriteReviewResDto toWriteReviewResDTO(Member member, Review savedReview, Pet pet) {
+        return ReviewResDto.WriteReviewResDto.builder()
                 .memberName((member.getNickname()))
                 .storyId(savedReview.getId())
                 .petId(pet.getId())
@@ -34,8 +34,8 @@ public class ReviewConverter {
     }
 
 
-    public ReviewResDTO.ReviewDetailDto toReviewDetailDTO(Review review, Pet pet, Long likeCount, boolean liked, Long commentCount) {
-        return ReviewResDTO.ReviewDetailDto.builder()
+    public ReviewResDto.ReviewDetailDto toReviewDetailDTO(Review review, Pet pet, Long likeCount, boolean liked, Long commentCount) {
+        return ReviewResDto.ReviewDetailDto.builder()
                 .profileUrl(review.getMember().getProfileUrl())
                 .memberName(review.getMember().getNickname())
                 .petId(pet.getId())
@@ -55,11 +55,11 @@ public class ReviewConverter {
     }
 
 
-    public ReviewResDTO.ReviewDto toReviewPreviewDTO(Review review,
+    public ReviewResDto.ReviewDto toReviewPreviewDTO(Review review,
                                                      Long likeCount,
                                                      boolean liked,
                                                      Long commentCount) {
-        return ReviewResDTO.ReviewDto.builder()
+        return ReviewResDto.ReviewDto.builder()
                 .profileUrl(review.getMember().getProfileUrl())
                 .memberName(review.getMember().getNickname())
                 .title(review.getTitle())

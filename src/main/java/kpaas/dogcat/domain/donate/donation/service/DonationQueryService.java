@@ -6,7 +6,6 @@ import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.donate.donation.repository.DonationRepository;
 import kpaas.dogcat.domain.donate.donation.entity.Donation;
 import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
-import kpaas.dogcat.domain.donate.donationList.repository.DonationListRepository;
 import kpaas.dogcat.domain.donate.donationList.service.DonationListQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
@@ -52,7 +51,7 @@ public class DonationQueryService {
     }
 
     /** 후원 공고 마감일 임박순 3개 리턴 **/
-    public List<DonationResDto.HomeDto> get3ClosingSoonDonations() {
+    public List<DonationResDto.PreviewDto> get3ClosingSoonDonations() {
         Pageable pageable = PageRequest.of(0, 3);
 
         return donationRepository.findTop3ByStatusOrderByDeadlineAsc(DonationStatus.ACTIVE, pageable)

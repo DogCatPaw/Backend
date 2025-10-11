@@ -59,8 +59,8 @@ public class DonationConverter {
                 .build();
     }
 
-    public DonationResDto.HomeDto toHomeDto(String dDay, int patronCount, int progress, Donation donation) {
-        return DonationResDto.HomeDto.builder()
+    public DonationResDto.PreviewDto toHomeDto(String dDay, int patronCount, int progress, Donation donation) {
+        return DonationResDto.PreviewDto.builder()
                 .dDay(dDay)
                 .thumbnail(donation.getImages())
                 .title(donation.getTitle())

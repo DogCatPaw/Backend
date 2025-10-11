@@ -9,8 +9,6 @@ import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDto;
 import kpaas.dogcat.domain.story.dailyStory.entity.DailyStory;
 import kpaas.dogcat.domain.story.like.service.LikeQueryService;
 import kpaas.dogcat.domain.story.dailyStory.repository.DailyStoryRepository;
-import kpaas.dogcat.domain.story.review.dto.ReviewResDTO;
-import kpaas.dogcat.domain.story.review.entity.Review;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;

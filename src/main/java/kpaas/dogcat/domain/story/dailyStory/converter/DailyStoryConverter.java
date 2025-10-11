@@ -5,8 +5,6 @@ import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryReqDto;
 import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDto;
 import kpaas.dogcat.domain.story.dailyStory.entity.DailyStory;
-import kpaas.dogcat.domain.story.review.dto.ReviewResDTO;
-import kpaas.dogcat.domain.story.review.entity.Review;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

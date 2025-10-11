@@ -7,7 +7,7 @@ import kpaas.dogcat.domain.pet.repository.PetRepository;
 import kpaas.dogcat.domain.story.review.converter.ReviewConverter;
 import kpaas.dogcat.domain.story.review.repository.ReviewRepository;
 import kpaas.dogcat.domain.story.review.dto.ReviewReqDTO;
-import kpaas.dogcat.domain.story.review.dto.ReviewResDTO;
+import kpaas.dogcat.domain.story.review.dto.ReviewResDto;
 import kpaas.dogcat.domain.story.review.entity.Review;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
@@ -26,7 +26,7 @@ public class ReviewCommandService {
     private final ReviewConverter reviewConverter;
     private final ObjectStorageUtil objectStorageUtil;
 
-    public ReviewResDTO.WriteReviewResDto writeReview(Long memberId, ReviewReqDTO.WriteReviewDTO dto, MultipartFile image) {
+    public ReviewResDto.WriteReviewResDto writeReview(Long memberId, ReviewReqDTO.WriteReviewDTO dto, MultipartFile image) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 

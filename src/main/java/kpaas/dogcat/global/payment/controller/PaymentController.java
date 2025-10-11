@@ -15,7 +15,7 @@ import kpaas.dogcat.global.payment.dto.PaymentReqDTO;
 import kpaas.dogcat.global.payment.dto.PaymentResDTO;
 import kpaas.dogcat.global.payment.service.PaymentCommandServiceImpl;
 
-@Tag(name = "후원 결제 관련 API")
+@Tag(name = "후원 관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/payment")

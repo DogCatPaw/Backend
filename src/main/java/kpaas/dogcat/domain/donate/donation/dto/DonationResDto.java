@@ -53,7 +53,7 @@ public class DonationResDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class HomeDto {
+    public static class PreviewDto {
         private String dDay;
         private String thumbnail;
         private String title;
