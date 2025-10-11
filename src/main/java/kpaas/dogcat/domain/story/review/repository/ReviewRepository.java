@@ -23,4 +23,14 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByTitleContainingAfterCursor(@Param("keyword") String keyword,
                                                   @Param("cursorId") Long cursorId,
                                                   Pageable pageable);
+
+    @Query("""
+        SELECT s
+        FROM Review s
+        LEFT JOIN s.likeList l
+        LEFT JOIN s.commentList c
+        GROUP BY s
+        ORDER BY COUNT(l) + COUNT(c) DESC
+        """)
+    List<Review> findTopPopularReview(Pageable pageable);
 }

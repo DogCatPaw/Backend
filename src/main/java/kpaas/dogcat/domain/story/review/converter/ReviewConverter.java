@@ -30,33 +30,47 @@ public class ReviewConverter {
                 .memberName((member.getNickname()))
                 .storyId(savedReview.getId())
                 .petId(pet.getId())
-                .DID(pet.getDid())
-                .title(savedReview.getTitle())
-                .images(savedReview.getImages())
-                .content(savedReview.getContent())
-                .adoptionAgency(savedReview.getAdoptionAgency())
-                .adoptionDate(savedReview.getAdoptionDate())
                 .build();
     }
+
+
+    public ReviewResDTO.ReviewDetailDTO toReviewDetailDTO(Review review, Pet pet, Long likeCount, boolean liked, Long commentCount) {
+        return ReviewResDTO.ReviewDetailDTO.builder()
+                .profileUrl(review.getMember().getProfileUrl())
+                .memberName(review.getMember().getNickname())
+                .storyId(review.getId())
+                .petId(pet.getId())
+                .DID(pet.getDid())
+                .title(review.getTitle())
+                .content(review.getContent())
+                .images(review.getImages())
+                .breed(pet.getBreed())
+                .petName(pet.getPetName())
+                .likeCount(likeCount)
+                .commentCount(commentCount)
+                .liked(liked)
+                .adoptionAgency(review.getAdoptionAgency())
+                .adoptionDate(review.getAdoptionDate())
+                .createdAt(review.getCreatedAt())
+                .build();
+    }
+
 
     public ReviewResDTO.ReviewDTO toReviewPreviewDTO(Review review,
                                                      Long likeCount,
                                                      boolean liked,
                                                      Long commentCount) {
         return ReviewResDTO.ReviewDTO.builder()
+                .profileUrl(review.getMember().getProfileUrl())
                 .memberName(review.getMember().getNickname())
-                .storyId(review.getId())
-                .petId(review.getPet().getId())
-                .DID(review.getPet().getDid())
                 .title(review.getTitle())
                 .images(review.getImages())
+                .petName(review.getPet().getPetName())
+                .breed(review.getPet().getBreed())
                 .content(review.getContent())
                 .likeCount(likeCount)
                 .liked(liked)
                 .commentCount(commentCount)
-                .adoptionAgency(review.getAdoptionAgency())
-                .adoptionDate(review.getAdoptionDate())
-                .createdAt(review.getCreatedAt())
                 .build();
     }
 }

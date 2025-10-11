@@ -1,5 +1,6 @@
 package kpaas.dogcat.domain.story.review.dto;
 
+import kpaas.dogcat.domain.pet.enums.Breed;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,19 +20,14 @@ public class ReviewResDTO {
         private String memberName;
         private Long storyId;
         private Long petId;
-        private String DID;
-        private String title;
-        private String images;
-        private String content;
-        private String adoptionAgency;
-        private LocalDate adoptionDate;
     }
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class ReviewDTO {
+    public static class ReviewDetailDTO {
+        private String profileUrl;
         private String memberName;
         private Long storyId;
         private Long petId;
@@ -39,12 +35,31 @@ public class ReviewResDTO {
         private String title;
         private String images;
         private String content;
+        private Breed breed;
+        private String petName;
         private Long likeCount;
         private boolean liked;
         private Long commentCount;
         private String adoptionAgency;
         private LocalDate adoptionDate;
         private LocalDateTime createdAt;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ReviewDTO {
+        private String profileUrl;
+        private String memberName;
+        private String images;
+        private String title;
+        private String content;
+        private Breed breed;
+        private String petName;
+        private Long likeCount;
+        private boolean liked;
+        private Long commentCount;
     }
 
     @Data

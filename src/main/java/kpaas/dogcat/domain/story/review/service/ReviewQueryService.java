@@ -2,9 +2,8 @@ package kpaas.dogcat.domain.story.review.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
+import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.story.comment.service.CommentQueryService;
-import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDTO;
-import kpaas.dogcat.domain.story.dailyStory.entity.DailyStory;
 import kpaas.dogcat.domain.story.like.service.LikeQueryService;
 import kpaas.dogcat.domain.story.review.converter.ReviewConverter;
 import kpaas.dogcat.domain.story.review.repository.ReviewRepository;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,15 +32,22 @@ public class ReviewQueryService {
     private final LikeQueryService likeQueryService;
     private final CommentQueryService commentQueryService;
 
-    public ReviewResDTO.ReviewDTO getReview(Long reviewId, Long memberId) {
+    /** 입양 후기 상세 반환*/
+    public ReviewResDTO.ReviewDetailDTO getReviewDetail(Long reviewId, Long memberId) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOTFOUND));
-
+        Pet pet =  review.getPet();
         Member member = findMemberOrNull(memberId);
 
-        return mapToPreviewDTO(review, member);
+        Long storyId = review.getId();
+        Long likeCount = likeQueryService.getLikeCount(storyId);
+        Long commentCount = commentQueryService.getCommentCount(storyId);
+        boolean liked = member != null && likeQueryService.isAlreadyLike(review, member);
+
+        return reviewConverter.toReviewDetailDTO(review, pet, likeCount, liked, commentCount);
     }
 
+    /** 입양 후기 조회용 반환 **/
     public ReviewResDTO.ReviewListDTO getReviews(Long cursorId, int size, Long memberId) {
         Pageable pageable = PageRequest.of(0, size);
 
@@ -66,6 +71,7 @@ public class ReviewQueryService {
                 .build();
     }
 
+    /** 입양 후기 키워드 찾기 **/
     public ReviewResDTO.ReviewListDTO search(String keyword, Long cursorId, int size, Long memberId) {
         Pageable pageable = PageRequest.of(0, size);
         List<Review> reviews;
@@ -105,5 +111,18 @@ public class ReviewQueryService {
         boolean liked = member != null && likeQueryService.isAlreadyLike(review, member);
 
         return reviewConverter.toReviewPreviewDTO(review, likeCount, liked, commentCount);
+    }
+
+    // 홈 - 좋아요와 댓글이 가장 많은 입양 후기 3개 반환
+    public List<ReviewResDTO.ReviewDTO> get3PopularReviews() {
+        Pageable pageable = PageRequest.of(0, 3);
+        List<Review> reviews = reviewRepository.findTopPopularReview(pageable);
+
+        return reviews.stream()
+                .map(r -> reviewConverter.toReviewPreviewDTO(
+                        r, likeQueryService.getLikeCount(r.getId()),
+                        false, commentQueryService.getCommentCount(r.getId())
+                ))
+                .toList();
     }
 }

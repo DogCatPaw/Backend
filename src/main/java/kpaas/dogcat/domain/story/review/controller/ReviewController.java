@@ -2,7 +2,6 @@ package kpaas.dogcat.domain.story.review.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDTO;
 import kpaas.dogcat.domain.story.review.service.ReviewCommandService;
 import kpaas.dogcat.domain.story.review.service.ReviewQueryService;
 import kpaas.dogcat.domain.story.review.dto.ReviewReqDTO;
@@ -39,7 +38,7 @@ public class ReviewController {
     public CustomResponse<ReviewResDTO.ReviewDTO> getReview(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                            @PathVariable Long reviews) {
         Long memberId = (userDetails != null) ? userDetails.getId() : null;
-        return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReview(reviews, memberId));
+        return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReviewDetail(reviews, memberId));
     }
 
     @Operation(summary = "메인 입양 후기 목록 조회", description = "입양 후기 일지 메인 화면의 목록을 조회합니다.")
