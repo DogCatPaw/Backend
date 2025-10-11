@@ -33,10 +33,10 @@ public class ReviewController {
         return CustomResponse.onSuccess(SuccessCode.CREATED, createdReview);
     }
 
-    @Operation(summary = "입양 후기 하나 조회", description = "입양 후기 하나를 조회합니다.")
+    @Operation(summary = "입양 후기 상세 조회", description = "입양 후기 한 개의 상세 내용을 조회합니다.")
     @GetMapping("/review/{reviews}")
-    public CustomResponse<ReviewResDTO.ReviewDTO> getReview(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                           @PathVariable Long reviews) {
+    public CustomResponse<ReviewResDTO.ReviewDetailDTO> getReview(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                  @PathVariable Long reviews) {
         Long memberId = (userDetails != null) ? userDetails.getId() : null;
         return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReviewDetail(reviews, memberId));
     }
