@@ -2,8 +2,9 @@ package kpaas.dogcat.domain.pet.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
+import kpaas.dogcat.domain.pet.converter.PetConverter;
 import kpaas.dogcat.domain.pet.dto.PetReqDTO;
-import kpaas.dogcat.domain.pet.dto.PetResDTO;
+import kpaas.dogcat.domain.pet.dto.PetResDto;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.repository.PetRepository;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
@@ -19,25 +20,16 @@ public class PetCommandService {
 
     private final PetRepository petRepository;
     private final MemberRepository memberRepository;
+    private final PetConverter petConverter;
 
-    public PetResDTO.registerPetResDTO register(Long memberId, PetReqDTO.registerPetReqDTO dto){
+    public PetResDto.registerPetResDto register(Long memberId, PetReqDTO.registerPetReqDTO dto){
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
-        Pet pet = Pet.builder()
-                .did(dto.getDid())
-                .member(member)
-                .petName(dto.getPetName())
-                .breed(dto.getBreed())
-                .old(dto.getOld())
-                .weight(dto.getWeight())
-                .gender(dto.getGender())
-                .color(dto.getColor())
-                .isNeutral(dto.isNeutral())
-                .specifics(dto.getSpecifics())
-                .build();
+
+        Pet pet = petConverter.toPet(member, dto);
         Pet savedPet = petRepository.save(pet);
         log.info("[ Pet registered successfully ]");
-        return new PetResDTO.registerPetResDTO(memberId, savedPet.getId(), savedPet.getDid(), savedPet.getPetName());
+        return new PetResDto.registerPetResDto(memberId, savedPet.getId(), savedPet.getDid(), savedPet.getPetName());
     }
 }

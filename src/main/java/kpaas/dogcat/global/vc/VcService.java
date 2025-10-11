@@ -36,7 +36,7 @@ public class VcService {
                     .color(dto.getColor())
                     .isNeutral(dto.isNeutral())
                     .specifics(dto.getSpecifics())
-                    .issuer(dto.getIssuer())
+//                    .issuer(dto.getIssuer())
 //                    .ownerWallet(req.getMemberWallet()) // 요청 보낸 guardian wallet
                     .build();
         }

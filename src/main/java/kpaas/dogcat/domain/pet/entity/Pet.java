@@ -30,24 +30,24 @@ public class Pet {
     @Column(nullable = false, unique = true)
     private String did;
 
-    private String petName;
-
-    @Enumerated(EnumType.STRING)
-    private Breed breed;
-
     @Column(nullable = false)
-    private int old;
+    private String petProfile;
 
+    private String petName;
+    private int old;
     private int weight;
+    private String color;
+    private boolean isNeutral;      //중성화
+    private String specifics;       //특이사항
+//    private String issuer;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private String color;
-    private boolean isNeutral;      //중성화
-    private String specifics;       //특이사항
-    private String issuer;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Breed breed;
 
     @CreatedDate
     @Column(updatable = false)

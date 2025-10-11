@@ -21,5 +21,6 @@ public enum Breed {
     GERMAN_SHEPHERD,          // 저먼 셰퍼드
     SIBERIAN_HUSKY,           // 시베리안 허스키
     SHIBA_INU,                // 시바견
-    MIXED                     // 믹스견
+    MIXED,                    // 믹스견
+    OTHERS                    // 기타
 }
