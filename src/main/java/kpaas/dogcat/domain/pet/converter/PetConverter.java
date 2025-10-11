@@ -13,6 +13,7 @@ public class PetConverter {
                 .did(dto.getDid())
                 .member(member)
                 .petName(dto.getPetName())
+                .petProfile(dto.getPetProfile())
                 .breed(dto.getBreed())
                 .old(dto.getOld())
                 .weight(dto.getWeight())

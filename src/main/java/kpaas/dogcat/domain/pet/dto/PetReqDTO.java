@@ -17,6 +17,7 @@ public class PetReqDTO {
     @Builder
     public static class registerPetReqDTO {
         private String did;
+        private String petProfile;
         private String petName;
         private Breed breed;
         private int old;

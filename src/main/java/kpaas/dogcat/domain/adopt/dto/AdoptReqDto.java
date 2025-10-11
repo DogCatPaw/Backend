@@ -1,16 +1,27 @@
 package kpaas.dogcat.domain.adopt.dto;
 
-import kpaas.dogcat.domain.donate.donation.dto.DonationResDto;
-import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDto;
-import kpaas.dogcat.domain.story.review.dto.ReviewResDto;
+import kpaas.dogcat.domain.adopt.enums.Region;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDate;
 
 public class AdoptReqDto {
 
-
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class RegisterDto {
+        private Long petId;
+        private String title;
+        private String content;
+        private Region region;
+        private String district;
+        private String shelterName;
+        private String contact;
+        private LocalDate deadLine;
+    }
 }

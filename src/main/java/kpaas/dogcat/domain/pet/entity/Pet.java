@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.pet.entity;
 
 import jakarta.persistence.*;
+import kpaas.dogcat.domain.adopt.entity.Adopt;
 import kpaas.dogcat.domain.donate.donation.entity.Donation;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.pet.enums.Breed;
@@ -59,4 +60,8 @@ public class Pet {
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Donation> donations;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "adopt_id")
+    private Adopt adopt;
 }

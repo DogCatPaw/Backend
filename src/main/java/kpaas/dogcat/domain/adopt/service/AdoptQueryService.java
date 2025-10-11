@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.adopt;
+package kpaas.dogcat.domain.adopt.service;
 
 import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
 import kpaas.dogcat.domain.donate.donation.service.DonationQueryService;
@@ -7,9 +7,11 @@ import kpaas.dogcat.domain.story.review.service.ReviewQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AdoptQueryService {
 
@@ -17,7 +19,6 @@ public class AdoptQueryService {
     private final DailyStoryQueryService dailyStoryQueryService;
     private final DonationQueryService donationQueryService;
 //    private final AdoptionQueryService adoptionQueryService;
-    private final AdoptConverter adoptConverter;
 
     public AdoptResDto.HomeDto getHomeData() {
         return AdoptResDto.HomeDto.builder()
