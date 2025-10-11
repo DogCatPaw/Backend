@@ -63,4 +63,13 @@ public class DonationResDto {
         private int patronCount;           //후원자 수
         private int progress;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PreviewListDto {
+        private List<DonationResDto.PreviewDto> donations;
+        private Long nextCursor;
+    }
 }

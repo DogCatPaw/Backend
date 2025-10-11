@@ -15,4 +15,7 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
     List<Donation> findByStatus(DonationStatus donationStatus);
     boolean existsByPetIdAndMemberIdAndStatusIn(Long petId, Long memberId, List<DonationStatus> blockingStatuses);
     List<Donation> findTop3ByStatusOrderByDeadlineAsc(DonationStatus status, Pageable pageable);
+
+    List<Donation> findByStatusOrderByIdDesc(DonationStatus status, Pageable pageable);
+    List<Donation> findByStatusAndIdLessThanOrderByIdDesc(DonationStatus status, Long cursorId, Pageable pageable);
 }

@@ -65,6 +65,34 @@ public class DonationQueryService {
                 .toList();
     }
 
+    public DonationResDto.PreviewListDto getDonations(Long cursor, int size) {
+        Pageable pageable = PageRequest.of(0, size);
+
+        List<Donation> donations;
+        if (cursor == null) {
+            donations = donationRepository.findByStatusOrderByIdDesc(DonationStatus.ACTIVE, pageable);
+        } else {
+            donations = donationRepository.findByStatusAndIdLessThanOrderByIdDesc(DonationStatus.ACTIVE, cursor, pageable);
+        }
+
+        List<DonationResDto.PreviewDto> donationDtos = donations.stream()
+                .map(donation -> {
+                    String dDay = getDday(donation);
+                    int patronCount = getPatronCount(donation);
+                    int progress = getProgress(donation);
+                    return donationConverter.toHomeDto(dDay, patronCount, progress, donation);
+                })
+                .toList();
+
+        // 다음 커서 계산
+        Long nextCursor = donations.size() < size ? null : donations.get(donations.size() - 1).getId();
+
+        return DonationResDto.PreviewListDto.builder()
+                .donations(donationDtos)
+                .nextCursor(nextCursor)
+                .build();
+    }
+
 
     /** 디데이 계산 **/
     public String getDday(Donation donation){

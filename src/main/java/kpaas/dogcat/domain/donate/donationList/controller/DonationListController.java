@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "후원 관련 API")
 @RestController
-@RequestMapping("/api/donation")
+@RequestMapping("/api/donation-list")
 @RequiredArgsConstructor
 public class DonationListController {
 
@@ -27,7 +27,7 @@ public class DonationListController {
     }
 
     @Operation(summary = "후원 공고 내 후원 목록 조회하기", description = "후원 공고 내 후원 목록을 조회하는 API 입니다.")
-    @GetMapping
+    @GetMapping("/lists")
     public CustomResponse<DonationListResDto.DonationListDto> getDonationList(@RequestParam(required = true) Long donationId,
                                                                               @RequestParam(required = false) Long cursor,
                                                                               @RequestParam(defaultValue = "5") int size) {

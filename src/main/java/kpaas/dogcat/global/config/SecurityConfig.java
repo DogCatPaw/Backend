@@ -29,11 +29,17 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/swagger-resources/**",
             "/v3/api-docs/**",
-            "api/story/daily/{stories}",
-            "api/story/daily/stories",
-            "api/story/daily/search",
-            "api/story/review/{reviews}",
-            "api/story/review/reviews"
+            "/api/story/daily/{stories}",
+            "/api/story/daily/stories",
+            "/api/story/daily/search",
+            "/api/story/review/{reviews}",
+            "/api/story/review/reviews",
+            "/api/story/review/search",
+            "/api/donation/",
+            "/api/donation/list",
+            "/api/donation/closing",
+            "/api/donation-list/lists"
+
     };
 
     @Bean
