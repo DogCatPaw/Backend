@@ -35,9 +35,11 @@ public class DonationConverter {
                 .build();
     }
 
-    public DonationResDto.DetailDto toDetailDto(Donation donation,
+    public DonationResDto.DetailDto toDetailDto(String dDay, int patronCount, int progress,
+                                                Donation donation,
                                                 DonationListResDto.DonationListDto donationListDto) {
         return DonationResDto.DetailDto.builder()
+                .dDay(dDay)
                 .memberId(donation.getMember().getId())
                 .petName(donation.getPet().getPetName())
                 .petDid(donation.getPet().getDid())
@@ -50,8 +52,23 @@ public class DonationConverter {
                 .deadline(donation.getDeadline())
                 .category(donation.getCategory())
                 .images(donation.getImages())
+                .patronCount(patronCount)
+                .progress(progress)
                 .recentDonations(donationListDto.getDonations())
                 .cursor(donationListDto.getCursor())
+                .build();
+    }
+
+    public DonationResDto.HomeDto toHomeDto(String dDay, int patronCount, int progress, Donation donation) {
+        return DonationResDto.HomeDto.builder()
+                .dDay(dDay)
+                .thumbnail(donation.getImages())
+                .title(donation.getTitle())
+                .currentAmount(donation.getCurrentAmount())
+                .targetAmount(donation.getTargetAmount())
+                .donationStatus(donation.getStatus())
+                .patronCount(patronCount)
+                .progress(progress)
                 .build();
     }
 }

@@ -29,6 +29,7 @@ public class DonationResDto {
     @NoArgsConstructor
     @Builder
     public static class DetailDto {
+        private String dDay;
         private Long memberId;
         private String petName;
         private String petDid;
@@ -41,8 +42,25 @@ public class DonationResDto {
         private Category category;
         private String content;
         private String images;
+        private int patronCount;
+        private int progress;
 
         private List<DonationListResDto.DonationDto> recentDonations;
         private Long cursor;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class HomeDto {
+        private String dDay;
+        private String thumbnail;
+        private String title;
+        private Integer currentAmount;
+        private Integer targetAmount;
+        private DonationStatus donationStatus;
+        private int patronCount;           //후원자 수
+        private int progress;
     }
 }

@@ -2,20 +2,23 @@ package kpaas.dogcat.domain.donate.donation.service;
 
 import kpaas.dogcat.domain.donate.donation.converter.DonationConverter;
 import kpaas.dogcat.domain.donate.donation.dto.DonationResDto;
+import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.donate.donation.repository.DonationRepository;
 import kpaas.dogcat.domain.donate.donation.entity.Donation;
 import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
-import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
 import kpaas.dogcat.domain.donate.donationList.repository.DonationListRepository;
-import kpaas.dogcat.domain.donate.donationList.service.DonationListCommandService;
 import kpaas.dogcat.domain.donate.donationList.service.DonationListQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Slf4j
@@ -27,7 +30,6 @@ public class DonationQueryService {
     private final DonationRepository donationRepository;
     private final DonationListQueryService donationListQueryService;
     private final DonationConverter donationConverter;
-    private final DonationListRepository donationListRepository;
 
     public Donation findById(Long donationId) {
         return donationRepository.findById(donationId)
@@ -38,24 +40,56 @@ public class DonationQueryService {
     public DonationResDto.DetailDto getDonationDetail(Long donationId, Long cursor, int size) {
         Donation donation = findById(donationId);
 
+        String dDay = getDday(donation);
+        int patronCount = getPatronCount(donation);
+        int progress = getProgress(donation);
+
         //후원 내역 조회
         DonationListResDto.DonationListDto donationListDto
-                = donationListQueryService.getDonationList(donationId, cursor, 5);
+                = donationListQueryService.getDonationList(donationId, cursor, size);
 
-        return donationConverter.toDetailDto(donation, donationListDto);
+        return donationConverter.toDetailDto(dDay, patronCount, progress, donation, donationListDto);
     }
 
-//    public Integer getCurrentAmount(Long donationId) {
-//        Donation donation = donationRepository.findById(donationId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.DONATION_NOTFOUND));
-//
-//        // 모인 후원금을 계산
-//        List<DonationList> donationLists = donationListRepository.findByDonationId(donationId);
-//        Integer currentAmount = donation.getCurrentAmount();
-//        if (currentAmount == null) currentAmount = 0;
-//        for (DonationList donationList : donationLists) {
-//            currentAmount += donationList.getAmount();  // 단순히 합산하는 것이기 때문에 쿼리 ok
-//        }
-//        return currentAmount;
-//    }
+    /** 후원 공고 마감일 임박순 3개 리턴 **/
+    public List<DonationResDto.HomeDto> get3ClosingSoonDonations() {
+        Pageable pageable = PageRequest.of(0, 3);
+
+        return donationRepository.findTop3ByStatusOrderByDeadlineAsc(DonationStatus.ACTIVE, pageable)
+                .stream()
+                .map(donation -> {
+                    String dDay = getDday(donation);
+                    int patronCount = getPatronCount(donation);
+                    int progress = getProgress(donation);
+                    return donationConverter.toHomeDto(dDay, patronCount, progress, donation);
+                })
+                .toList();
+    }
+
+
+    /** 디데이 계산 **/
+    public String getDday(Donation donation){
+        LocalDate today = LocalDate.now();
+        long daysLeft = ChronoUnit.DAYS.between(today, donation.getDeadline());
+        String dDay;
+
+        if (daysLeft > 0) dDay = "D-" + daysLeft;
+        else if (daysLeft == 0) dDay = "D-day";
+        else dDay = "마감";
+
+        return dDay;
+    }
+
+    /** 후원자 수 **/
+    public int getPatronCount(Donation donation) {
+        return donation.getDonationListList() != null
+                ? donation.getDonationListList().size() : 0;
+    }
+
+    /** 후원율 계산 **/
+    public int getProgress(Donation donation) {
+        int progress = (donation.getTargetAmount() != 0) ?
+                (int) Math.round((double) donation.getCurrentAmount() / donation.getTargetAmount() * 100) : 0;
+        return progress;
+    }
 }
