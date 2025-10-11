@@ -2,7 +2,6 @@ package kpaas.dogcat.domain.donate.donationList.service;
 
 import kpaas.dogcat.domain.donate.donation.entity.Donation;
 import kpaas.dogcat.domain.donate.donation.repository.DonationRepository;
-import kpaas.dogcat.domain.donate.donation.service.DonationQueryService;
 import kpaas.dogcat.domain.donate.donationList.converter.DonationListConverter;
 import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
 import kpaas.dogcat.domain.donate.donationList.entity.DonationList;

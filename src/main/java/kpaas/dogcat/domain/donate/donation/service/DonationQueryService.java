@@ -34,30 +34,28 @@ public class DonationQueryService {
                 .orElseThrow(() -> new CustomException(ErrorCode.DONATION_NOTFOUND));
     }
 
+    // 후원 공고 상세 보기 + 후원 내역 조회
     public DonationResDto.DetailDto getDonationDetail(Long donationId, Long cursor, int size) {
         Donation donation = findById(donationId);
-
-        //누적 금액 계산
-        Integer currentAmount = getCurrentAmount(donationId);
 
         //후원 내역 조회
         DonationListResDto.DonationListDto donationListDto
                 = donationListQueryService.getDonationList(donationId, cursor, 5);
 
-        return donationConverter.toDetailDto(donation, currentAmount, donationListDto);
+        return donationConverter.toDetailDto(donation, donationListDto);
     }
 
-    public Integer getCurrentAmount(Long donationId) {
-        Donation donation = donationRepository.findById(donationId)
-                .orElseThrow(() -> new CustomException(ErrorCode.DONATION_NOTFOUND));
-
-        // 모인 후원금을 계산
-        List<DonationList> donationLists = donationListRepository.findByDonationId(donationId);
-        Integer currentAmount = donation.getCurrentAmount();
-        if (currentAmount == null) currentAmount = 0;
-        for (DonationList donationList : donationLists) {
-            currentAmount += donationList.getAmount();  // 단순히 합산하는 것이기 때문에 쿼리 ok
-        }
-        return currentAmount;
-    }
+//    public Integer getCurrentAmount(Long donationId) {
+//        Donation donation = donationRepository.findById(donationId)
+//                .orElseThrow(() -> new CustomException(ErrorCode.DONATION_NOTFOUND));
+//
+//        // 모인 후원금을 계산
+//        List<DonationList> donationLists = donationListRepository.findByDonationId(donationId);
+//        Integer currentAmount = donation.getCurrentAmount();
+//        if (currentAmount == null) currentAmount = 0;
+//        for (DonationList donationList : donationLists) {
+//            currentAmount += donationList.getAmount();  // 단순히 합산하는 것이기 때문에 쿼리 ok
+//        }
+//        return currentAmount;
+//    }
 }

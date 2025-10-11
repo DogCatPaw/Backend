@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DonationConverter {
 
-    public Donation toDonation(Member member, Pet pet, DonationReqDto.CreateDto dto) {
+    public Donation toDonation(Member member, Pet pet, DonationReqDto.CreateDto dto, String accountNumber) {
         return Donation.builder()
                 .member(member)
                 .pet(pet)
@@ -21,6 +21,9 @@ public class DonationConverter {
                 .category(dto.getCategory())
                 .content(dto.getContent())
                 .images(dto.getImages())
+                .bankName(dto.getBankName())
+                .accountNumber(accountNumber)
+                .accountHolder(dto.getAccountHolder())
                 .build();
     }
 
@@ -29,18 +32,10 @@ public class DonationConverter {
                 .memberId(savedDonation.getMember().getId())
                 .donationId(savedDonation.getId())
                 .petDid(savedDonation.getPet().getDid())
-                .petName(savedDonation.getPet().getPetName())
-                .breed(savedDonation.getPet().getBreed())
-                .title(savedDonation.getTitle())
-                .targetAmount(savedDonation.getTargetAmount())
-                .deadline(savedDonation.getDeadline())
-                .category(savedDonation.getCategory())
-                .content(savedDonation.getContent())
-                .images(savedDonation.getImages())
                 .build();
     }
 
-    public DonationResDto.DetailDto toDetailDto(Donation donation, Integer currentAmount,
+    public DonationResDto.DetailDto toDetailDto(Donation donation,
                                                 DonationListResDto.DonationListDto donationListDto) {
         return DonationResDto.DetailDto.builder()
                 .memberId(donation.getMember().getId())
@@ -49,8 +44,9 @@ public class DonationConverter {
                 .breed(donation.getPet().getBreed())
                 .title(donation.getTitle())
                 .content(donation.getContent())
+                .donationStatus(donation.getStatus())
                 .targetAmount(donation.getTargetAmount())
-                .currentAmount(currentAmount)
+                .currentAmount(donation.getCurrentAmount())
                 .deadline(donation.getDeadline())
                 .category(donation.getCategory())
                 .images(donation.getImages())

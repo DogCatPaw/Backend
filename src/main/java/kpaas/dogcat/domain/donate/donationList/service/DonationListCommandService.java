@@ -49,10 +49,11 @@ public class DonationListCommandService {
             throw new CustomException(ErrorCode.DONATION_INVALID);
         }
 
-        int remaining = donation.getTargetAmount() - donation.getCurrentAmount();
-        if (item.getPrice() > remaining) {
-            throw new CustomException(ErrorCode.DONATION_OVERFLOW);
-        }
+        // 목표 달성하면 ACHIEVED, 후원 더이상 못하게 하려했는데, 마감일전까지 가능하도록했음.
+//        int remaining = donation.getTargetAmount() - donation.getCurrentAmount();
+//        if (item.getPrice() > remaining) {
+//            throw new CustomException(ErrorCode.DONATION_OVERFLOW);
+//        }
 
         // 뼈다귀 잔액 확인 및 차감
         Integer bones = member.getBoneBalance();
@@ -69,9 +70,9 @@ public class DonationListCommandService {
         donationListRepository.save(donationList);
 
         int newAmount = donation.getCurrentAmount() + item.getPrice();
-        donation.updateCurrentAmount(newAmount);
+        donation.updateCurrentAmount(newAmount);    //현재 누적금액
 
-        if (newAmount >= donation.getTargetAmount()) {
+        if (newAmount >= donation.getTargetAmount() && donation.getStatus() == DonationStatus.ACTIVE) {
             donation.changeStatus(DonationStatus.ACHIEVED);
             log.info("[ 목표 금액 달성 - 후원ID={}, 목표금액={}, 현재금액={} ]",
                     donation.getId(), donation.getTargetAmount(), newAmount);

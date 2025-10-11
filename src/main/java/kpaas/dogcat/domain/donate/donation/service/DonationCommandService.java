@@ -1,5 +1,6 @@
 package kpaas.dogcat.domain.donate.donation.service;
 
+import jakarta.transaction.Transactional;
 import kpaas.dogcat.domain.donate.donation.converter.DonationConverter;
 import kpaas.dogcat.domain.donate.donation.dto.DonationReqDto;
 import kpaas.dogcat.domain.donate.donation.dto.DonationResDto;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class DonationCommandService {
 
@@ -44,7 +46,8 @@ public class DonationCommandService {
         }
 
         // 후원 공고 저장
-        Donation donation = donationConverter.toDonation(member, pet, dto);
+        String accountNumber = dto.getAccountNumber().replace("-", "");
+        Donation donation = donationConverter.toDonation(member, pet, dto, accountNumber);
         Donation savedDonation = donationRepository.save(donation);
 
         return donationConverter.toCreateDto(savedDonation);
@@ -52,11 +55,12 @@ public class DonationCommandService {
 
     // 마감일 지난 후원 공고 -> CLOSED
     public void closeDonation() {
-        List<Donation> activeDonations = donationRepository.findByStatus(DonationStatus.ACTIVE);
+        List<Donation> openDonations = donationRepository
+                .findByStatusIn(List.of(DonationStatus.ACTIVE, DonationStatus.ACHIEVED));
         LocalDate today = LocalDate.now();
 
         // 마감일이 지난 공고 상태를 CLOSED로 변경
-        for (Donation donation : activeDonations) {
+        for (Donation donation : openDonations) {
             if (today.isAfter(donation.getDeadline())) {
                 donation.changeStatus(DonationStatus.CLOSED);
                 log.info("[ 후원 공고 마감 처리 완료: '{}' (ID={}) ]", donation.getTitle(), donation.getId());

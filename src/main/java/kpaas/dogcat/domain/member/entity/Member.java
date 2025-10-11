@@ -45,7 +45,10 @@ public class Member {
     @Column(nullable = false)
     private String phoneNumber;
 
+    @Builder.Default
     private Integer boneBalance = 0;    // 보유한 뼈다귀 수량, 1뼈다귀 = 1000원
+
+    @Builder.Default
     private Integer settledBalance = 0; // 정산된 후원금
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)

@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface DonationRepository extends JpaRepository<Donation, Long> {
+    List<Donation> findByStatusIn(List<DonationStatus> active);
     List<Donation> findByStatus(DonationStatus donationStatus);
     boolean existsByPetIdAndMemberIdAndStatusIn(Long petId, Long memberId, List<DonationStatus> blockingStatuses);
 }

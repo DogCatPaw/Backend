@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.donate.donation.dto;
 
 import kpaas.dogcat.domain.donate.donation.enums.Category;
+import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
 import kpaas.dogcat.domain.pet.enums.Breed;
 import lombok.AllArgsConstructor;
@@ -20,15 +21,7 @@ public class DonationResDto {
     public static class CreateDto {
         private Long memberId;
         private Long donationId;
-        private String petName;
         private String petDid;
-        private Breed breed;
-        private String title;
-        private Integer targetAmount;
-        private LocalDate deadline;
-        private Category category;
-        private String content;
-        private String images;
     }
 
     @Data
@@ -43,6 +36,7 @@ public class DonationResDto {
         private String title;
         private Integer targetAmount;
         private Integer currentAmount;
+        private DonationStatus donationStatus;
         private LocalDate deadline;
         private Category category;
         private String content;
