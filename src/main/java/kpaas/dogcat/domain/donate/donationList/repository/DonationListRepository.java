@@ -12,4 +12,5 @@ import java.util.List;
 public interface DonationListRepository extends JpaRepository<DonationList, Long> {
     List<DonationList> findByDonationOrderByIdDesc(Donation donation, Pageable pageable);
     List<DonationList> findByDonationAndIdLessThanOrderByIdDesc(Donation donation, Long id, Pageable pageable);
+    List<DonationList> findByDonationId(Long donationId);
 }

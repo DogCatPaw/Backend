@@ -46,6 +46,7 @@ public class Member {
     private String phoneNumber;
 
     private Integer boneBalance = 0;    // 보유한 뼈다귀 수량, 1뼈다귀 = 1000원
+    private Integer settledBalance = 0; // 정산된 후원금
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Pet> petList;
@@ -53,7 +54,7 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Payment> payments;
 
-    public void chargePoint(Integer amount) {
+    public void chargeBone(Integer amount) {
         if (!amount.equals(1000) && !amount.equals(5000)
                 && !amount.equals(10000) && !amount.equals(20000)) {
             throw new CustomException(ErrorCode.INSUFFICIENT_BALANCE);
@@ -61,11 +62,16 @@ public class Member {
         this.boneBalance += amount;
     }
 
-    public void decreaseBone(Integer amount) {
+    public Integer decreaseBone(Integer amount) {
         if (this.boneBalance < amount) {
             throw new CustomException(ErrorCode.BONE_NOT_ENOUGH);
         }
         this.boneBalance -= amount;
+        return boneBalance;
+    }
+
+    public void settleBone(Integer amount) {
+        this.settledBalance += amount;
     }
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)

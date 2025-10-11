@@ -52,7 +52,7 @@ public enum ErrorCode implements BaseCode {
     REVIEW_NOTFOUND(HttpStatus.NOT_FOUND, "STORY_404", "등록된 입양 후기가 없습니다."),
     IMAGE_REQUIRED(HttpStatus.NOT_FOUND, "STORY_404", "선택된 이미지 파일이 없습니다."),
 
-    // 결제 관련 에러 추가
+    // 후원 결제 관련 에러 추가
     INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "PAYMENT_400", "결제 금액은 1000원 이상만 가능합니다."),
     ITEM_NOTFOUND(HttpStatus.NOT_FOUND, "ITEM404", "구매할 물품이 없습니다."),
     PAYMENT_NOTFOUND(HttpStatus.NOT_FOUND, "PAYMENT404", "결제가 없습니다."),
@@ -66,12 +66,15 @@ public enum ErrorCode implements BaseCode {
     PAYMENT_UNSPECIFIED_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "PAYMENT500", "결제/환불 상태가 불분명하여 처리에 실패했습니다."),
     PAYMENT_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "PAYMENT500", "토스 결제 응답이 없습니다."),
 
-    // 후원 관련 에러 추가
+    // 후원 뼈다귀
     BONE_NOTFOUND(HttpStatus.NOT_FOUND, "BONE404", "후원 가능한 뼈다귀가 없습니다."),
-    // 후원공고글
-    DONATION_NOTFOUND(HttpStatus.NOT_FOUND, "DONATION404", "해당되는 후원 공고가 없습니다."),
     BONE_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "BONE400", "뼈다귀가 충분하지 않습니다."),
-    DONATIONLIST_NOTFOUND(HttpStatus.NOT_FOUND, "DONATION404", "해당되는 후원 내역이 없습니다.");
+    // 후원 공고글
+    DONATION_NOTFOUND(HttpStatus.NOT_FOUND, "DONATION404", "해당되는 후원 공고가 없습니다."),
+    DONATIONLIST_NOTFOUND(HttpStatus.NOT_FOUND, "DONATION404", "해당되는 후원 내역이 없습니다."),
+    DONATION_INVALID(HttpStatus.NOT_FOUND, "DONATION404", "해당 후원 공고는 마감되었습니다."),
+    DONATION_OVERFLOW(HttpStatus.BAD_REQUEST, "DONATION400", "목표 후원 금액 미만으로 후원바랍니다."),
+    ALREADY_ACTIVE_DONATION(HttpStatus.BAD_REQUEST, "DONATION400", "해당 펫에 존재하는 후원 공고입니다.");
 
 
     private final HttpStatus httpStatus;

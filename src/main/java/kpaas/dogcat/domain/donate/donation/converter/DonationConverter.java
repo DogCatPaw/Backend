@@ -3,6 +3,7 @@ package kpaas.dogcat.domain.donate.donation.converter;
 import kpaas.dogcat.domain.donate.donation.dto.DonationReqDto;
 import kpaas.dogcat.domain.donate.donation.dto.DonationResDto;
 import kpaas.dogcat.domain.donate.donation.entity.Donation;
+import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,25 @@ public class DonationConverter {
                 .category(savedDonation.getCategory())
                 .content(savedDonation.getContent())
                 .images(savedDonation.getImages())
+                .build();
+    }
+
+    public DonationResDto.DetailDto toDetailDto(Donation donation, Integer currentAmount,
+                                                DonationListResDto.DonationListDto donationListDto) {
+        return DonationResDto.DetailDto.builder()
+                .memberId(donation.getMember().getId())
+                .petName(donation.getPet().getPetName())
+                .petDid(donation.getPet().getDid())
+                .breed(donation.getPet().getBreed())
+                .title(donation.getTitle())
+                .content(donation.getContent())
+                .targetAmount(donation.getTargetAmount())
+                .currentAmount(currentAmount)
+                .deadline(donation.getDeadline())
+                .category(donation.getCategory())
+                .images(donation.getImages())
+                .recentDonations(donationListDto.getDonations())
+                .cursor(donationListDto.getCursor())
                 .build();
     }
 }

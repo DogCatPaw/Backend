@@ -26,7 +26,7 @@ public class DonationList {
     private Long id;
 
     @Column(nullable = false)
-    private Integer amount;     // 후원비
+    private Integer amount;     // 각자가 후원한 금액
 
     @CreatedDate
     @Column(updatable = false)

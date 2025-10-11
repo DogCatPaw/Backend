@@ -86,7 +86,7 @@ public class PaymentCommandServiceImpl {
             log.info("[ 결제 승인 완료 - 회원ID: {}, orderId: {}, 결제금액: {} ]", memberId, dto.getOrderId(), responseDto.getTotalAmount());
             payment.updateStatus(OrderStatus.DONE);
             paymentRepository.save(payment);
-            member.chargePoint(responseDto.getTotalAmount());
+            member.chargeBone(responseDto.getTotalAmount());
             memberRepository.save(member);
 
             return paymentConverter.toApproveDTO(responseDto, payment);

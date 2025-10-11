@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.donate.donation.entity;
 
 import jakarta.persistence.*;
+import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.donate.donation.enums.Category;
 import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
 import kpaas.dogcat.domain.member.entity.Member;
@@ -13,6 +14,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -32,17 +34,27 @@ public class Donation {
     @Column(nullable = false)
     private Integer targetAmount;
 
-    @CreatedDate
-    @Column(updatable = false)
     private LocalDate deadline;
 
     @Enumerated(EnumType.STRING)
-    private Category category;      //후원목적: 수술비, 의료비
+    private Category category;              //후원목적: 수술비, 의료비
+
+    @Enumerated(EnumType.STRING)
+    private DonationStatus status;          // 후원 상태
 
     @Column(nullable = false)
     private String content;
 
     private String images;
+
+    // 계좌 정보
+    private String bankName;
+    private String accountNumber;
+    private String accountHolder;           // 예금주명
+
+    // 정산 관련 필드
+    private Integer currentAmount = 0;      // 현재 누적 후원금
+    private Integer payoutAmount = 0;           // 실제 지급액
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id")
@@ -54,4 +66,16 @@ public class Donation {
 
     @OneToMany(mappedBy = "donation", cascade = CascadeType.REMOVE)
     private List<DonationList> donationListList;
+
+    public void changeStatus(DonationStatus status) {
+        this.status = status;
+    }
+
+    public void setPayoutAmount(Integer amount) {
+        this.payoutAmount = amount;
+    }
+
+    public void updateCurrentAmount(Integer amount) {
+        this.currentAmount = amount;
+    }
 }
