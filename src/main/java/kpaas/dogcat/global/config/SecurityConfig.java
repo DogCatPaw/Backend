@@ -46,7 +46,8 @@ public class SecurityConfig {
             "/api/donations/lists",
 
             "/api/adoption/home",
-            "/api/adoption/"
+            "/api/adoption/",
+            "/api/adoption/detail"
     };
 
     @Bean
