@@ -2,6 +2,7 @@ package kpaas.dogcat.domain.adopt.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
 import kpaas.dogcat.domain.adopt.service.AdoptCommandService;
 import kpaas.dogcat.domain.adopt.service.AdoptQueryService;
 import kpaas.dogcat.domain.adopt.dto.AdoptReqDto;
@@ -29,8 +30,17 @@ public class AdoptController {
     }
 
     @Operation(summary = "입양 공고 작성", description = "입양 공고를 작성하는 API 입니다. 펫 등록이 먼저 필요합니다.")
-    @PostMapping("/")
+    @PostMapping("/post")
     public CustomResponse<AdoptResDto.RegisterDto> register(@RequestBody AdoptReqDto.RegisterDto dto) {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptCommandService.register(dto));
+    }
+
+    @Operation(summary = "입양 공고 조회 (cursor 기반)", description = "입양 공고를 cursor로 조회하는 API 입니다. " +
+            "\"cursor와 size에 아무 값도 입력하지 않아도 되며, 기본 사이즈는 9입니다. 다음 조회는 nextCursor을 사용하세요.")
+    @GetMapping("/")
+    public CustomResponse<AdoptResDto.PreviewListDto> getRegistration(@RequestParam(required = false) Long cursor,
+                                             @RequestParam(defaultValue = "9") int size,
+                                             @RequestParam AdoptionStatus status) {
+        return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getAdoptions(cursor, size, status));
     }
 }

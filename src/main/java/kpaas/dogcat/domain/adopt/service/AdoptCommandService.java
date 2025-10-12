@@ -26,7 +26,8 @@ public class AdoptCommandService {
     public AdoptResDto.RegisterDto register(AdoptReqDto.RegisterDto dto) {
         Pet pet = petQueryService.findById(dto.getPetId());
         Adopt adopt = adoptConverter.toAdopt(pet, dto);
-        adoptRepository.save(adopt);
+        pet.setAdopt(adopt);            // 연관관계 양쪽 설정
+        adoptRepository.save(adopt);    // 주인인 Pet만 save해도 adopt까지 cascade로 저장됨
 
         return adoptConverter.toRegisterDto(pet);
     }

@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.adopt.entity;
 
 import jakarta.persistence.*;
+import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
 import kpaas.dogcat.domain.adopt.enums.Region;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import lombok.AllArgsConstructor;
@@ -44,10 +45,18 @@ public class Adopt {
     @Column(nullable = false)
     private LocalDate deadline;
 
+    @Enumerated(EnumType.STRING)
+    private AdoptionStatus status;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    //펫이 먼저 존재하고 입양 공고가 붙기 때문에 펫을 주인으로 설정
     @OneToOne(mappedBy = "adopt", fetch = FetchType.LAZY)
     private Pet pet;
+
+    public void setPet(Pet pet) {
+        this.pet = pet;
+    }
 }

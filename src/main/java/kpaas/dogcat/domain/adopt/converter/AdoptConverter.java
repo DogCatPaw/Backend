@@ -18,6 +18,7 @@ public class AdoptConverter {
                 .shelterName(dto.getShelterName())
                 .contact(dto.getContact())
                 .deadline(dto.getDeadLine())
+                .status(dto.getStatus())
                 .build();
     }
 
@@ -25,6 +26,19 @@ public class AdoptConverter {
         return AdoptResDto.RegisterDto.builder()
                 .petId(pet.getId())
                 .did(pet.getDid())
+                .build();
+    }
+
+    public AdoptResDto.PreviewDto toPreviewDto(String dDay, Pet pet, Adopt adoption) {
+        return AdoptResDto.PreviewDto.builder()
+                .thumbnail(pet.getPetProfile())     //등록했던 펫 프로필 사용할지, 공고 사진 따로 올릴지 고민
+                .title(adoption.getTitle())
+                .breed(pet.getBreed())
+                .did(pet.getDid())
+                .region(adoption.getRegion())
+                .district(adoption.getDistrict())
+                .shelterName(adoption.getShelterName())
+                .dDay(dDay)
                 .build();
     }
 }

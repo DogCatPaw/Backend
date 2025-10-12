@@ -61,7 +61,15 @@ public class Pet {
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Donation> donations;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "adopt_id")
     private Adopt adopt;
+
+    /** adopt 연결 메서드 */
+    public void setAdopt(Adopt adopt) {
+        this.adopt = adopt;
+        if (adopt != null && adopt.getPet() != this) {
+            adopt.setPet(this);
+        }
+    }
 }

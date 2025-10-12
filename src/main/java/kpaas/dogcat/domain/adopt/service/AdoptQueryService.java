@@ -1,13 +1,26 @@
 package kpaas.dogcat.domain.adopt.service;
 
+import kpaas.dogcat.domain.adopt.converter.AdoptConverter;
 import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
+import kpaas.dogcat.domain.adopt.entity.Adopt;
+import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
+import kpaas.dogcat.domain.adopt.repository.AdoptRepository;
+import kpaas.dogcat.domain.donate.donation.entity.Donation;
+import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.donate.donation.service.DonationQueryService;
+import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.story.dailyStory.service.DailyStoryQueryService;
 import kpaas.dogcat.domain.story.review.service.ReviewQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -19,6 +32,8 @@ public class AdoptQueryService {
     private final DailyStoryQueryService dailyStoryQueryService;
     private final DonationQueryService donationQueryService;
 //    private final AdoptionQueryService adoptionQueryService;
+    private final AdoptRepository adoptRepository;
+    private final AdoptConverter adoptConverter;
 
     public AdoptResDto.HomeDto getHomeData() {
         return AdoptResDto.HomeDto.builder()
@@ -27,5 +42,49 @@ public class AdoptQueryService {
                 .closingSoonDonations(donationQueryService.get3ClosingSoonDonations())
 //                .latestAdoptions(adoptionQueryService.get3LatestAdoptions())
                 .build();
+    }
+
+    public AdoptResDto.PreviewListDto getAdoptions(Long cursor, int size, AdoptionStatus status) {
+        Pageable pageable = PageRequest.of(0, size);
+
+        // 상태가 null이면 입양 가능한 상태만 조회
+        if (status == null) {
+            status = AdoptionStatus.ACTIVE;
+        }
+
+        List<Adopt> adoptions;
+        if (cursor == null) {
+            adoptions = adoptRepository.findByStatusOrderByIdDesc(status, pageable);
+        } else {
+            adoptions = adoptRepository.findByStatusAndIdLessThanOrderByIdDesc(status, cursor, pageable);
+        }
+
+        List<AdoptResDto.PreviewDto> adoptionDtos = adoptions.stream()
+                .map(adoption -> {
+                    Pet pet = adoption.getPet();
+                    String dDay = getDday(adoption);
+                    return adoptConverter.toPreviewDto(dDay, pet, adoption);
+                })
+                .toList();
+
+        Long nextCursor = adoptions.size() < size ? null : adoptions.get(adoptions.size() - 1).getId();
+
+        return AdoptResDto.PreviewListDto.builder()
+                .adoptions(adoptionDtos)
+                .nextCursor(nextCursor)
+                .build();
+    }
+
+    /** 디데이 계산 **/
+    public String getDday(Adopt adopt){
+        LocalDate today = LocalDate.now();
+        long daysLeft = ChronoUnit.DAYS.between(today, adopt.getDeadline());
+        String dDay;
+
+        if (daysLeft > 0) dDay = "D-" + daysLeft;
+        else if (daysLeft == 0) dDay = "D-day";
+        else dDay = "마감";
+
+        return dDay;
     }
 }

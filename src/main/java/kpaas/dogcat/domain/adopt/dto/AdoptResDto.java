@@ -1,5 +1,9 @@
 package kpaas.dogcat.domain.adopt.dto;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
 import kpaas.dogcat.domain.adopt.enums.Region;
 import kpaas.dogcat.domain.donate.donation.dto.DonationResDto;
 import kpaas.dogcat.domain.pet.enums.Breed;
@@ -11,6 +15,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class AdoptResDto {
@@ -33,5 +38,58 @@ public class AdoptResDto {
     public static class RegisterDto {
         private Long petId;
         private String did;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class PreviewDto {
+        private String thumbnail;
+        private String title;
+        private Breed breed;
+        private String did;
+        private Region region;
+        private String district;
+        private String shelterName;
+        //        private String contact;
+        private String dDay;
+        private AdoptionStatus status;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PreviewListDto {
+        private List<AdoptResDto.PreviewDto> adoptions;
+        private Long nextCursor;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class DetailDto {
+        private String title;
+        private String content;
+
+        private String did;
+        private String petProfile;
+        private String petName;
+        private int old;
+        private int weight;
+        private String color;
+        private boolean isNeutral;      //중성화
+        private String specifics;       //특이사항, 메모
+        private Gender gender;
+        private Breed breed;
+
+        private Region region;          // 광역시·도
+        private String district;        // 군·구 (ex. "강남구")
+        private String shelterName;
+//        private String contact;
+        private LocalDate deadline;
+        private AdoptionStatus status;
     }
 }
