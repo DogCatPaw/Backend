@@ -65,14 +65,20 @@ public class DonationQueryService {
                 .toList();
     }
 
-    public DonationResDto.PreviewListDto getDonations(Long cursor, int size) {
+    public DonationResDto.PreviewListDto getDonations(Long cursor, int size, DonationStatus status) {
         Pageable pageable = PageRequest.of(0, size);
 
+        // 상태가 null이면 ACTIVE인 상태만 조회
+        if (status == null || status == DonationStatus.SETTLED) {
+            status = DonationStatus.ACTIVE;
+        }
+
+        // 특정 상태만 조회
         List<Donation> donations;
         if (cursor == null) {
-            donations = donationRepository.findByStatusOrderByIdDesc(DonationStatus.ACTIVE, pageable);
+            donations = donationRepository.findByStatusOrderByIdDesc(status, pageable);
         } else {
-            donations = donationRepository.findByStatusAndIdLessThanOrderByIdDesc(DonationStatus.ACTIVE, cursor, pageable);
+            donations = donationRepository.findByStatusAndIdLessThanOrderByIdDesc(status, cursor, pageable);
         }
 
         List<DonationResDto.PreviewDto> donationDtos = donations.stream()

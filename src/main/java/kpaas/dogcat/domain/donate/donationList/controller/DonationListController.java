@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "후원 관련 API")
 @RestController
-@RequestMapping("/api/donation-list")
+@RequestMapping("/api/donations")
 @RequiredArgsConstructor
 public class DonationListController {
 

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.donate.donation.dto.DonationReqDto;
 import kpaas.dogcat.domain.donate.donation.dto.DonationResDto;
+import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.donate.donation.service.DonationCommandService;
 import kpaas.dogcat.domain.donate.donation.service.DonationQueryService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
@@ -46,11 +47,12 @@ public class DonationController {
     }
 
     @Operation(summary = "하단 - 전체 후원 리스트 (cursor 기반)", description = "후원글을 cursor로 조회하는 API 입니다." +
-            "cursorId와 size에 아무 값도 입력하지 않아도 되며, 기본 사이즈는 9입니다. 다음 조회는 nextCursor을 사용하세요.")
+            "status 파라미터는 ACTIVE, ACHIEVED, CLOSED처럼 대문자로 보내주세요." +
+            "cursor와 size에 아무 값도 입력하지 않아도 되며, 기본 사이즈는 9입니다. 다음 조회는 nextCursor을 사용하세요.")
     @GetMapping("/list")
-    public CustomResponse<DonationResDto.PreviewListDto> getDonationList(@RequestParam(required = false) Long cursorId,
-                                                                         @RequestParam(defaultValue = "9") int size
-    ) {
-        return CustomResponse.onSuccess(donationQueryService.getDonations(cursorId, size));
+    public CustomResponse<DonationResDto.PreviewListDto> getDonationList(@RequestParam(required = false) Long cursor,
+                                                                         @RequestParam(defaultValue = "9") int size,
+                                                                         @RequestParam(required = false)DonationStatus status) {
+        return CustomResponse.onSuccess(donationQueryService.getDonations(cursor, size, status));
     }
 }
