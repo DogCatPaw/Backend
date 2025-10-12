@@ -77,7 +77,8 @@ public enum ErrorCode implements BaseCode {
     ALREADY_ACTIVE_DONATION(HttpStatus.BAD_REQUEST, "DONATION400", "해당 펫과 관련된 후원 공고가 이미 존재합니다."),
 
     // 입양
-    ALEADY_ACTIVE_ADOPTION(HttpStatus.BAD_REQUEST, "ADOPTION400", "해당 펫과 관련된 입양 공고가 이미 존재합니다.");
+    ALEADY_ACTIVE_ADOPTION(HttpStatus.BAD_REQUEST, "ADOPTION400", "해당 펫과 관련된 입양 공고가 이미 존재합니다."),
+    ADOPTION_NOTFOUND(HttpStatus.NOT_FOUND, "ADOPTION404", "해당되는 입양 공고가 없습니다.");
 
 
     private final HttpStatus httpStatus;

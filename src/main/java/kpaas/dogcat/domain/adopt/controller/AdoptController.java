@@ -47,4 +47,10 @@ public class AdoptController {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getAdoptions(
                 cursor, size, status, region, district));
     }
+
+    @Operation(summary = "입양 공고 상세 페이지 조회", description = "입양 공고의 상세 페이지를 조회하는 API 입니다.")
+    @GetMapping("/detail")
+    public CustomResponse<AdoptResDto.DetailDto> getDetail(@RequestParam Long adoptId) {
+        return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getDetails(adoptId));
+    }
 }

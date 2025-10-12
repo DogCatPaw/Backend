@@ -10,8 +10,11 @@ import kpaas.dogcat.domain.donate.donation.entity.Donation;
 import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.donate.donation.service.DonationQueryService;
 import kpaas.dogcat.domain.pet.entity.Pet;
+import kpaas.dogcat.domain.pet.service.PetQueryService;
 import kpaas.dogcat.domain.story.dailyStory.service.DailyStoryQueryService;
 import kpaas.dogcat.domain.story.review.service.ReviewQueryService;
+import kpaas.dogcat.global.apiPayload.code.CustomException;
+import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +38,7 @@ public class AdoptQueryService {
 //    private final AdoptionQueryService adoptionQueryService;
     private final AdoptRepository adoptRepository;
     private final AdoptConverter adoptConverter;
+    private final PetQueryService petQueryService;
 
     public AdoptResDto.HomeDto getHomeData() {
         return AdoptResDto.HomeDto.builder()
@@ -45,6 +49,7 @@ public class AdoptQueryService {
                 .build();
     }
 
+    /** 입양 공고 상태 + 지역 + 시군구 별 조회**/
     public AdoptResDto.PreviewListDto getAdoptions(Long cursor, int size,
                                                    AdoptionStatus status,
                                                    Region region,
@@ -90,6 +95,13 @@ public class AdoptQueryService {
                 .adoptions(adoptionDtos)
                 .nextCursor(nextCursor)
                 .build();
+    }
+
+    public AdoptResDto.DetailDto getDetails(Long adoptId){
+        Adopt adopt = adoptRepository.findWithPetById(adoptId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ADOPTION_NOTFOUND));
+
+        return adoptConverter.toDetailDto(adopt);
     }
 
     /** 디데이 계산 **/

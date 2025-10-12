@@ -36,8 +36,8 @@ public class AdoptResDto {
     @NoArgsConstructor
     @Builder
     public static class RegisterDto {
+        private Long adoptId;
         private Long petId;
-        private String did;
     }
 
     @Data
@@ -45,6 +45,7 @@ public class AdoptResDto {
     @NoArgsConstructor
     @Builder
     public static class PreviewDto {
+        private Long adoptId;
         private String thumbnail;
         private String title;
         private Breed breed;

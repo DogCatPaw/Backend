@@ -24,13 +24,14 @@ public class AdoptConverter {
 
     public AdoptResDto.RegisterDto toRegisterDto(Pet pet) {
         return AdoptResDto.RegisterDto.builder()
+                .adoptId(pet.getAdopt().getId())
                 .petId(pet.getId())
-                .did(pet.getDid())
                 .build();
     }
 
     public AdoptResDto.PreviewDto toPreviewDto(String dDay, Pet pet, Adopt adoption) {
         return AdoptResDto.PreviewDto.builder()
+                .adoptId(adoption.getId())
                 .thumbnail(pet.getPetProfile())     //등록했던 펫 프로필 사용할지, 공고 사진 따로 올릴지 고민
                 .title(adoption.getTitle())
                 .breed(pet.getBreed())
@@ -39,6 +40,28 @@ public class AdoptConverter {
                 .district(adoption.getDistrict())
                 .shelterName(adoption.getShelterName())
                 .dDay(dDay)
+                .build();
+    }
+
+    public AdoptResDto.DetailDto toDetailDto(Adopt adopt) {
+        return AdoptResDto.DetailDto.builder()
+                .title(adopt.getTitle())
+                .content(adopt.getContent())
+                .did(adopt.getPet().getDid())
+                .petProfile(adopt.getPet().getPetProfile())
+                .petName(adopt.getPet().getPetName())
+                .old(adopt.getPet().getOld())
+                .weight(adopt.getPet().getWeight())
+                .color(adopt.getPet().getColor())
+                .isNeutral(adopt.getPet().isNeutral())
+                .specifics(adopt.getPet().getSpecifics())
+                .gender(adopt.getPet().getGender())
+                .breed(adopt.getPet().getBreed())
+                .region(adopt.getRegion())
+                .district(adopt.getDistrict())
+                .shelterName(adopt.getShelterName())
+                .status(adopt.getStatus())
+                .deadline(adopt.getDeadline())
                 .build();
     }
 }
