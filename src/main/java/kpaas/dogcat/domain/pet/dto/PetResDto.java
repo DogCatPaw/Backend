@@ -25,6 +25,7 @@ public class PetResDto {
     @NoArgsConstructor
     @Builder
     public static class MyPetListDto {
+        private Long petId;
         private String did;
         private String petProfile;
         private String petName;

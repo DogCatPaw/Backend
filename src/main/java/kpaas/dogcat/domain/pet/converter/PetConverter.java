@@ -26,6 +26,7 @@ public class PetConverter {
 
     public PetResDto.MyPetListDto toMyPetListDto(Pet pet) {
         return PetResDto.MyPetListDto.builder()
+                .petId(pet.getId())
                 .did(pet.getDid())
                 .petProfile(pet.getPetProfile())
                 .petName(pet.getPetName())

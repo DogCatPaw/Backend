@@ -26,20 +26,27 @@ public class SecurityConfig {
     private String[] allowUrl = {
             "/api/auth/signup",
             "/api/auth/login",
+
             "/swagger-ui/**",
             "/swagger-resources/**",
             "/v3/api-docs/**",
+
             "/api/story/daily/{stories}",
             "/api/story/daily/stories",
             "/api/story/daily/search",
+
             "/api/story/review/{reviews}",
             "/api/story/review/reviews",
             "/api/story/review/search",
+            "/api/comment/",
+
             "/api/donation/",
             "/api/donation/list",
             "/api/donation/closing",
-            "/api/donation-list/lists"
+            "/api/donations/lists",
 
+            "/api/adoption/home",
+            "/api/adoption/"
     };
 
     @Bean

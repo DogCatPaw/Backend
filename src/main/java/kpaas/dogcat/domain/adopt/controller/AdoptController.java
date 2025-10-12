@@ -3,6 +3,7 @@ package kpaas.dogcat.domain.adopt.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
+import kpaas.dogcat.domain.adopt.enums.Region;
 import kpaas.dogcat.domain.adopt.service.AdoptCommandService;
 import kpaas.dogcat.domain.adopt.service.AdoptQueryService;
 import kpaas.dogcat.domain.adopt.dto.AdoptReqDto;
@@ -39,8 +40,11 @@ public class AdoptController {
             "\"cursor와 size에 아무 값도 입력하지 않아도 되며, 기본 사이즈는 9입니다. 다음 조회는 nextCursor을 사용하세요.")
     @GetMapping("/")
     public CustomResponse<AdoptResDto.PreviewListDto> getRegistration(@RequestParam(required = false) Long cursor,
-                                             @RequestParam(defaultValue = "9") int size,
-                                             @RequestParam AdoptionStatus status) {
-        return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getAdoptions(cursor, size, status));
+                                                                      @RequestParam(defaultValue = "9") int size,
+                                                                      @RequestParam(required = false) AdoptionStatus status,
+                                                                      @RequestParam(required = false) Region region,
+                                                                      @RequestParam(required = false) String district) {
+        return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getAdoptions(
+                cursor, size, status, region, district));
     }
 }

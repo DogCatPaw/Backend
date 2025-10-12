@@ -9,6 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface AdoptRepository extends JpaRepository<Adopt, Long> {
+
+    boolean existsByPetId(Long petId);
+
     // status
     List<Adopt> findByStatusOrderByIdDesc(AdoptionStatus status, Pageable pageable);
     List<Adopt> findByStatusAndIdLessThanOrderByIdDesc(AdoptionStatus status, Long cursor, Pageable pageable);

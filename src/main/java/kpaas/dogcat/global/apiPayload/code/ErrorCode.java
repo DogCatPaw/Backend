@@ -74,7 +74,10 @@ public enum ErrorCode implements BaseCode {
     DONATIONLIST_NOTFOUND(HttpStatus.NOT_FOUND, "DONATION404", "해당되는 후원 내역이 없습니다."),
     DONATION_INVALID(HttpStatus.NOT_FOUND, "DONATION404", "해당 후원 공고는 마감되었습니다."),
     DONATION_OVERFLOW(HttpStatus.BAD_REQUEST, "DONATION400", "목표 후원 금액 미만으로 후원바랍니다."),
-    ALREADY_ACTIVE_DONATION(HttpStatus.BAD_REQUEST, "DONATION400", "해당 펫과 관련된 후원 공고가 이미 존재합니다.");
+    ALREADY_ACTIVE_DONATION(HttpStatus.BAD_REQUEST, "DONATION400", "해당 펫과 관련된 후원 공고가 이미 존재합니다."),
+
+    // 입양
+    ALEADY_ACTIVE_ADOPTION(HttpStatus.BAD_REQUEST, "ADOPTION400", "해당 펫과 관련된 입양 공고가 이미 존재합니다.");
 
 
     private final HttpStatus httpStatus;

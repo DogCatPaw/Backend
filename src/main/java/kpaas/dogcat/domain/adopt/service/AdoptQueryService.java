@@ -4,6 +4,7 @@ import kpaas.dogcat.domain.adopt.converter.AdoptConverter;
 import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
 import kpaas.dogcat.domain.adopt.entity.Adopt;
 import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
+import kpaas.dogcat.domain.adopt.enums.Region;
 import kpaas.dogcat.domain.adopt.repository.AdoptRepository;
 import kpaas.dogcat.domain.donate.donation.entity.Donation;
 import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
@@ -44,19 +45,35 @@ public class AdoptQueryService {
                 .build();
     }
 
-    public AdoptResDto.PreviewListDto getAdoptions(Long cursor, int size, AdoptionStatus status) {
+    public AdoptResDto.PreviewListDto getAdoptions(Long cursor, int size,
+                                                   AdoptionStatus status,
+                                                   Region region,
+                                                   String district) {
         Pageable pageable = PageRequest.of(0, size);
 
         // 상태가 null이면 입양 가능한 상태만 조회
-        if (status == null) {
-            status = AdoptionStatus.ACTIVE;
-        }
+        if (status == null) status = AdoptionStatus.ACTIVE;
 
         List<Adopt> adoptions;
-        if (cursor == null) {
-            adoptions = adoptRepository.findByStatusOrderByIdDesc(status, pageable);
+        if (region != null && district != null) {
+            // 지역 + 시군구 + 상태
+            if (cursor == null)
+                adoptions = adoptRepository.findByRegionAndDistrictAndStatusOrderByIdDesc(region, district, status, pageable);
+            else
+                adoptions = adoptRepository.findByRegionAndDistrictAndStatusAndIdLessThanOrderByIdDesc(region, district, status, cursor, pageable);
+
+        } else if (region != null) {
+            // 지역 + 상태
+            if (cursor == null)
+                adoptions = adoptRepository.findByRegionAndStatusOrderByIdDesc(region, status, pageable);
+            else
+                adoptions = adoptRepository.findByRegionAndStatusAndIdLessThanOrderByIdDesc(region, status, cursor, pageable);
         } else {
-            adoptions = adoptRepository.findByStatusAndIdLessThanOrderByIdDesc(status, cursor, pageable);
+            // 상태만
+            if (cursor == null)
+                adoptions = adoptRepository.findByStatusOrderByIdDesc(status, pageable);
+            else
+                adoptions = adoptRepository.findByStatusAndIdLessThanOrderByIdDesc(status, cursor, pageable);
         }
 
         List<AdoptResDto.PreviewDto> adoptionDtos = adoptions.stream()
