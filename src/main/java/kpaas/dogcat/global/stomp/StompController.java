@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.chat.stomp;
+package kpaas.dogcat.global.stomp;
 
 import kpaas.dogcat.domain.chat.dto.ChatReqDTO;
 import kpaas.dogcat.domain.chat.service.command.ChatMessageCommandService;
