@@ -44,4 +44,25 @@ public class DonationListConverter {
                 .cursor(nextCursor)
                 .build();
     }
+
+    public DonationListResDto.MyDonationDto toMyDonationDto(DonationList donationList) {
+        Donation donation = donationList.getDonation();
+
+        return DonationListResDto.MyDonationDto.builder()
+                .donationTitle(donation.getTitle())       // 공고 제목
+                .donationAmount(donationList.getAmount()) // 내가 후원한 금액
+                .donationTime(donationList.getCreatedAt())// 후원한 시간
+                .build();
+    }
+
+    public DonationListResDto.MyDonationListDto toMyDonationListDto(Integer totalAmount, Integer currentBoneBalance,
+                                                                    List<DonationListResDto.MyDonationDto> donationDtos,
+                                                                    Long nextCursor) {
+        return DonationListResDto.MyDonationListDto.builder()
+                .totalAmount(totalAmount)
+                .currentBoneBalance(currentBoneBalance)
+                .donations(donationDtos)
+                .cursor(nextCursor)
+                .build();
+    }
 }
