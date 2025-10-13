@@ -25,8 +25,8 @@ public class AdoptResDto {
     @NoArgsConstructor
     @Builder
     public static class HomeDto {
-        //        private List<AdoptionResDTO.SimpleDto> latestAdoptions;        // 최신 입양공고 3개
-        private List<DonationResDto.PreviewDto> closingSoonDonations;     // 마감 임박 후원공고 3개
+        private List<AdoptResDto.PreviewDto> latestAdoptions;        // 최신 입양공고 3개
+        private List<DonationResDto.PreviewDto> closingSoonDonations;  // 마감 임박 후원공고 3개
         private List<ReviewResDto.ReviewDto> popularReviews;           // 인기 후기 3개
         private List<DailyStoryResDto.StoryPreviewDto> popularStories; // 인기 일상 일지 3개
     }

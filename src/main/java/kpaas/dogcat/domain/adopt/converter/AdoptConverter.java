@@ -6,6 +6,8 @@ import kpaas.dogcat.domain.adopt.entity.Adopt;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class AdoptConverter {
 
@@ -40,6 +42,13 @@ public class AdoptConverter {
                 .district(adoption.getDistrict())
                 .shelterName(adoption.getShelterName())
                 .dDay(dDay)
+                .build();
+    }
+
+    public AdoptResDto.PreviewListDto toPreviewListDto(List<AdoptResDto.PreviewDto> adoptionDtos, long nextCursor) {
+        return AdoptResDto.PreviewListDto.builder()
+                .adoptions(adoptionDtos)
+                .nextCursor(nextCursor)
                 .build();
     }
 

@@ -65,6 +65,7 @@ public class DonationQueryService {
                 .toList();
     }
 
+    /** 후원 Status별 조회 기능 **/
     public DonationResDto.PreviewListDto getDonations(Long cursor, int size, DonationStatus status) {
         Pageable pageable = PageRequest.of(0, size);
 

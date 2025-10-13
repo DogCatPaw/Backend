@@ -29,4 +29,6 @@ public interface AdoptRepository extends JpaRepository<Adopt, Long> {
 
     @Query("SELECT a FROM Adopt a JOIN FETCH a.pet WHERE a.id = :adoptId")
     Optional<Adopt> findWithPetById(@Param("adoptId") Long adoptId);
+
+    List<Adopt> findTop3ByStatusOrderByDeadlineAsc(AdoptionStatus adoptionStatus, Pageable pageable);
 }

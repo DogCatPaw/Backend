@@ -6,8 +6,6 @@ import kpaas.dogcat.domain.adopt.entity.Adopt;
 import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
 import kpaas.dogcat.domain.adopt.enums.Region;
 import kpaas.dogcat.domain.adopt.repository.AdoptRepository;
-import kpaas.dogcat.domain.donate.donation.entity.Donation;
-import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.donate.donation.service.DonationQueryService;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.service.PetQueryService;
@@ -35,18 +33,29 @@ public class AdoptQueryService {
     private final ReviewQueryService reviewQueryService;
     private final DailyStoryQueryService dailyStoryQueryService;
     private final DonationQueryService donationQueryService;
-//    private final AdoptionQueryService adoptionQueryService;
     private final AdoptRepository adoptRepository;
     private final AdoptConverter adoptConverter;
-    private final PetQueryService petQueryService;
 
     public AdoptResDto.HomeDto getHomeData() {
         return AdoptResDto.HomeDto.builder()
                 .popularReviews(reviewQueryService.get3PopularReviews())
                 .popularStories(dailyStoryQueryService.get3PopularStories())
                 .closingSoonDonations(donationQueryService.get3ClosingSoonDonations())
-//                .latestAdoptions(adoptionQueryService.get3LatestAdoptions())
+                .latestAdoptions(get3LatestAdoptions())
                 .build();
+    }
+
+    public List<AdoptResDto.PreviewDto> get3LatestAdoptions() {
+        Pageable pageable = PageRequest.of(0, 3);
+
+        List<Adopt> adopts = adoptRepository.findTop3ByStatusOrderByDeadlineAsc(AdoptionStatus.ACTIVE, pageable);
+        return adopts.stream()
+                .map(adoption -> {
+                    Pet pet = adoption.getPet();
+                    String dDay = getDday(adoption);
+                    return adoptConverter.toPreviewDto(dDay, pet, adoption);
+                })
+                .toList();
     }
 
     /** 입양 공고 상태 + 지역 + 시군구 별 조회**/
@@ -91,10 +100,7 @@ public class AdoptQueryService {
 
         Long nextCursor = adoptions.size() < size ? null : adoptions.get(adoptions.size() - 1).getId();
 
-        return AdoptResDto.PreviewListDto.builder()
-                .adoptions(adoptionDtos)
-                .nextCursor(nextCursor)
-                .build();
+        return adoptConverter.toPreviewListDto(adoptionDtos, nextCursor);
     }
 
     public AdoptResDto.DetailDto getDetails(Long adoptId){
