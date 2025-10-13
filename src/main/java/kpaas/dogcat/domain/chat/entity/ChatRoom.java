@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.chat.entity;
 
 import jakarta.persistence.*;
+import kpaas.dogcat.domain.adopt.entity.Adopt;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +26,16 @@ public class ChatRoom {
     @Enumerated(EnumType.STRING)
     private RoomStatus roomStatus;
 
+    @Column(nullable = false)
+    private Long initiatorId;  // 채팅 시작자 (입양자)
+
+    @Column(nullable = false)
+    private Long targetId;     // 상대방 (입양 공고 작성자)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adopt_id")
+    private Adopt adopt;
+
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatParticipant> participants = new ArrayList<>();
 
@@ -34,4 +45,11 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatReadStatus> chatReadStatuses = new ArrayList<>();
 
+//    // 채팅방 참여자 추가 (연관관계 편의 메서드)
+//    public void addParticipant(ChatParticipant participant) {
+//        participants.add(participant);
+//        if (participant.getChatRoom() != this) {
+//            participant.setChatRoom(this);
+//        }
+//    }
 }

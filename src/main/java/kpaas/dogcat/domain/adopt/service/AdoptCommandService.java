@@ -5,6 +5,8 @@ import kpaas.dogcat.domain.adopt.repository.AdoptRepository;
 import kpaas.dogcat.domain.adopt.dto.AdoptReqDto;
 import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
 import kpaas.dogcat.domain.adopt.entity.Adopt;
+import kpaas.dogcat.domain.member.entity.Member;
+import kpaas.dogcat.domain.member.service.AuthCommandService;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.service.PetQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
@@ -20,17 +22,19 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AdoptCommandService {
 
+    private final AuthCommandService authCommandService;
     private final PetQueryService petQueryService;
     private final AdoptRepository adoptRepository;
     private final AdoptConverter adoptConverter;
 
     /** 입양 공고 작성 **/
-    public AdoptResDto.RegisterDto register(AdoptReqDto.RegisterDto dto) {
+    public AdoptResDto.RegisterDto register(AdoptReqDto.RegisterDto dto, Long writerId) {
         Pet pet = petQueryService.findById(dto.getPetId());
+        Member member = authCommandService.findById(writerId);
         if (adoptRepository.existsByPetId(dto.getPetId())) {
             throw new CustomException(ErrorCode.ALEADY_ACTIVE_ADOPTION);
         }
-        Adopt adopt = adoptConverter.toAdopt(pet, dto);
+        Adopt adopt = adoptConverter.toAdopt(pet, member, dto);
         pet.setAdopt(adopt);            // 연관관계 양쪽 설정
         adoptRepository.save(adopt);    // 주인인 Pet만 save해도 adopt까지 cascade로 저장됨
 

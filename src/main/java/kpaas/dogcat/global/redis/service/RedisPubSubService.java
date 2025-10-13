@@ -38,7 +38,7 @@ public class RedisPubSubService implements MessageListener {
             // 구독하고 있는 입장은 역직렬화해야하므로 readValue
             ChatReqDTO.ChatMessageReqDTO messageReqDTO = objectMapper.readValue(payload, ChatReqDTO.ChatMessageReqDTO.class);
             log.info("메시지 역직렬화 성공 - 방: {}, 발신자: {}, 내용: {}",
-                    messageReqDTO.getRoomId(), messageReqDTO.getMemberId(), messageReqDTO.getMessage());
+                    messageReqDTO.getRoomId(), messageReqDTO.getChatSenderId(), messageReqDTO.getMessage());
 
             // 직렬화하여 json으로 stomp에 publish (이때 경로는 반드시 /topic)
             String stompMessage = objectMapper.writeValueAsString(messageReqDTO);

@@ -32,7 +32,8 @@ public class ChatReadStatus {
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom;
 
-    private boolean isRead;
+    @Column(nullable = false)
+    private boolean isRead = false;
 
     public void markAsRead(){
         this.isRead = true;

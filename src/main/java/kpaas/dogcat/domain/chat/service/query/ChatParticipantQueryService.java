@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.chat.service;
+package kpaas.dogcat.domain.chat.service.query;
 
 import kpaas.dogcat.domain.chat.entity.ChatParticipant;
 import kpaas.dogcat.domain.chat.entity.ChatRoom;
@@ -10,25 +10,23 @@ import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ChatParticipantService {
+public class ChatParticipantQueryService {
 
     private final ChatParticipantRepository chatParticipantRepository;
     private final AuthCommandService authCommandService;
 
-    public void saveAllParticipants(List<ChatParticipant> chatParticipants) {
-        chatParticipantRepository.saveAll(chatParticipants);
-    }
-
     // 참여자인지 검증
-    public boolean isRoomParticipant(String username, Long roomId) {
-        Member member = authCommandService.findByUsername(username);
+    public boolean isRoomParticipant(Long memberId, Long roomId) {
+        Member member = authCommandService.findById(memberId);
         return chatParticipantRepository.existsByChatRoomIdAndMemberId(roomId, member.getId());
     }
 
@@ -47,5 +45,7 @@ public class ChatParticipantService {
         return participant;
     }
 
-
+    public List<ChatParticipant> findByChatRoomId(Long roomId) {
+        return chatParticipantRepository.findByChatRoomId(roomId);
+    }
 }

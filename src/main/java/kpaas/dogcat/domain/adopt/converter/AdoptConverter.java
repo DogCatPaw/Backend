@@ -3,6 +3,7 @@ package kpaas.dogcat.domain.adopt.converter;
 import kpaas.dogcat.domain.adopt.dto.AdoptReqDto;
 import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
 import kpaas.dogcat.domain.adopt.entity.Adopt;
+import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import org.springframework.stereotype.Component;
 
@@ -11,9 +12,10 @@ import java.util.List;
 @Component
 public class AdoptConverter {
 
-    public Adopt toAdopt(Pet pet, AdoptReqDto.RegisterDto dto) {
+    public Adopt toAdopt(Pet pet, Member writer, AdoptReqDto.RegisterDto dto) {
         return Adopt.builder()
                 .pet(pet)
+                .writer(writer)
                 .title(dto.getTitle())
                 .region(dto.getRegion())
                 .district(dto.getDistrict())
@@ -27,6 +29,8 @@ public class AdoptConverter {
     public AdoptResDto.RegisterDto toRegisterDto(Pet pet) {
         return AdoptResDto.RegisterDto.builder()
                 .adoptId(pet.getAdopt().getId())
+                .targetId(pet.getAdopt().getWriter().getId())
+                .adoptTitle(pet.getAdopt().getTitle())
                 .petId(pet.getId())
                 .build();
     }

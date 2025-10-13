@@ -17,11 +17,14 @@ public class StompWebSockConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/websocket")
-                .setAllowedOriginPatterns("*")
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns(
+                        "https://jiangxy.github.io", "*")
                 .withSockJS();
         registry.addEndpoint("/ws")     //사이트 테스트용
-                .setAllowedOriginPatterns("*");
+                .setAllowedOriginPatterns(
+                        "https://jiangxy.github.io", "*"
+                );
     }
 
     @Override

@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @RequiredArgsConstructor
-//@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
@@ -26,6 +26,8 @@ public class SecurityConfig {
     private String[] allowUrl = {
             "/api/auth/signup",
             "/api/auth/login",
+
+            "/ws/**",
 
             "/swagger-ui/**",
             "/swagger-resources/**",

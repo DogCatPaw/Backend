@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.member.entity;
 
 import jakarta.persistence.*;
+import kpaas.dogcat.domain.adopt.entity.Adopt;
 import kpaas.dogcat.domain.donate.donation.entity.Donation;
 import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
 import kpaas.dogcat.domain.member.enums.Gender;
@@ -77,9 +78,12 @@ public class Member {
         this.settledBalance += amount;
     }
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Donation> donations;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DonationList> donationListList;
+
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Adopt> adopts;
 }

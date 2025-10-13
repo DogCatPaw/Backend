@@ -11,14 +11,15 @@ public class ChatReqDTO {
     @AllArgsConstructor
     public static class ChatMessageReqDTO {
         private Long roomId;
-        private Long memberId;
+        private Long chatSenderId;
         private String message;
     }
 
     @Data
     @AllArgsConstructor
     public static class ChatRoomCreateDTO {
-        private Long targetId;
+        private Long adoptWriterId;
+        private Long adoptId;
         private String roomName;
     }
 

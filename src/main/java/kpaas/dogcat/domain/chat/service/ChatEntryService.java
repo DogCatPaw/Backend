@@ -1,5 +1,8 @@
 package kpaas.dogcat.domain.chat.service;
 
+import kpaas.dogcat.domain.chat.service.command.ChatMessageCommandService;
+import kpaas.dogcat.domain.chat.service.query.ChatParticipantQueryService;
+import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.service.AuthCommandService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
@@ -16,9 +19,8 @@ public class ChatEntryService {
 
     private final JwtUtil jwtUtil;
     private final AuthCommandService authCommandService;
-    private final ChatRoomService chatRoomService;
-    private final ChatMessageService chatMessageService;
-    private final ChatParticipantService chatParticipantService;
+    private final ChatParticipantQueryService chatParticipantQueryService;
+    private final ChatMessageCommandService chatMessageCommandService;
 
 
     public void connectSocket(StompHeaderAccessor accessor) {
@@ -29,6 +31,8 @@ public class ChatEntryService {
 
         // 사용자 정보를 세션에 저장 (웹소켓 세션 메모리에만 존재해서 서버 재시작하면 날아감)
         accessor.getSessionAttributes().put("username", username);
+        Member member = authCommandService.findByUsername(username);
+        accessor.getSessionAttributes().put("memberId", member.getId());
         accessor.setUser(() -> username);  // Principal 생성
     }
 
@@ -42,12 +46,14 @@ public class ChatEntryService {
             String[] parts = destination.split("/");
             Long roomId = Long.parseLong(parts[2]);
             String username = (String) accessor.getSessionAttributes().get("username");
+            Long memberId = (Long) accessor.getSessionAttributes().get("memberId");
 
-            if (!chatParticipantService.isRoomParticipant(username, roomId)) {
+            if (!chatParticipantQueryService.isRoomParticipant(memberId, roomId)) {
                 log.error("[ 방 {} 참여 권한 없음 - 사용자: {} ]", roomId, username);
                 throw new CustomException(ErrorCode.ROOM_NO_AUTH);
             }
             log.info("[ 방 {} 구독 성공 - 사용자: {} ]", roomId, username);
+            chatMessageCommandService.markAsReadCount(roomId, memberId);
         }
     }
 

@@ -3,6 +3,8 @@ package kpaas.dogcat.domain.adopt.entity;
 import jakarta.persistence.*;
 import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
 import kpaas.dogcat.domain.adopt.enums.Region;
+import kpaas.dogcat.domain.chat.entity.ChatRoom;
+import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -52,9 +55,16 @@ public class Adopt {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member writer;   // 공고 작성자
+
     //펫이 먼저 존재하고 입양 공고가 붙기 때문에 펫을 주인으로 설정
     @OneToOne(mappedBy = "adopt", fetch = FetchType.LAZY)
     private Pet pet;
+
+    @OneToMany(mappedBy = "adopt", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatRoom> chatRooms;
 
     public void setPet(Pet pet) {
         this.pet = pet;

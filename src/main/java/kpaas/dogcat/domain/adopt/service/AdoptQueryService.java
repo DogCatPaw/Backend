@@ -36,6 +36,16 @@ public class AdoptQueryService {
     private final AdoptRepository adoptRepository;
     private final AdoptConverter adoptConverter;
 
+    public Adopt findById(Long adoptId) {
+        return adoptRepository.findById(adoptId).orElseThrow(() -> new CustomException(ErrorCode.ADOPTION_NOTFOUND));
+    }
+
+    public AdoptResDto.PreviewDto getAdoptionForChatting(Adopt adopt) {
+        Pet pet = adopt.getPet();
+        String dDay = getDday(adopt);
+        return adoptConverter.toPreviewDto(dDay, pet, adopt);
+    }
+
     public AdoptResDto.HomeDto getHomeData() {
         return AdoptResDto.HomeDto.builder()
                 .popularReviews(reviewQueryService.get3PopularReviews())
@@ -103,6 +113,7 @@ public class AdoptQueryService {
         return adoptConverter.toPreviewListDto(adoptionDtos, nextCursor);
     }
 
+    /** 입양 공고 상세 페이지 조회 */
     public AdoptResDto.DetailDto getDetails(Long adoptId){
         Adopt adopt = adoptRepository.findWithPetById(adoptId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ADOPTION_NOTFOUND));

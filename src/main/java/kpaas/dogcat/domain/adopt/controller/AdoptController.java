@@ -10,8 +10,11 @@ import kpaas.dogcat.domain.adopt.dto.AdoptReqDto;
 import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
+import kpaas.dogcat.global.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,8 +35,9 @@ public class AdoptController {
 
     @Operation(summary = "입양 공고 작성", description = "입양 공고를 작성하는 API 입니다. 펫 등록이 먼저 필요합니다.")
     @PostMapping("/post")
-    public CustomResponse<AdoptResDto.RegisterDto> register(@RequestBody AdoptReqDto.RegisterDto dto) {
-        return CustomResponse.onSuccess(SuccessCode.OK, adoptCommandService.register(dto));
+    public CustomResponse<AdoptResDto.RegisterDto> register(@RequestBody AdoptReqDto.RegisterDto dto,
+                                                            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return CustomResponse.onSuccess(SuccessCode.OK, adoptCommandService.register(dto, userDetails.getId()));
     }
 
     @Operation(summary = "입양 공고 조회 (cursor 기반)", description = "입양 공고를 cursor로 조회하는 API 입니다. " +

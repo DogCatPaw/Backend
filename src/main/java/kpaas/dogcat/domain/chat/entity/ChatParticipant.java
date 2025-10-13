@@ -35,5 +35,9 @@ public class ChatParticipant {
 
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatMessage> chatMessages = new ArrayList<>();
+
+//    public void setChatRoom(ChatRoom chatRoom) {
+//        this.chatRoom = chatRoom;
+//    }
 }
 

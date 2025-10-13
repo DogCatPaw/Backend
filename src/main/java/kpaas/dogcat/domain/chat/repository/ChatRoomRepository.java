@@ -14,16 +14,20 @@ import java.util.Optional;
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     Optional<ChatRoom> findById(Long roomId);
-//    Optional<ChatRoom> findByInitiatorAndRoomId(Long initiatorId, Long roomId);
 
     @Query("""
-    SELECT cr FROM ChatRoom cr 
-    JOIN cr.participants p1 
-    JOIN cr.participants p2 
-    WHERE p1.member.id = :memberId1 
-    AND p2.member.id = :memberId2 
-    """)
-    Optional<ChatRoom> findExistingRoom(@Param("memberId1") Long initiatorId, @Param("memberId2") Long targetId);
+    SELECT r FROM ChatRoom r
+    WHERE r.adopt.id = :adoptId
+    AND (
+        (r.initiatorId = :initiatorId AND r.targetId = :targetId)
+        OR (r.initiatorId = :targetId AND r.targetId = :initiatorId)
+    )
+""")
+    Optional<ChatRoom> findExistingRoom(
+            @Param("initiatorId") Long initiatorId,
+            @Param("targetId") Long targetId,
+            @Param("adoptId") Long adoptId
+    );
 
     @Query("""
     SELECT cr FROM ChatRoom cr 

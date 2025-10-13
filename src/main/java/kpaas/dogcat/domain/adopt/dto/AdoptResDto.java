@@ -37,6 +37,8 @@ public class AdoptResDto {
     @Builder
     public static class RegisterDto {
         private Long adoptId;
+        private Long targetId;
+        private String adoptTitle;
         private Long petId;
     }
 

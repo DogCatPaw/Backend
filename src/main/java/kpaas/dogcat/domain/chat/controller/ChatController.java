@@ -2,10 +2,12 @@ package kpaas.dogcat.domain.chat.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
 import kpaas.dogcat.domain.chat.dto.ChatReqDTO;
 import kpaas.dogcat.domain.chat.dto.ChatResDTO;
-import kpaas.dogcat.domain.chat.service.ChatMessageService;
-import kpaas.dogcat.domain.chat.service.ChatRoomService;
+import kpaas.dogcat.domain.chat.service.query.ChatMessageQueryService;
+import kpaas.dogcat.domain.chat.service.command.ChatRoomCommandService;
+import kpaas.dogcat.domain.chat.service.query.ChatRoomQueryService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import kpaas.dogcat.global.jwt.CustomUserDetails;
@@ -23,14 +25,17 @@ import java.util.List;
 @RequestMapping("/api/chat")
 public class ChatController {
 
-    private final ChatRoomService chatRoomService;
-    private final ChatMessageService chatMessageService;
+    private final ChatRoomCommandService chatRoomCommandService;
+    private final ChatRoomQueryService chatRoomQueryService;
+    private final ChatMessageQueryService chatMessageQueryService;
 
-    @Operation(summary = "채팅방", description = "채팅방 생성하기 ")
+    @Operation(summary = "채팅방 생성하기", description = "adoptWriterId에 입양공고를 작성한 사람을 넣어주고, 입양 공고 번호를 넣어주세요." +
+            "방 이름 설정이 가능하니 일단은 입양 공고 이름으로 방 생성하세요.")
     @PostMapping("/room/create")
     public CustomResponse<ChatResDTO.ChatRoomCreatedDTO> createRoom(@RequestBody ChatReqDTO.ChatRoomCreateDTO dto,
                                                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
-        ChatResDTO.ChatRoomCreatedDTO room = chatRoomService.createRoom(userDetails.getId(), dto.getTargetId(), dto.getRoomName());
+        ChatResDTO.ChatRoomCreatedDTO room = chatRoomCommandService.createRoom(
+                userDetails.getId(), dto.getAdoptWriterId(), dto.getAdoptId(), dto.getRoomName());
         return CustomResponse.onSuccess(SuccessCode.CREATED, room);
     }
 
@@ -38,14 +43,14 @@ public class ChatController {
     @GetMapping("/room/card")
     public CustomResponse<ChatResDTO.ChatRoomCardDTO> getRoomCard(@RequestParam Long roomId,
                                                                   @AuthenticationPrincipal CustomUserDetails userDetails) {
-        ChatResDTO.ChatRoomCardDTO chatRoom = chatRoomService.getChatRoomCard(roomId, userDetails.getId());
+        ChatResDTO.ChatRoomCardDTO chatRoom = chatRoomQueryService.getChatRoomCard(roomId, userDetails.getId());
         return CustomResponse.onSuccess(SuccessCode.OK, chatRoom);
     }
 
     @Operation(summary = "채팅방 목록 조회", description = "채팅방 전체 목록 조회하기 ")
     @GetMapping("/room/list")
     public CustomResponse<List<ChatResDTO.ChatRoomCardDTO>> getRoomCardList(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        List<ChatResDTO.ChatRoomCardDTO> chatRooms = chatRoomService.getChatRoomCards(userDetails.getId());
+        List<ChatResDTO.ChatRoomCardDTO> chatRooms = chatRoomQueryService.getChatRoomCards(userDetails.getId());
         return CustomResponse.onSuccess(SuccessCode.OK, chatRooms);
     }
 
@@ -53,14 +58,16 @@ public class ChatController {
     @GetMapping("/history/{roomId}")
     public CustomResponse<List<ChatResDTO.ChatMessageResDTO>> getChatHistory(@PathVariable Long roomId,
                                                                              @AuthenticationPrincipal CustomUserDetails userDetails) {
-        List<ChatResDTO.ChatMessageResDTO> chatMessageList = chatMessageService.getChatMessages(roomId, userDetails.getId());
+        List<ChatResDTO.ChatMessageResDTO> chatMessageList = chatMessageQueryService.getChatMessages(roomId, userDetails.getId());
         return CustomResponse.onSuccess(SuccessCode.OK, chatMessageList);
     }
 
-//    @PostMapping("/room/{roomId}/read")
-//    public ResponseEntity<?> readMessage(@PathVariable Long roomId) {
-//        chatService.readMessage(roomId);
-//        return ResponseEntity.ok().build();
-//    }
+    @Operation(summary = "채팅방 상단 입양 공고 조회", description = "해당되는 입양 공고를 채팅방 상단에 띄우는 API입니다.")
+    @GetMapping("/room/{roomId}/adoption")
+    public CustomResponse<AdoptResDto.PreviewDto> getAdoptInfoForChat(@PathVariable Long roomId,
+                                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
 
+        AdoptResDto.PreviewDto adoptInfo = chatMessageQueryService.getAdoptInfo(roomId, userDetails.getId());
+        return CustomResponse.onSuccess(SuccessCode.OK, adoptInfo);
+    }
 }
