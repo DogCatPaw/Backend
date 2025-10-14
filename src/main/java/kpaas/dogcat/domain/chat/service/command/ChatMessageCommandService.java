@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.chat.service.command;
 
 import kpaas.dogcat.domain.chat.dto.ChatReqDTO;
+import kpaas.dogcat.domain.chat.dto.ChatResDTO;
 import kpaas.dogcat.domain.chat.entity.ChatMessage;
 import kpaas.dogcat.domain.chat.entity.ChatParticipant;
 import kpaas.dogcat.domain.chat.entity.ChatReadStatus;
@@ -8,6 +9,7 @@ import kpaas.dogcat.domain.chat.entity.ChatRoom;
 import kpaas.dogcat.domain.chat.repository.ChatMessageRepository;
 import kpaas.dogcat.domain.chat.repository.ChatReadStatusRepository;
 import kpaas.dogcat.domain.chat.repository.ChatRoomRepository;
+import kpaas.dogcat.domain.chat.service.query.ChatMessageQueryService;
 import kpaas.dogcat.domain.chat.service.query.ChatParticipantQueryService;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.service.AuthCommandService;
@@ -31,6 +33,7 @@ public class ChatMessageCommandService {
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatReadStatusRepository chatReadStatusRepository;
+    private final ChatMessageQueryService chatMessageQueryService;
 
     public void saveMessage(ChatReqDTO.ChatMessageReqDTO chatMessageReqDTO) {
         //채팅방 조회
@@ -64,13 +67,19 @@ public class ChatMessageCommandService {
         }
     }
 
+    /** 메세지 조회 및 읽음 처리 */
+    public List<ChatResDTO.ChatMessageResDTO> enterRoom(Long roomId, Long memberId) {
+        List<ChatResDTO.ChatMessageResDTO> chatMessages = chatMessageQueryService.getChatMessages(roomId, memberId);
+        markAsReadCount(roomId, memberId);
+        return chatMessages;
+    }
+
     /** 읽음 처리 **/
-    public int markAsReadCount(Long roomId, Long memberId) {
+    public void markAsReadCount(Long roomId, Long memberId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOTFOUND));
         Member member = authCommandService.findById(memberId);
         int updatedCount = chatReadStatusRepository.markAsRead(chatRoom, member);
-        log.info("[ markAsRead count ] : {}", updatedCount);
-        return updatedCount;
+        log.info("[ 읽은 메세지 수 ] : {}", updatedCount);
     }
 }

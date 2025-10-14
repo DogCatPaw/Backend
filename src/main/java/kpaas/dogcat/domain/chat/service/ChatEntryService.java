@@ -53,7 +53,6 @@ public class ChatEntryService {
                 throw new CustomException(ErrorCode.ROOM_NO_AUTH);
             }
             log.info("[ 방 {} 구독 성공 - 사용자: {} ]", roomId, username);
-            chatMessageCommandService.markAsReadCount(roomId, memberId);
         }
     }
 

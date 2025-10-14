@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
 import kpaas.dogcat.domain.chat.dto.ChatReqDTO;
 import kpaas.dogcat.domain.chat.dto.ChatResDTO;
+import kpaas.dogcat.domain.chat.service.command.ChatMessageCommandService;
 import kpaas.dogcat.domain.chat.service.query.ChatMessageQueryService;
 import kpaas.dogcat.domain.chat.service.command.ChatRoomCommandService;
 import kpaas.dogcat.domain.chat.service.query.ChatRoomQueryService;
@@ -28,6 +29,7 @@ public class ChatController {
     private final ChatRoomCommandService chatRoomCommandService;
     private final ChatRoomQueryService chatRoomQueryService;
     private final ChatMessageQueryService chatMessageQueryService;
+    private final ChatMessageCommandService chatMessageCommandService;
 
     @Operation(summary = "채팅방 생성하기", description = "adoptWriterId에 입양공고를 작성한 사람을 넣어주고, 입양 공고 번호를 넣어주세요." +
             "방 이름 설정이 가능하니 일단은 입양 공고 이름으로 방 생성하세요.")
@@ -37,6 +39,14 @@ public class ChatController {
         ChatResDTO.ChatRoomCreatedDTO room = chatRoomCommandService.createRoom(
                 userDetails.getId(), dto.getAdoptWriterId(), dto.getAdoptId(), dto.getRoomName());
         return CustomResponse.onSuccess(SuccessCode.CREATED, room);
+    }
+
+    @Operation(summary = "채팅방 입장 및 메시지 조회하기", description = "채팅방 입장 및 메세지 조회하기")
+    @PostMapping("/{roomId}/enter")
+    public CustomResponse<List<ChatResDTO.ChatMessageResDTO>> enterRoom(@PathVariable Long roomId,
+                                                                        @AuthenticationPrincipal CustomUserDetails userDetails) {
+        List<ChatResDTO.ChatMessageResDTO> chatMessageList = chatMessageCommandService.enterRoom(roomId, userDetails.getId());
+        return CustomResponse.onSuccess(SuccessCode.OK, chatMessageList);
     }
 
     @Operation(summary = "채팅방 카드 단일 조회", description = "채팅방 카드 단일 조회하기 ")
@@ -54,13 +64,13 @@ public class ChatController {
         return CustomResponse.onSuccess(SuccessCode.OK, chatRooms);
     }
 
-    @Operation(summary = "이전 메시지 조회", description = "이전 메시지 조회하기")
-    @GetMapping("/history/{roomId}")
-    public CustomResponse<List<ChatResDTO.ChatMessageResDTO>> getChatHistory(@PathVariable Long roomId,
-                                                                             @AuthenticationPrincipal CustomUserDetails userDetails) {
-        List<ChatResDTO.ChatMessageResDTO> chatMessageList = chatMessageQueryService.getChatMessages(roomId, userDetails.getId());
-        return CustomResponse.onSuccess(SuccessCode.OK, chatMessageList);
-    }
+//    @Operation(summary = "이전 메시지 조회", description = "이전 메시지 조회하기")
+//    @GetMapping("/history/{roomId}")
+//    public CustomResponse<List<ChatResDTO.ChatMessageResDTO>> getChatHistory(@PathVariable Long roomId,
+//                                                                             @AuthenticationPrincipal CustomUserDetails userDetails) {
+//        List<ChatResDTO.ChatMessageResDTO> chatMessageList = chatMessageQueryService.getChatMessages(roomId, userDetails.getId());
+//        return CustomResponse.onSuccess(SuccessCode.OK, chatMessageList);
+//    }
 
     @Operation(summary = "채팅방 상단 입양 공고 조회", description = "해당되는 입양 공고를 채팅방 상단에 띄우는 API입니다.")
     @GetMapping("/room/{roomId}/adoption")
