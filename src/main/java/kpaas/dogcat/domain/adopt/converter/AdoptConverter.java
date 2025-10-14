@@ -49,7 +49,7 @@ public class AdoptConverter {
                 .build();
     }
 
-    public AdoptResDto.PreviewListDto toPreviewListDto(List<AdoptResDto.PreviewDto> adoptionDtos, long nextCursor) {
+    public AdoptResDto.PreviewListDto toPreviewListDto(List<AdoptResDto.PreviewDto> adoptionDtos, Long nextCursor) {
         return AdoptResDto.PreviewListDto.builder()
                 .adoptions(adoptionDtos)
                 .nextCursor(nextCursor)

@@ -7,6 +7,7 @@ import kpaas.dogcat.domain.donate.donation.repository.DonationRepository;
 import kpaas.dogcat.domain.donate.donation.entity.Donation;
 import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
 import kpaas.dogcat.domain.donate.donationList.service.DonationListQueryService;
+import kpaas.dogcat.domain.pet.enums.Breed;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -65,22 +66,11 @@ public class DonationQueryService {
                 .toList();
     }
 
-    /** 후원 Status별 조회 기능 **/
-    public DonationResDto.PreviewListDto getDonations(Long cursor, int size, DonationStatus status) {
-        Pageable pageable = PageRequest.of(0, size);
-
-        // 상태가 null이면 ACTIVE인 상태만 조회
-        if (status == null || status == DonationStatus.SETTLED) {
-            status = DonationStatus.ACTIVE;
-        }
-
-        // 특정 상태만 조회
-        List<Donation> donations;
-        if (cursor == null) {
-            donations = donationRepository.findByStatusOrderByIdDesc(status, pageable);
-        } else {
-            donations = donationRepository.findByStatusAndIdLessThanOrderByIdDesc(status, cursor, pageable);
-        }
+    /** 후원 공고 (품종 + 상태 별) 조회*/
+    public DonationResDto.PreviewListDto getDonations(Long cursor, int size,
+                                                      Breed breed,
+                                                      DonationStatus status) {
+        List<Donation> donations = donationRepository.searchDonations(cursor, size, breed, status);
 
         List<DonationResDto.PreviewDto> donationDtos = donations.stream()
                 .map(donation -> {

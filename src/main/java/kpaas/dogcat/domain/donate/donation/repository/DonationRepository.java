@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DonationRepository extends JpaRepository<Donation, Long> {
+public interface DonationRepository extends JpaRepository<Donation, Long>, DonationQueryDsl {
     List<Donation> findByStatusIn(List<DonationStatus> active);
     List<Donation> findByStatus(DonationStatus donationStatus);
     boolean existsByPetIdAndMemberIdAndStatusIn(Long petId, Long memberId, List<DonationStatus> blockingStatuses);

@@ -7,6 +7,7 @@ import kpaas.dogcat.domain.donate.donation.dto.DonationResDto;
 import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.donate.donation.service.DonationCommandService;
 import kpaas.dogcat.domain.donate.donation.service.DonationQueryService;
+import kpaas.dogcat.domain.pet.enums.Breed;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +53,8 @@ public class DonationController {
     @GetMapping("/list")
     public CustomResponse<DonationResDto.PreviewListDto> getDonationList(@RequestParam(required = false) Long cursor,
                                                                          @RequestParam(defaultValue = "9") int size,
-                                                                         @RequestParam(required = false)DonationStatus status) {
-        return CustomResponse.onSuccess(donationQueryService.getDonations(cursor, size, status));
+                                                                         @RequestParam(required = false) Breed breed,
+                                                                         @RequestParam(required = false) DonationStatus status) {
+        return CustomResponse.onSuccess(donationQueryService.getDonations(cursor, size, breed, status));
     }
 }

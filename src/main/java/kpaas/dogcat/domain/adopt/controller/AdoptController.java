@@ -8,6 +8,7 @@ import kpaas.dogcat.domain.adopt.service.AdoptCommandService;
 import kpaas.dogcat.domain.adopt.service.AdoptQueryService;
 import kpaas.dogcat.domain.adopt.dto.AdoptReqDto;
 import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
+import kpaas.dogcat.domain.pet.enums.Breed;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import kpaas.dogcat.global.jwt.CustomUserDetails;
@@ -46,10 +47,11 @@ public class AdoptController {
     public CustomResponse<AdoptResDto.PreviewListDto> getRegistration(@RequestParam(required = false) Long cursor,
                                                                       @RequestParam(defaultValue = "9") int size,
                                                                       @RequestParam(required = false) AdoptionStatus status,
+                                                                      @RequestParam(required = false) Breed breed,
                                                                       @RequestParam(required = false) Region region,
                                                                       @RequestParam(required = false) String district) {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getAdoptions(
-                cursor, size, status, region, district));
+                cursor, size, status, breed, region, district));
     }
 
     @Operation(summary = "입양 공고 상세 페이지 조회", description = "입양 공고의 상세 페이지를 조회하는 API 입니다.")
