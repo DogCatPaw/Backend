@@ -64,14 +64,6 @@ public class ChatController {
         return CustomResponse.onSuccess(SuccessCode.OK, chatRooms);
     }
 
-//    @Operation(summary = "이전 메시지 조회", description = "이전 메시지 조회하기")
-//    @GetMapping("/history/{roomId}")
-//    public CustomResponse<List<ChatResDTO.ChatMessageResDTO>> getChatHistory(@PathVariable Long roomId,
-//                                                                             @AuthenticationPrincipal CustomUserDetails userDetails) {
-//        List<ChatResDTO.ChatMessageResDTO> chatMessageList = chatMessageQueryService.getChatMessages(roomId, userDetails.getId());
-//        return CustomResponse.onSuccess(SuccessCode.OK, chatMessageList);
-//    }
-
     @Operation(summary = "채팅방 상단 입양 공고 조회", description = "해당되는 입양 공고를 채팅방 상단에 띄우는 API입니다.")
     @GetMapping("/room/{roomId}/adoption")
     public CustomResponse<AdoptResDto.PreviewDto> getAdoptInfoForChat(@PathVariable Long roomId,
