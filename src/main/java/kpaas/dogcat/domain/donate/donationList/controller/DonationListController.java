@@ -2,6 +2,7 @@ package kpaas.dogcat.domain.donate.donationList.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
 import kpaas.dogcat.domain.donate.donationList.service.DonationListCommandService;
 import kpaas.dogcat.domain.donate.donationList.dto.DonationListReqDto;
 import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
@@ -28,7 +29,7 @@ public class DonationListController {
         return CustomResponse.onSuccess(SuccessCode.OK, donationListCommandService.donate(dto));
     }
 
-    @Operation(summary = "후원한 사람들의 후원 내역 목록 조회하기", description = "후원 공고 내 후원 목록을 조회하는 API 입니다." +
+    @Operation(summary = "후원한 사람들의 후원 내역 목록 조회하기(x)", description = "후원 공고 내 후원 목록을 조회하는 API 입니다." +
             "목록만 조회 가능하고, 후원 상세 페이지와 내역 목록 한번에 반환은 /api/donation/에서 가능합니다.")
     @GetMapping("/lists")
     public CustomResponse<DonationListResDto.DonationListDto> getDonationList(@RequestParam(required = true) Long donationId,
@@ -46,5 +47,12 @@ public class DonationListController {
             @RequestParam(defaultValue = "5") int size) {
         return CustomResponse.onSuccess(SuccessCode.OK,
                 donationListQueryService.getMyDonationList(userDetails.getId(), cursor, size));
+    }
+
+    @Operation(summary = "현재 후원 가능한 뼈다귀 조회", description = "내 뼈다귀 잔여량을 조회하는 API 입니다.")
+    @GetMapping("/bone")
+    public CustomResponse<DonationListResDto.MyBoneBalanceDto> getMyBoneBalance(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return CustomResponse.onSuccess(SuccessCode.OK, donationListQueryService.getMyBoneBalance(userDetails.getId()));
     }
 }

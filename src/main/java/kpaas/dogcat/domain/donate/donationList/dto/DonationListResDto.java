@@ -45,6 +45,14 @@ public class DonationListResDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
+    public static class MyBoneBalanceDto {
+        private Integer currentBoneBalance;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class MyDonationDto {
         private String donationTitle;
         private Integer donationAmount;

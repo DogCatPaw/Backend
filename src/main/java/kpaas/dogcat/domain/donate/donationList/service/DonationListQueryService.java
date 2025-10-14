@@ -66,6 +66,12 @@ public class DonationListQueryService {
                 .orElseThrow(() -> new CustomException(ErrorCode.DONATIONLIST_NOTFOUND));
     }
 
+    /** 내 후원 잔액 조회하기 */
+    public DonationListResDto.MyBoneBalanceDto  getMyBoneBalance(Long memberId) {
+        Member member = authCommandService.findById(memberId);
+        return new DonationListResDto.MyBoneBalanceDto(member.getBoneBalance());
+    }
+
     /** 내 후원 내역 목록 조회하기 */
     public DonationListResDto.MyDonationListDto getMyDonationList(Long memberId, Long cursor, int size) {
         Member member = authCommandService.findById(memberId);
