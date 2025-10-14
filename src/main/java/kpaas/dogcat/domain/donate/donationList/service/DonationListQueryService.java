@@ -65,4 +65,27 @@ public class DonationListQueryService {
         return donationListRepository.findById(donationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DONATIONLIST_NOTFOUND));
     }
+
+    /** 내 후원 내역 목록 조회하기 */
+    public DonationListResDto.MyDonationListDto getMyDonationList(Long memberId, Long cursor, int size) {
+        Member member = authCommandService.findById(memberId);
+        Pageable pageable = PageRequest.of(0, size);
+
+        List<DonationList> donationLists = (cursor == null)
+                ? donationListRepository.findByMemberIdOrderByIdDesc(memberId, pageable)
+                : donationListRepository.findByMemberIdAndIdLessThanOrderByIdDesc(memberId, cursor, pageable);
+
+        List<DonationListResDto.MyDonationDto> donationDtos = donationLists.stream()
+                .map(donationListConverter::toMyDonationDto)
+                .toList();
+
+        Long nextCursor = donationLists.isEmpty() ? null : donationLists.get(donationLists.size() - 1).getId();
+
+        // 총 후원 금액 및 잔액 뼈다귀
+        Integer totalAmount = donationListRepository.getTotalDonationAmount(memberId);
+        Integer currentBoneBalance = member.getBoneBalance();
+
+        return donationListConverter.toMyDonationListDto(totalAmount, currentBoneBalance,
+                donationDtos, nextCursor);
+    }
 }

@@ -40,4 +40,25 @@ public class DonationListResDto {
         List<DonationDto> donations;
         private Long cursor;
     }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class MyDonationDto {
+        private String donationTitle;
+        private Integer donationAmount;
+        private LocalDateTime donationTime;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class MyDonationListDto {
+        private Integer totalAmount;
+        private Integer currentBoneBalance;
+        List<MyDonationDto> donations;
+        private Long cursor;
+    }
 }

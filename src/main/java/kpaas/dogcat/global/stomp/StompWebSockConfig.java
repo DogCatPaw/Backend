@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.chat.stomp;
+package kpaas.dogcat.global.stomp;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

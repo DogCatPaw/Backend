@@ -1,4 +1,4 @@
-package kpaas.dogcat.domain.chat.stomp;
+package kpaas.dogcat.global.stomp;
 
 // 이벤트를 캐치해서 로그 남기는 용도
 
