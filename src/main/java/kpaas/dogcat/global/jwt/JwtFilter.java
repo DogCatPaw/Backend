@@ -26,6 +26,14 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        String uri = request.getRequestURI();
+
+        // ✅ 1. 인증이 필요 없는 경로는 바로 통과
+        if (isExcludedPath(uri)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
             // 1. 헤더에서 토큰 추출
             String token = getToken(request);
@@ -49,7 +57,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("Invalid or expired token");
         }
     }
 
@@ -60,5 +69,11 @@ public class JwtFilter extends OncePerRequestFilter {
             return token.substring(7);
         }
         return null;
+    }
+
+    private boolean isExcludedPath(String uri) {
+        return uri.startsWith("/api/auth/")
+                || uri.startsWith("/swagger")
+                || uri.startsWith("/v3/api-docs");
     }
 }
