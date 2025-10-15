@@ -61,8 +61,8 @@ public class SecurityConfig {
                 )
                 .csrf(AbstractHttpConfigurer::disable)  //jwt이기에 csrf공격 비활성화
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
-                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+                .cors(Customizer.withDefaults());
+//                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -71,8 +71,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    JwtFilter jwtFilter() throws Exception {
-        return new JwtFilter(jwtUtil, customUserDetailsService);
-    }
+//    @Bean
+//    JwtFilter jwtFilter() throws Exception {
+//        return new JwtFilter(jwtUtil, customUserDetailsService);
+//    }
 }
