@@ -102,12 +102,15 @@ public class DailyStoryQueryService {
      * 공통 변환 메서드 */
     private DailyStoryResDto.StoryPreviewDto mapToPreviewDTO(DailyStory story, Member member) {
         Long storyId = story.getId();
-
+        String thumbnailUrl = null;
+        if (story.getImages() != null && !story.getImages().isEmpty()) {
+            thumbnailUrl = story.getImages().split(",")[0];
+        }
         Long likeCount = likeQueryService.getLikeCount(storyId);
         Long commentCount = commentQueryService.getCommentCount(storyId);
         boolean liked = member != null && likeQueryService.isAlreadyLike(story, member);
 
-        return dailyStoryConverter.toStoryPreviewDTO(story, likeCount, liked, commentCount);
+        return dailyStoryConverter.toStoryPreviewDTO(story, thumbnailUrl, likeCount, liked, commentCount);
     }
 
     // 홈 - 좋아요와 댓글이 가장 많은 입양 후기 3개 반환
@@ -117,7 +120,8 @@ public class DailyStoryQueryService {
 
         return stories.stream()
                 .map(r -> dailyStoryConverter.toStoryPreviewDTO(
-                        r, likeQueryService.getLikeCount(r.getId()),
+                        r, r.getImages().split(",")[0],
+                        likeQueryService.getLikeCount(r.getId()),
                         false, commentQueryService.getCommentCount(r.getId())
                 ))
                 .toList();

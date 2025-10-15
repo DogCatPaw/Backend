@@ -22,6 +22,7 @@ public class DonationResDto {
         private Long memberId;
         private Long donationId;
         private String petDid;
+        private String images;
     }
 
     @Data

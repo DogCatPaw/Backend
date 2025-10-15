@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DailyStoryCommandService {
@@ -26,18 +28,18 @@ public class DailyStoryCommandService {
     private final DailyStoryConverter dailyStoryConverter;
     private final ObjectStorageUtil objectStorageUtil;
 
-    public DailyStoryResDto.WriteStoryResDto writeDailyStory(Long memberId, DailyStoryReqDto.WriteStoryReqDto dto, MultipartFile image) {
+    public DailyStoryResDto.WriteStoryResDto writeDailyStory(
+            Long memberId, DailyStoryReqDto.WriteStoryReqDto dto, List<MultipartFile> images) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 
         Pet pet = petRepository.findById(dto.getPetId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PET_NOTFOUND));
 
-//        if (image == null || image.isEmpty()) {
-//            throw new CustomException(ErrorCode.IMAGE_REQUIRED);
-//        }
-        String url = objectStorageUtil.upload(image);
-        DailyStory story = dailyStoryConverter.toDailyStoryEntity(dto, member, pet, url);
+        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
+        String joinedUrls = String.join(",", imageUrls);
+
+        DailyStory story = dailyStoryConverter.toDailyStoryEntity(dto, member, pet, joinedUrls);
         DailyStory savedStory = dailyStoryRepository.save(story);
 
         return dailyStoryConverter.toWriteStoryResDto(member, savedStory, pet);

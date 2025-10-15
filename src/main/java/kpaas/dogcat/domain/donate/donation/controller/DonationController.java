@@ -11,7 +11,9 @@ import kpaas.dogcat.domain.pet.enums.Breed;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,9 +27,10 @@ public class DonationController {
     private final DonationQueryService donationQueryService;
 
     @Operation(summary = "후원 공고 글 작성하기", description = "후원 공고글을 작성하는 API 입니다.")
-    @PostMapping("/posts")
-    public CustomResponse<DonationResDto.CreateDto> create(@RequestBody DonationReqDto.CreateDto dto) {
-        return CustomResponse.onSuccess(SuccessCode.CREATED, donationCommandService.createDonation(dto));
+    @PostMapping(value = "/posts", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public CustomResponse<DonationResDto.CreateDto> create(@RequestBody DonationReqDto.CreateDto dto,
+                                                           @RequestPart(value = "images", required = true) List<MultipartFile> images) {
+        return CustomResponse.onSuccess(SuccessCode.CREATED, donationCommandService.createDonation(dto, images));
     }
 
     @Operation(summary = "후원 공고 글 상세 보기 + 후원 내역 조회", description = "후원 공고글을 상세 보기하는 API 입니다." +
@@ -47,7 +50,7 @@ public class DonationController {
 //        return CustomResponse.onSuccess(SuccessCode.OK, donationQueryService.get3ClosingSoonDonations());
 //    }
 
-    @Operation(summary = "하단 - 전체 후원 리스트 (cursor 기반)", description = "후원글을 cursor로 조회하는 API 입니다." +
+    @Operation(summary = "메인 화면 - 후원 공고 조회 (cursor 기반)", description = "후원글을 cursor로 조회하는 API 입니다." +
             "status 파라미터는 ACTIVE, ACHIEVED, CLOSED처럼 대문자로 보내주세요." +
             "cursor와 size에 아무 값도 입력하지 않아도 되며, 기본 사이즈는 9입니다. 다음 조회는 nextCursor을 사용하세요.")
     @GetMapping("/list")

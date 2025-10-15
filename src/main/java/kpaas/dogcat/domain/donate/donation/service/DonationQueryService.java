@@ -66,7 +66,7 @@ public class DonationQueryService {
                 .toList();
     }
 
-    /** 후원 공고 (품종 + 상태 별) 조회*/
+    /** 후원 공고 (품종 + 상태 별 + 마감일 임박 순) 조회*/
     public DonationResDto.PreviewListDto getDonations(Long cursor, int size,
                                                       Breed breed,
                                                       DonationStatus status) {

@@ -12,11 +12,12 @@ import java.util.List;
 @Component
 public class AdoptConverter {
 
-    public Adopt toAdopt(Pet pet, Member writer, AdoptReqDto.RegisterDto dto) {
+    public Adopt toAdopt(Pet pet, Member writer, AdoptReqDto.RegisterDto dto, String joinedUrls) {
         return Adopt.builder()
                 .pet(pet)
                 .writer(writer)
                 .title(dto.getTitle())
+                .images(joinedUrls)
                 .region(dto.getRegion())
                 .district(dto.getDistrict())
                 .shelterName(dto.getShelterName())
@@ -32,19 +33,36 @@ public class AdoptConverter {
                 .targetId(pet.getAdopt().getWriter().getId())
                 .adoptTitle(pet.getAdopt().getTitle())
                 .petId(pet.getId())
+                .images(pet.getAdopt().getImages())
                 .build();
     }
 
-    public AdoptResDto.PreviewDto toPreviewDto(String dDay, Pet pet, Adopt adoption) {
+    public AdoptResDto.PreviewDto toPreviewChatDto(String dDay, String thumbnail, Pet pet, Adopt adoption) {
         return AdoptResDto.PreviewDto.builder()
                 .adoptId(adoption.getId())
-                .thumbnail(pet.getPetProfile())     //등록했던 펫 프로필 사용할지, 공고 사진 따로 올릴지 고민
+                .thumbnail(thumbnail)
                 .title(adoption.getTitle())
                 .breed(pet.getBreed())
                 .did(pet.getDid())
                 .region(adoption.getRegion())
                 .district(adoption.getDistrict())
                 .shelterName(adoption.getShelterName())
+                .status(adoption.getStatus())
+                .dDay(dDay)
+                .build();
+    }
+
+    public AdoptResDto.PreviewDto toPreviewDto(String dDay, String thumbnail, Pet pet, Adopt adoption) {
+        return AdoptResDto.PreviewDto.builder()
+                .adoptId(adoption.getId())
+                .thumbnail(thumbnail)
+                .title(adoption.getTitle())
+                .breed(pet.getBreed())
+                .did(pet.getDid())
+                .region(adoption.getRegion())
+                .district(adoption.getDistrict())
+                .shelterName(adoption.getShelterName())
+                .status(adoption.getStatus())
                 .dDay(dDay)
                 .build();
     }
@@ -60,6 +78,7 @@ public class AdoptConverter {
         return AdoptResDto.DetailDto.builder()
                 .title(adopt.getTitle())
                 .content(adopt.getContent())
+                .images(adopt.getImages())
                 .did(adopt.getPet().getDid())
                 .petProfile(adopt.getPet().getPetProfile())
                 .petName(adopt.getPet().getPetName())

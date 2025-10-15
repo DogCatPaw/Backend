@@ -1,6 +1,5 @@
 package kpaas.dogcat.domain.pet.service;
 
-import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.service.AuthCommandService;
 import kpaas.dogcat.domain.pet.converter.PetConverter;
 import kpaas.dogcat.domain.pet.dto.PetResDto;
@@ -31,11 +30,11 @@ public class PetQueryService {
     }
 
     // 내 펫 목록 조회
-    public List<PetResDto.MyPetListDto> getMyPetList(Long memberId) {
+    public List<PetResDto.MyPetDto> getMyPetList(Long memberId) {
         authCommandService.findById(memberId);
         List<Pet> pets = petRepository.findAllByMemberId(memberId);
-        List<PetResDto.MyPetListDto> myPetList = pets.stream()
-                .map(petConverter::toMyPetListDto)
+        List<PetResDto.MyPetDto> myPetList = pets.stream()
+                .map(petConverter::toMyPetDto)
                 .toList();
         return myPetList;
     }

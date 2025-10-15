@@ -13,6 +13,7 @@ import kpaas.dogcat.domain.chat.repository.ChatReadStatusRepository;
 import kpaas.dogcat.domain.chat.repository.ChatRoomRepository;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.pet.dto.PetResDto;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -93,13 +94,9 @@ public class ChatMessageQueryService {
     }
 
     /** 채팅방 상단에 입양 공고 조회*/
-    public AdoptResDto.PreviewDto getAdoptInfo(Long roomId, Long memberId) {
+    public PetResDto.MyPetDto getAdoptInfo(Long roomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOTFOUND));
-        if (!chatParticipantQueryService.isRoomParticipant(memberId, roomId)) {
-            log.error("[ 방 {} 참여 권한 없음 - 사용자: {} ]", roomId, memberId);
-            throw new CustomException(ErrorCode.ROOM_NO_AUTH);
-        }
 
         Adopt adopt = chatRoom.getAdopt();
         if (adopt == null) {

@@ -15,6 +15,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Tag(name = "입양 후기 일지 API")
 @RestController
 @RequestMapping("/api/story")
@@ -26,22 +28,23 @@ public class ReviewController {
 
     @Operation(summary = "입양 후기 일지 작성", description = "일지 하나를 작성합니다.")
     @PostMapping(value = "/review", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public CustomResponse<ReviewResDto.WriteReviewResDto> create(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                 @RequestPart("story") ReviewReqDTO.WriteReviewDTO dto,
-                                                                 @RequestPart(value = "image", required = false) MultipartFile image){
-        ReviewResDto.WriteReviewResDto createdReview = reviewCommandService.writeReview(userDetails.getId(), dto, image);
+    public CustomResponse<ReviewResDto.WriteReviewResDto> create(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestPart("story") ReviewReqDTO.WriteReviewDTO dto,
+            @RequestPart(value = "images", required = true) List<MultipartFile> images){
+        ReviewResDto.WriteReviewResDto createdReview = reviewCommandService.writeReview(userDetails.getId(), dto, images);
         return CustomResponse.onSuccess(SuccessCode.CREATED, createdReview);
     }
 
     @Operation(summary = "입양 후기 상세 조회", description = "입양 후기 한 개의 상세 내용을 조회합니다.")
-    @GetMapping("/review/{reviews}")
+    @GetMapping("/review/{reviewId}")
     public CustomResponse<ReviewResDto.ReviewDetailDto> getReview(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                  @PathVariable Long reviews) {
+                                                                  @PathVariable Long reviewId) {
         Long memberId = (userDetails != null) ? userDetails.getId() : null;
-        return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReviewDetail(reviews, memberId));
+        return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReviewDetail(reviewId, memberId));
     }
 
-    @Operation(summary = "메인 입양 후기 목록 조회", description = "입양 후기 일지 메인 화면의 목록을 조회합니다.")
+    @Operation(summary = "메인화면 - 입양 후기 목록 조회", description = "입양 후기 일지 메인 화면의 목록을 조회합니다.")
     @GetMapping("/review/reviews")
     public CustomResponse<ReviewResDto.ReviewListDto> getReviews(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                  @RequestParam(required = false) Long cursorId,

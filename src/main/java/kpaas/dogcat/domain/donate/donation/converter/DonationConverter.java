@@ -7,11 +7,15 @@ import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Component
 public class DonationConverter {
 
-    public Donation toDonation(Member member, Pet pet, DonationReqDto.CreateDto dto, String accountNumber) {
+    public Donation toDonation(Member member, Pet pet, DonationReqDto.CreateDto dto,
+                               String accountNumber, String joinedUrls) {
         return Donation.builder()
                 .member(member)
                 .pet(pet)
@@ -20,7 +24,7 @@ public class DonationConverter {
                 .deadline(dto.getDeadline())
                 .category(dto.getCategory())
                 .content(dto.getContent())
-                .images(dto.getImages())
+                .images(joinedUrls)
                 .bankName(dto.getBankName())
                 .accountNumber(accountNumber)
                 .accountHolder(dto.getAccountHolder())
@@ -32,6 +36,7 @@ public class DonationConverter {
                 .memberId(savedDonation.getMember().getId())
                 .donationId(savedDonation.getId())
                 .petDid(savedDonation.getPet().getDid())
+                .images(savedDonation.getImages())
                 .build();
     }
 

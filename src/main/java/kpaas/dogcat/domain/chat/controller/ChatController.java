@@ -9,6 +9,7 @@ import kpaas.dogcat.domain.chat.service.command.ChatMessageCommandService;
 import kpaas.dogcat.domain.chat.service.query.ChatMessageQueryService;
 import kpaas.dogcat.domain.chat.service.command.ChatRoomCommandService;
 import kpaas.dogcat.domain.chat.service.query.ChatRoomQueryService;
+import kpaas.dogcat.domain.pet.dto.PetResDto;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import kpaas.dogcat.global.jwt.CustomUserDetails;
@@ -66,10 +67,8 @@ public class ChatController {
 
     @Operation(summary = "채팅방 상단 입양 공고 조회", description = "해당되는 입양 공고를 채팅방 상단에 띄우는 API입니다.")
     @GetMapping("/room/{roomId}/adoption")
-    public CustomResponse<AdoptResDto.PreviewDto> getAdoptInfoForChat(@PathVariable Long roomId,
-                                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
-
-        AdoptResDto.PreviewDto adoptInfo = chatMessageQueryService.getAdoptInfo(roomId, userDetails.getId());
+    public CustomResponse<PetResDto.MyPetDto> getAdoptInfoForChat(@PathVariable Long roomId) {
+        PetResDto.MyPetDto adoptInfo = chatMessageQueryService.getAdoptInfo(roomId);
         return CustomResponse.onSuccess(SuccessCode.OK, adoptInfo);
     }
 }

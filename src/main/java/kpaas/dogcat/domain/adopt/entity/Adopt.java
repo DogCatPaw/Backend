@@ -33,6 +33,9 @@ public class Adopt {
     private String title;
     private String content;
 
+    @Column(nullable = false)
+    private String images;
+
     @Enumerated(EnumType.STRING)
     private Region region;          // 광역시·도
 

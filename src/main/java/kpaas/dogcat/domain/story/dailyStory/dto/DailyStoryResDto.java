@@ -50,6 +50,7 @@ public class DailyStoryResDto {
     @NoArgsConstructor
     @Builder
     public static class StoryPreviewDto {
+        private Long storyId;
         private String profileUrl;
         private String memberName;
         private String title;

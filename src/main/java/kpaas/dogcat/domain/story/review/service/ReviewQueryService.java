@@ -62,7 +62,6 @@ public class ReviewQueryService {
                 .map(review -> mapToPreviewDTO(review, member))
                 .toList();
         Long nextCursor = reviews.size() < size ? null : reviews.get(reviews.size() - 1).getId();
-//        Long nextCursor = reviewList.isEmpty() ? null : reviewList.get(reviewList.size() - 1).getId();
 
         return ReviewResDto.ReviewListDto.builder()
                 .reviews(reviewList)
@@ -104,12 +103,15 @@ public class ReviewQueryService {
      * 공통 변환 메서드 */
     private ReviewResDto.ReviewDto mapToPreviewDTO(Review review, Member member) {
         Long storyId = review.getId();
-
+        String thumbnailUrl = null;
+        if (review.getImages() != null && !review.getImages().isEmpty()) {
+            thumbnailUrl = review.getImages().split(",")[0];
+        }
         Long likeCount = likeQueryService.getLikeCount(storyId);
         Long commentCount = commentQueryService.getCommentCount(storyId);
         boolean liked = member != null && likeQueryService.isAlreadyLike(review, member);
 
-        return reviewConverter.toReviewPreviewDTO(review, likeCount, liked, commentCount);
+        return reviewConverter.toReviewPreviewDTO(review, thumbnailUrl, likeCount, liked, commentCount);
     }
 
     // 홈 - 좋아요와 댓글이 가장 많은 입양 후기 3개 반환
@@ -119,7 +121,8 @@ public class ReviewQueryService {
 
         return reviews.stream()
                 .map(r -> reviewConverter.toReviewPreviewDTO(
-                        r, likeQueryService.getLikeCount(r.getId()),
+                        r, r.getImages().split(",")[0],
+                        likeQueryService.getLikeCount(r.getId()),
                         false, commentQueryService.getCommentCount(r.getId())
                 ))
                 .toList();

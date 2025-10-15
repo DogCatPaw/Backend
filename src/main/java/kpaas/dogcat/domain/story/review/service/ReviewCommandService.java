@@ -5,16 +5,18 @@ import kpaas.dogcat.domain.member.repository.MemberRepository;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.repository.PetRepository;
 import kpaas.dogcat.domain.story.review.converter.ReviewConverter;
-import kpaas.dogcat.domain.story.review.repository.ReviewRepository;
 import kpaas.dogcat.domain.story.review.dto.ReviewReqDTO;
 import kpaas.dogcat.domain.story.review.dto.ReviewResDto;
 import kpaas.dogcat.domain.story.review.entity.Review;
+import kpaas.dogcat.domain.story.review.repository.ReviewRepository;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import kpaas.dogcat.global.objectStorage.ObjectStorageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,18 +28,18 @@ public class ReviewCommandService {
     private final ReviewConverter reviewConverter;
     private final ObjectStorageUtil objectStorageUtil;
 
-    public ReviewResDto.WriteReviewResDto writeReview(Long memberId, ReviewReqDTO.WriteReviewDTO dto, MultipartFile image) {
+    public ReviewResDto.WriteReviewResDto writeReview(
+            Long memberId, ReviewReqDTO.WriteReviewDTO dto, List<MultipartFile> images) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 
         Pet pet = petRepository.findById(dto.getPetId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PET_NOTFOUND));
 
-//        if (image == null || image.isEmpty()) {
-//            throw new CustomException(ErrorCode.IMAGE_REQUIRED);
-//        }
-        String url = objectStorageUtil.upload(image);
-        Review review = reviewConverter.toReviewEntity(dto, member, pet, url);
+        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
+        String joinedUrls = String.join(",", imageUrls);
+
+        Review review = reviewConverter.toReviewEntity(dto, member, pet, joinedUrls);
         Review savedReview = reviewRepository.save(review);
 
         return reviewConverter.toWriteReviewResDTO(member, savedReview, pet);

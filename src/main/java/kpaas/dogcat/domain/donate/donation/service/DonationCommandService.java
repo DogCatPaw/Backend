@@ -13,9 +13,12 @@ import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.service.PetQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
+import kpaas.dogcat.global.objectStorage.ObjectStorageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,10 +33,10 @@ public class DonationCommandService {
     private final AuthCommandService authCommandService;
     private final PetQueryService petQueryService;
     private final DonationConverter donationConverter;
-    private static final List<DonationStatus> BLOCKING_STATUSES =
-            List.of(DonationStatus.ACTIVE, DonationStatus.ACHIEVED);
+    private final ObjectStorageUtil objectStorageUtil;
+    private static final List<DonationStatus> BLOCKING_STATUSES = List.of(DonationStatus.ACTIVE, DonationStatus.ACHIEVED);
 
-    public DonationResDto.CreateDto createDonation(DonationReqDto.CreateDto dto){
+    public DonationResDto.CreateDto createDonation(DonationReqDto.CreateDto dto, List<MultipartFile> images){
 
         // 회원과 펫 조회
         Member member = authCommandService.findById(dto.getMemberId());
@@ -45,9 +48,12 @@ public class DonationCommandService {
             throw new CustomException(ErrorCode.ALREADY_ACTIVE_DONATION);
         }
 
+        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
+        String joinedUrls = String.join(",", imageUrls);
+
         // 후원 공고 저장
         String accountNumber = dto.getAccountNumber().replace("-", "");
-        Donation donation = donationConverter.toDonation(member, pet, dto, accountNumber);
+        Donation donation = donationConverter.toDonation(member, pet, dto, accountNumber, joinedUrls);
         Donation savedDonation = donationRepository.save(donation);
 
         return donationConverter.toCreateDto(savedDonation);

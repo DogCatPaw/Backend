@@ -15,6 +15,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Tag(name = "일상 일지 API")
 @RestController
 @RequestMapping("/api/story")
@@ -26,22 +28,24 @@ public class DailyStoryController {
 
     @Operation(summary = "일상 일지 작성", description = "일지 하나를 작성합니다.")
     @PostMapping(value = "/daily", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public CustomResponse<DailyStoryResDto.WriteStoryResDto> create(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                    @RequestPart("story") DailyStoryReqDto.WriteStoryReqDto dto,
-                                                                    @RequestPart(value = "image", required = false) MultipartFile image) {
-        DailyStoryResDto.WriteStoryResDto createdStory = dailyStoryCommandService.writeDailyStory(userDetails.getId(), dto, image);
+    public CustomResponse<DailyStoryResDto.WriteStoryResDto> create(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestPart("story") DailyStoryReqDto.WriteStoryReqDto dto,
+            @RequestPart(value = "images", required = true) List<MultipartFile> images) {
+        DailyStoryResDto.WriteStoryResDto createdStory = dailyStoryCommandService.writeDailyStory(
+                userDetails.getId(), dto, images);
         return CustomResponse.onSuccess(SuccessCode.CREATED, createdStory);
     }
 
-    @Operation(summary = "일상 일지 하나 조회", description = "일지 하나를 조회합니다.")
-    @GetMapping("/daily/{stories}")
+    @Operation(summary = "일상 일지 상세 조회", description = "일지 하나를 상세 조회합니다.")
+    @GetMapping("/daily/{storyId}")
     public CustomResponse<DailyStoryResDto.StoryDetailDto> getStory(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                     @PathVariable Long stories) {
+                                                                    @PathVariable Long storyId) {
         Long memberId = (userDetails != null) ? userDetails.getId() : null;
-        return CustomResponse.onSuccess(SuccessCode.OK, dailyStoryQueryService.getStoryDetail(stories, memberId));
+        return CustomResponse.onSuccess(SuccessCode.OK, dailyStoryQueryService.getStoryDetail(storyId, memberId));
     }
 
-    @Operation(summary = "메인 일상 일지 목록 조회", description = "일지 메인 화면의 일지 목록을 조회합니다.")
+    @Operation(summary = "메인화면 - 일상 일지 목록 조회", description = "일지 메인 화면의 일지 목록을 조회합니다.")
     @GetMapping("/daily/stories")
     public CustomResponse<DailyStoryResDto.StoriesListDto> getStories(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                       @RequestParam(required = false) Long cursorId,

@@ -8,8 +8,11 @@ import kpaas.dogcat.domain.adopt.enums.Region;
 import kpaas.dogcat.domain.adopt.repository.AdoptRepository;
 import kpaas.dogcat.domain.donate.donation.service.DonationQueryService;
 import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.pet.converter.PetConverter;
+import kpaas.dogcat.domain.pet.dto.PetResDto;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.enums.Breed;
+import kpaas.dogcat.domain.pet.service.PetQueryService;
 import kpaas.dogcat.domain.story.dailyStory.service.DailyStoryQueryService;
 import kpaas.dogcat.domain.story.review.service.ReviewQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
@@ -37,15 +40,15 @@ public class AdoptQueryService {
     private final AdoptRepository adoptRepository;
     private final AdoptConverter adoptConverter;
     private final AuthCommandService authCommandService;
+    private final PetConverter petConverter;
 
     public Adopt findById(Long adoptId) {
         return adoptRepository.findById(adoptId).orElseThrow(() -> new CustomException(ErrorCode.ADOPTION_NOTFOUND));
     }
 
-    public AdoptResDto.PreviewDto getAdoptionForChatting(Adopt adopt) {
+    public PetResDto.MyPetDto getAdoptionForChatting(Adopt adopt) {
         Pet pet = adopt.getPet();
-        String dDay = getDday(adopt);
-        return adoptConverter.toPreviewDto(dDay, pet, adopt);
+        return petConverter.toMyPetDto(pet);
     }
 
     public AdoptResDto.HomeDto getHomeData() {
@@ -64,8 +67,9 @@ public class AdoptQueryService {
         return adopts.stream()
                 .map(adoption -> {
                     Pet pet = adoption.getPet();
+                    String thumbnailUrl = adoption.getImages().split(",")[0];
                     String dDay = getDday(adoption);
-                    return adoptConverter.toPreviewDto(dDay, pet, adoption);
+                    return adoptConverter.toPreviewDto(dDay, thumbnailUrl, pet, adoption);
                 })
                 .toList();
     }
@@ -82,8 +86,9 @@ public class AdoptQueryService {
         List<AdoptResDto.PreviewDto> adoptionDtos = adoptions.stream()
                 .map(adoption -> {
                     Pet pet = adoption.getPet();
+                    String thumbnailUrl = adoption.getImages().split(",")[0];
                     String dDay = getDday(adoption);
-                    return adoptConverter.toPreviewDto(dDay, pet, adoption);
+                    return adoptConverter.toPreviewDto(dDay, thumbnailUrl, pet, adoption);
                 })
                 .toList();
 

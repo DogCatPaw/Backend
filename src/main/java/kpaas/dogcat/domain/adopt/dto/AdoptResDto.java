@@ -38,6 +38,7 @@ public class AdoptResDto {
         private Long targetId;
         private String adoptTitle;
         private Long petId;
+        private String images;
     }
 
     @Data
@@ -74,6 +75,7 @@ public class AdoptResDto {
     public static class DetailDto {
         private String title;
         private String content;
+        private String images;
 
         private String did;
         private String petProfile;

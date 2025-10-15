@@ -49,7 +49,7 @@ public enum ErrorCode implements BaseCode {
     PET_NOTFOUND(HttpStatus.NOT_FOUND, "PET_404", "등록된 반려동물이 없습니다. 등록 먼저 해주세요!"),
     DAILYSTORY_NOTFOUND(HttpStatus.NOT_FOUND, "STORY_404", "등록된 일상 일지가 없습니다."),
     REVIEW_NOTFOUND(HttpStatus.NOT_FOUND, "STORY_404", "등록된 입양 후기가 없습니다."),
-    IMAGE_REQUIRED(HttpStatus.NOT_FOUND, "STORY_404", "선택된 이미지 파일이 없습니다."),
+    IMAGE_REQUIRED(HttpStatus.NOT_FOUND, "STORY_404", "이미지 파일을 업로드해주세요."),
 
     // 후원 결제 관련 에러 추가
     INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "PAYMENT_400", "결제 금액은 1000원 이상만 가능합니다."),

@@ -1,5 +1,7 @@
 package kpaas.dogcat.global.objectStorage;
 
+import kpaas.dogcat.global.apiPayload.code.CustomException;
+import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.core.exception.SdkClientException;
@@ -15,6 +17,8 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -27,10 +31,6 @@ public class ObjectStorageUtil {
     private String bucketName;
 
     public String upload(MultipartFile file) {
-        // 추후 더 생각해볼점!!!
-        if (file == null || file.isEmpty()) {
-            return null; // 혹은 default image url 반환
-        }
 
         String fileName = file.getOriginalFilename();
 
@@ -40,6 +40,7 @@ public class ObjectStorageUtil {
                     .key(fileName)
                     .contentType(file.getContentType())
                     .contentLength(file.getSize())
+                    .acl(ObjectCannedACL.PUBLIC_READ)
                     .build();
 
             s3Client.putObject(putObjectRequest,
@@ -63,6 +64,23 @@ public class ObjectStorageUtil {
 
         URL url = utilities.getUrl(getUrlRequest);
         return url.toString();
+    }
+
+    /** 여러 사진 파일 반환 */
+    public List<String> uploadMultiple(List<MultipartFile> files) {
+        if (files == null || files.isEmpty()) {
+            throw new CustomException(ErrorCode.IMAGE_REQUIRED);
+        }
+
+        List<String> urls = new ArrayList<>();
+        for (MultipartFile file : files) {
+            if (file != null && !file.isEmpty()) {
+                String url = upload(file);
+                urls.add(url);
+            }
+        }
+
+        return urls;
     }
 
     // 파일 삭제

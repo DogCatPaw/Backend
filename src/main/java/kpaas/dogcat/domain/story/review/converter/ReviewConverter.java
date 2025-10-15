@@ -56,6 +56,7 @@ public class ReviewConverter {
 
 
     public ReviewResDto.ReviewDto toReviewPreviewDTO(Review review,
+                                                     String thumbnailUrl,
                                                      Long likeCount,
                                                      boolean liked,
                                                      Long commentCount) {
@@ -63,7 +64,7 @@ public class ReviewConverter {
                 .profileUrl(review.getMember().getProfileUrl())
                 .memberName(review.getMember().getNickname())
                 .title(review.getTitle())
-                .images(review.getImages())
+                .images(thumbnailUrl)
                 .petName(review.getPet().getPetName())
                 .breed(review.getPet().getBreed())
                 .content(review.getContent())

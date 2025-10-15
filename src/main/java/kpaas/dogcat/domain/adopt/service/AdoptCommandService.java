@@ -12,10 +12,15 @@ import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.service.PetQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
+import kpaas.dogcat.global.objectStorage.ObjectStorageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -28,15 +33,20 @@ public class AdoptCommandService {
     private final AdoptRepository adoptRepository;
     private final AdoptConverter adoptConverter;
     private final AdoptQueryService adoptQueryService;
+    private final ObjectStorageUtil objectStorageUtil;
 
     /** 입양 공고 작성 **/
-    public AdoptResDto.RegisterDto register(AdoptReqDto.RegisterDto dto, Long writerId) {
+    public AdoptResDto.RegisterDto register(AdoptReqDto.RegisterDto dto, Long writerId, List<MultipartFile> images) {
         Pet pet = petQueryService.findById(dto.getPetId());
         Member member = authCommandService.findById(writerId);
         if (adoptRepository.existsByPetId(dto.getPetId())) {
             throw new CustomException(ErrorCode.ALEADY_ACTIVE_ADOPTION);
         }
-        Adopt adopt = adoptConverter.toAdopt(pet, member, dto);
+
+        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
+        String joinedUrls = String.join(",", imageUrls);
+
+        Adopt adopt = adoptConverter.toAdopt(pet, member, dto, joinedUrls);
         pet.setAdopt(adopt);            // 연관관계 양쪽 설정
         adoptRepository.save(adopt);    // 주인인 Pet만 save해도 adopt까지 cascade로 저장됨
 

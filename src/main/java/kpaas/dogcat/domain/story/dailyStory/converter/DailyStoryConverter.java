@@ -56,14 +56,16 @@ public class DailyStoryConverter {
 
     // 스토리 목록 조회용
     public DailyStoryResDto.StoryPreviewDto toStoryPreviewDTO(DailyStory story,
+                                                              String thumbnailUrl,
                                                               Long likeCount,
                                                               boolean liked,
                                                               Long commentCount) {
         return DailyStoryResDto.StoryPreviewDto.builder()
+                .storyId(story.getId())
                 .profileUrl(story.getMember().getProfileUrl())
                 .memberName(story.getMember().getNickname())
                 .title(story.getTitle())
-                .images(story.getImages())
+                .images(thumbnailUrl)
                 .petName(story.getPet().getPetName())
                 .breed(story.getPet().getBreed())
                 .content(story.getContent())
