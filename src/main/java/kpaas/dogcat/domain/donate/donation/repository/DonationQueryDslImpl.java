@@ -39,7 +39,7 @@ public class DonationQueryDslImpl implements DonationQueryDsl {
         return jpaQueryFactory
                 .selectFrom(donation)
                 .where(builder)
-                .orderBy(donation.id.desc())
+                .orderBy(donation.deadline.asc())
                 .limit(size)
                 .fetch();
     }

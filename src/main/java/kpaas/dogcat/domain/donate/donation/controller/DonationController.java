@@ -40,12 +40,12 @@ public class DonationController {
         return CustomResponse.onSuccess(SuccessCode.OK, donationDetail);
     }
 
-    @Operation(summary = "상단 - 마감 임박 후원 3개", description = "마감 기한이 임박한 후원 3개를 조회하는 API 입니다. "
-                                                    + "후원페이지 상단에 띄워주세요. ")
-    @GetMapping("/closing")
-    public CustomResponse<List<DonationResDto.PreviewDto>> getClosingSoonDonations() {
-        return CustomResponse.onSuccess(SuccessCode.OK, donationQueryService.get3ClosingSoonDonations());
-    }
+//    @Operation(summary = "상단 - 마감 임박 후원 3개", description = "마감 기한이 임박한 후원 3개를 조회하는 API 입니다. "
+//                                                    + "후원페이지 상단에 띄워주세요. ")
+//    @GetMapping("/closing")
+//    public CustomResponse<List<DonationResDto.PreviewDto>> getClosingSoonDonations() {
+//        return CustomResponse.onSuccess(SuccessCode.OK, donationQueryService.get3ClosingSoonDonations());
+//    }
 
     @Operation(summary = "하단 - 전체 후원 리스트 (cursor 기반)", description = "후원글을 cursor로 조회하는 API 입니다." +
             "status 파라미터는 ACTIVE, ACHIEVED, CLOSED처럼 대문자로 보내주세요." +
