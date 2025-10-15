@@ -1,8 +1,5 @@
 package kpaas.dogcat.domain.adopt.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
 import kpaas.dogcat.domain.adopt.enums.Region;
 import kpaas.dogcat.domain.donate.donation.dto.DonationResDto;
@@ -93,6 +90,16 @@ public class AdoptResDto {
         private String shelterName;
 //        private String contact;
         private LocalDate deadline;
+        private AdoptionStatus status;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class DelegateDto {
+        private Long adoptWriterId;
+        private Long adopterId;
         private AdoptionStatus status;
     }
 }

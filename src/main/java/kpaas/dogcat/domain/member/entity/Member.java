@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -52,8 +53,8 @@ public class Member {
     @Builder.Default
     private Integer settledBalance = 0; // 정산된 후원금
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Pet> petList;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<Pet> pets = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Payment> payments;
@@ -86,4 +87,5 @@ public class Member {
 
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Adopt> adopts;
+
 }

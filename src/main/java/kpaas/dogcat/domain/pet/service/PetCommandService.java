@@ -1,7 +1,9 @@
 package kpaas.dogcat.domain.pet.service;
 
+import kpaas.dogcat.domain.adopt.service.AdoptQueryService;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
+import kpaas.dogcat.domain.member.service.AuthCommandService;
 import kpaas.dogcat.domain.pet.converter.PetConverter;
 import kpaas.dogcat.domain.pet.dto.PetReqDTO;
 import kpaas.dogcat.domain.pet.dto.PetResDto;

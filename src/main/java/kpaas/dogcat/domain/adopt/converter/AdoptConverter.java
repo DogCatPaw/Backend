@@ -77,4 +77,12 @@ public class AdoptConverter {
                 .deadline(adopt.getDeadline())
                 .build();
     }
+
+    public AdoptResDto.DelegateDto toDelegateDto(Adopt adopt, Long adopterId) {
+        return AdoptResDto.DelegateDto.builder()
+                .adopterId(adopterId)
+                .adoptWriterId(adopt.getWriter().getId())
+                .status(adopt.getStatus())
+                .build();
+    }
 }

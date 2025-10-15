@@ -69,4 +69,8 @@ public class Adopt {
     public void setPet(Pet pet) {
         this.pet = pet;
     }
+
+    public void updateStatus(AdoptionStatus status) {
+        this.status = status;
+    }
 }

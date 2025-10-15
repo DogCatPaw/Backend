@@ -77,7 +77,10 @@ public enum ErrorCode implements BaseCode {
 
     // 입양
     ALEADY_ACTIVE_ADOPTION(HttpStatus.BAD_REQUEST, "ADOPTION400", "해당 펫과 관련된 입양 공고가 이미 존재합니다."),
-    ADOPTION_NOTFOUND(HttpStatus.NOT_FOUND, "ADOPTION404", "해당되는 입양 공고가 없습니다.");
+    ADOPTION_NOTFOUND(HttpStatus.NOT_FOUND, "ADOPTION404", "해당되는 입양 공고가 없습니다."),
+    ADOPTION_ADOPTING(HttpStatus.BAD_REQUEST, "ADOPTION400", "입양 절차 진행중입니다."),
+    ADOPTION_COMPLETED(HttpStatus.BAD_REQUEST, "ADOPTION400", "입양 완료된 공고입니다."),
+    ADOPTION_BAD_REQUEST(HttpStatus.BAD_REQUEST, "ADOPTION400", "자기 자신이 입양할 수 없습니다.");
 
 
     private final HttpStatus httpStatus;
