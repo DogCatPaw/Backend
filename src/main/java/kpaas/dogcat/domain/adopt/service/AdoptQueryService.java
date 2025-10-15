@@ -7,6 +7,7 @@ import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
 import kpaas.dogcat.domain.adopt.enums.Region;
 import kpaas.dogcat.domain.adopt.repository.AdoptRepository;
 import kpaas.dogcat.domain.donate.donation.service.DonationQueryService;
+import kpaas.dogcat.domain.member.service.AuthCommandService;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.enums.Breed;
 import kpaas.dogcat.domain.story.dailyStory.service.DailyStoryQueryService;
@@ -35,6 +36,7 @@ public class AdoptQueryService {
     private final DonationQueryService donationQueryService;
     private final AdoptRepository adoptRepository;
     private final AdoptConverter adoptConverter;
+    private final AuthCommandService authCommandService;
 
     public Adopt findById(Long adoptId) {
         return adoptRepository.findById(adoptId).orElseThrow(() -> new CustomException(ErrorCode.ADOPTION_NOTFOUND));
@@ -109,5 +111,22 @@ public class AdoptQueryService {
         else dDay = "마감";
 
         return dDay;
+    }
+
+    /** 마이페이지 - 입양 현황 조회 */
+    public AdoptResDto.MyAdoptionListDto getMyAdoptionList(Long memberId, Long cursor, int size){
+        authCommandService.findById(memberId);
+        Pageable pageable = PageRequest.of(0, size);
+
+        List<Adopt> adoptList = (cursor == null)
+                ? adoptRepository.findByAdopterIdOrderByIdDesc(memberId, pageable)
+                : adoptRepository.findByAdopterIdAndIdLessThanOrderByIdDesc(memberId, cursor, pageable);
+
+        List<AdoptResDto.MyAdoptionDto> adoptionDtos = adoptList.stream()
+                .map(adoptConverter::toMyAdoptionDto)
+                .toList();
+
+        Long nextCursor = adoptList.isEmpty() ? null : adoptList.get(adoptList.size() - 1).getId();
+        return adoptConverter.toMyAdoptionListDto(adoptionDtos, nextCursor);
     }
 }

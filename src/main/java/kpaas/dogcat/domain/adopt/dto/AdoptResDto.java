@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class AdoptResDto {
@@ -101,5 +102,30 @@ public class AdoptResDto {
         private Long adoptWriterId;
         private Long adopterId;
         private AdoptionStatus status;
+        private LocalDateTime appliedAt;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class MyAdoptionDto {
+        private Long adoptId;
+        private String petName;
+        private Breed breed;
+        private Region region;
+        private String district;
+        private String shelterName;
+        private AdoptionStatus status;
+        private LocalDateTime appliedAt;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class MyAdoptionListDto {
+        List<MyAdoptionDto> adoptions;
+        private Long cursor;
     }
 }

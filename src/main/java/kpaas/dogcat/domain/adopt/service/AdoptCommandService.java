@@ -58,7 +58,8 @@ public class AdoptCommandService {
         }
         Pet pet = adopt.getPet();
 
-        // 소유권 이전 및 공고 완료 처리
+        // 입양자 필드 저장 & 소유권 이전 & 공고 완료 처리
+        adopt.apply(adopter);
         pet.changeOwner(adopter);
         adopt.updateStatus(AdoptionStatus.ADOPTED);
 

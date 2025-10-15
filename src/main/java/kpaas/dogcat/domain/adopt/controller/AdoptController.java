@@ -62,7 +62,15 @@ public class AdoptController {
     @Operation(summary = "입양 신청하기", description = "입양 신청 완료하는 API 입니다. 펫의 소유권을 이전합니다.")
     @PostMapping("/{adoptionId}/complete")
     public CustomResponse<AdoptResDto.DelegateDto> delegate(@PathVariable Long adoptionId,
-                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
+                                                            @AuthenticationPrincipal CustomUserDetails userDetails) {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptCommandService.delegate(adoptionId, userDetails.getId()));
+    }
+
+    @Operation(summary = "입양 신청 현황 조회(마이페이지)", description = "마이페이지의 입양 신청 현황을 조회하는 API 입니다.")
+    @GetMapping("/mine")
+    public CustomResponse<AdoptResDto.MyAdoptionListDto> getDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                   @RequestParam(required = false) Long cursor,
+                                                                   @RequestParam(defaultValue = "5") int size) {
+        return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getMyAdoptionList(userDetails.getId(), cursor, size));
     }
 }

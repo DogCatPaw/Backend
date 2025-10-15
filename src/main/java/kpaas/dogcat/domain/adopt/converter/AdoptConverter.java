@@ -83,6 +83,26 @@ public class AdoptConverter {
                 .adopterId(adopterId)
                 .adoptWriterId(adopt.getWriter().getId())
                 .status(adopt.getStatus())
+                .appliedAt(adopt.getAppliedAt())
+                .build();
+    }
+
+    public AdoptResDto.MyAdoptionDto toMyAdoptionDto(Adopt adopt) {
+        return AdoptResDto.MyAdoptionDto.builder()
+                .adoptId(adopt.getId())
+                .petName(adopt.getPet().getPetName())
+                .region(adopt.getRegion())
+                .district(adopt.getDistrict())
+                .shelterName(adopt.getShelterName())
+                .status(adopt.getStatus())
+                .appliedAt(adopt.getAppliedAt())
+                .build();
+    }
+
+    public AdoptResDto.MyAdoptionListDto toMyAdoptionListDto(List<AdoptResDto.MyAdoptionDto> adoptionDtos, Long nextCursor) {
+        return AdoptResDto.MyAdoptionListDto.builder()
+                .adoptions(adoptionDtos)
+                .cursor(nextCursor)
                 .build();
     }
 }

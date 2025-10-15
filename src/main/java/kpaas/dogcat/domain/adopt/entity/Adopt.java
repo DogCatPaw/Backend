@@ -55,9 +55,15 @@ public class Adopt {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    private LocalDateTime appliedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member writer;   // 공고 작성자
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adopter_id")
+    private Member adopter;  // 입양 신청자
 
     //펫이 먼저 존재하고 입양 공고가 붙기 때문에 펫을 주인으로 설정
     @OneToOne(mappedBy = "adopt", fetch = FetchType.LAZY)
@@ -68,6 +74,12 @@ public class Adopt {
 
     public void setPet(Pet pet) {
         this.pet = pet;
+    }
+
+    public void apply(Member adopter) {
+        this.adopter = adopter;
+        this.appliedAt = LocalDateTime.now();
+        this.status = AdoptionStatus.ADOPTING;
     }
 
     public void updateStatus(AdoptionStatus status) {

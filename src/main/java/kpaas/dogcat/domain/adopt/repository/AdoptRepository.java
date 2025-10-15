@@ -2,8 +2,6 @@ package kpaas.dogcat.domain.adopt.repository;
 
 import kpaas.dogcat.domain.adopt.entity.Adopt;
 import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
-import kpaas.dogcat.domain.adopt.enums.Region;
-import kpaas.dogcat.domain.pet.enums.Breed;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +18,7 @@ public interface AdoptRepository extends JpaRepository<Adopt, Long>, AdoptQueryD
     Optional<Adopt> findWithPetById(@Param("adoptId") Long adoptId);
 
     List<Adopt> findTop3ByStatusOrderByDeadlineAsc(AdoptionStatus adoptionStatus, Pageable pageable);
+
+    List<Adopt> findByAdopterIdOrderByIdDesc(Long adopterId, Pageable pageable);
+    List<Adopt> findByAdopterIdAndIdLessThanOrderByIdDesc(Long adopterId, Long cursor, Pageable pageable);
 }
