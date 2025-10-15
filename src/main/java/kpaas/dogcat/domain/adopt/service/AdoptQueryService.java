@@ -46,9 +46,9 @@ public class AdoptQueryService {
         return adoptRepository.findById(adoptId).orElseThrow(() -> new CustomException(ErrorCode.ADOPTION_NOTFOUND));
     }
 
-    public PetResDto.MyPetDto getAdoptionForChatting(Adopt adopt) {
+    public PetResDto.PetChatDto getAdoptionForChatting(Adopt adopt) {
         Pet pet = adopt.getPet();
-        return petConverter.toMyPetDto(pet);
+        return petConverter.toPetChatDto(pet);
     }
 
     public AdoptResDto.HomeDto getHomeData() {

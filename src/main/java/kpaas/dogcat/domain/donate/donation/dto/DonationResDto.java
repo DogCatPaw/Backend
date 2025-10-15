@@ -55,6 +55,7 @@ public class DonationResDto {
     @NoArgsConstructor
     @Builder
     public static class PreviewDto {
+        private Long donationId;
         private String dDay;
         private String thumbnail;
         private String title;

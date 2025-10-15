@@ -27,18 +27,27 @@ public class PetResDto {
     @Builder
     public static class MyPetDto {
         private Long petId;
+        private String did;
+        private String petProfile;
+        private String petName;
+        private int old;
+        private Gender gender;
+        private Breed breed;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class PetChatDto {
+        private Long petId;
         private Long adoptId;
         private String did;
         private String petProfile;
         private String petName;
         private int old;
         private AdoptionStatus status;
-
-        private int weight;
         private Gender gender;
         private Breed breed;
-        private String color;
-        private boolean isNeutral;
-        private String specifics;
     }
 }

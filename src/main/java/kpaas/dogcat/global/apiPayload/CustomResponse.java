@@ -80,5 +80,4 @@ public class CustomResponse<T> {
                 .result(result)
                 .build();
     }
-
 }

@@ -49,6 +49,7 @@ public class ReviewResDto {
     @NoArgsConstructor
     @Builder
     public static class ReviewDto {
+        private Long reviewId;
         private String profileUrl;
         private String memberName;
         private String images;

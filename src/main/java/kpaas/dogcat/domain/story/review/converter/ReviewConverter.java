@@ -61,6 +61,7 @@ public class ReviewConverter {
                                                      boolean liked,
                                                      Long commentCount) {
         return ReviewResDto.ReviewDto.builder()
+                .reviewId(review.getId())
                 .profileUrl(review.getMember().getProfileUrl())
                 .memberName(review.getMember().getNickname())
                 .title(review.getTitle())

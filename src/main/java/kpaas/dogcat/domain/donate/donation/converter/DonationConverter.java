@@ -64,10 +64,12 @@ public class DonationConverter {
                 .build();
     }
 
-    public DonationResDto.PreviewDto toHomeDto(String dDay, int patronCount, int progress, Donation donation) {
+    public DonationResDto.PreviewDto toHomeDto(String thumbnailUrl, String dDay,
+                                               int patronCount, int progress, Donation donation) {
         return DonationResDto.PreviewDto.builder()
+                .donationId(donation.getId())
                 .dDay(dDay)
-                .thumbnail(donation.getImages())
+                .thumbnail(thumbnailUrl)
                 .title(donation.getTitle())
                 .currentAmount(donation.getCurrentAmount())
                 .targetAmount(donation.getTargetAmount())

@@ -27,18 +27,26 @@ public class PetConverter {
     public PetResDto.MyPetDto toMyPetDto(Pet pet) {
         return PetResDto.MyPetDto.builder()
                 .petId(pet.getId())
+                .did(pet.getDid())
+                .petProfile(pet.getPetProfile())
+                .petName(pet.getPetName())
+                .old(pet.getOld())
+                .gender(pet.getGender())
+                .breed(pet.getBreed())
+                .build();
+    }
+
+    public PetResDto.PetChatDto toPetChatDto(Pet pet) {
+        return PetResDto.PetChatDto.builder()
+                .petId(pet.getId())
                 .adoptId(pet.getAdopt().getId())
                 .did(pet.getDid())
                 .petProfile(pet.getPetProfile())
                 .petName(pet.getPetName())
                 .old(pet.getOld())
                 .status(pet.getAdopt().getStatus())
-                .weight(pet.getWeight())
                 .gender(pet.getGender())
                 .breed(pet.getBreed())
-                .color(pet.getColor())
-                .isNeutral(pet.isNeutral())
-                .specifics(pet.getSpecifics())
                 .build();
     }
 }

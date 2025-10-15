@@ -94,7 +94,7 @@ public class ChatMessageQueryService {
     }
 
     /** 채팅방 상단에 입양 공고 조회*/
-    public PetResDto.MyPetDto getAdoptInfo(Long roomId) {
+    public PetResDto.PetChatDto getAdoptInfo(Long roomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOTFOUND));
 

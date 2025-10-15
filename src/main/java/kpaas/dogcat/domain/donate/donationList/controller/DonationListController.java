@@ -29,15 +29,15 @@ public class DonationListController {
         return CustomResponse.onSuccess(SuccessCode.OK, donationListCommandService.donate(dto));
     }
 
-    @Operation(summary = "후원한 사람들의 후원 내역 목록 조회하기(x)", description = "후원 공고 내 후원 목록을 조회하는 API 입니다." +
-            "목록만 조회 가능하고, 후원 상세 페이지와 내역 목록 한번에 반환은 /api/donation/에서 가능합니다.")
-    @GetMapping("/lists")
-    public CustomResponse<DonationListResDto.DonationListDto> getDonationList(@RequestParam(required = true) Long donationId,
-                                                                              @RequestParam(required = false) Long cursor,
-                                                                              @RequestParam(defaultValue = "5") int size) {
-        return CustomResponse.onSuccess(SuccessCode.OK,
-                donationListQueryService.getDonationList(donationId, cursor, size));
-    }
+//    @Operation(summary = "후원한 사람들의 후원 내역 목록 조회하기(x)", description = "후원 공고 내 후원 목록을 조회하는 API 입니다." +
+//            "목록만 조회 가능하고, 후원 상세 페이지와 내역 목록 한번에 반환은 /api/donation/에서 가능합니다.")
+//    @GetMapping("/lists")
+//    public CustomResponse<DonationListResDto.DonationListDto> getDonationList(@RequestParam(required = true) Long donationId,
+//                                                                              @RequestParam(required = false) Long cursor,
+//                                                                              @RequestParam(defaultValue = "5") int size) {
+//        return CustomResponse.onSuccess(SuccessCode.OK,
+//                donationListQueryService.getDonationList(donationId, cursor, size));
+//    }
 
     @Operation(summary = "내가 후원한 내역 조회하기(마이페이지)", description = "내 후원 내역을 조회하는 API 입니다.")
     @GetMapping("/mine")

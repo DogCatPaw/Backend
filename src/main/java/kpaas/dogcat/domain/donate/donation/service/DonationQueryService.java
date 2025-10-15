@@ -58,10 +58,11 @@ public class DonationQueryService {
         return donationRepository.findTop3ByStatusOrderByDeadlineAsc(DonationStatus.ACTIVE, pageable)
                 .stream()
                 .map(donation -> {
+                    String thumbnailUrl = donation.getImages().split(",")[0];
                     String dDay = getDday(donation);
                     int patronCount = getPatronCount(donation);
                     int progress = getProgress(donation);
-                    return donationConverter.toHomeDto(dDay, patronCount, progress, donation);
+                    return donationConverter.toHomeDto(thumbnailUrl, dDay, patronCount, progress, donation);
                 })
                 .toList();
     }
@@ -74,10 +75,11 @@ public class DonationQueryService {
 
         List<DonationResDto.PreviewDto> donationDtos = donations.stream()
                 .map(donation -> {
+                    String thumbnailUrl = donation.getImages().split(",")[0];
                     String dDay = getDday(donation);
                     int patronCount = getPatronCount(donation);
                     int progress = getProgress(donation);
-                    return donationConverter.toHomeDto(dDay, patronCount, progress, donation);
+                    return donationConverter.toHomeDto(thumbnailUrl, dDay, patronCount, progress, donation);
                 })
                 .toList();
 

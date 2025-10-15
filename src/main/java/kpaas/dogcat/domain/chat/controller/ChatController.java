@@ -67,8 +67,8 @@ public class ChatController {
 
     @Operation(summary = "채팅방 상단 입양 공고 조회", description = "해당되는 입양 공고를 채팅방 상단에 띄우는 API입니다.")
     @GetMapping("/room/{roomId}/adoption")
-    public CustomResponse<PetResDto.MyPetDto> getAdoptInfoForChat(@PathVariable Long roomId) {
-        PetResDto.MyPetDto adoptInfo = chatMessageQueryService.getAdoptInfo(roomId);
+    public CustomResponse<PetResDto.PetChatDto> getAdoptInfoForChat(@PathVariable Long roomId) {
+        PetResDto.PetChatDto adoptInfo = chatMessageQueryService.getAdoptInfo(roomId);
         return CustomResponse.onSuccess(SuccessCode.OK, adoptInfo);
     }
 }

@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @RequiredArgsConstructor
-@EnableWebSecurity(debug = true)
+//@EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
@@ -33,23 +33,24 @@ public class SecurityConfig {
             "/swagger-resources/**",
             "/v3/api-docs/**",
 
-            "/api/story/daily/{stories}",
+            "/api/story/daily/{storyId}",
             "/api/story/daily/stories",
             "/api/story/daily/search",
 
-            "/api/story/review/{reviews}",
+            "/api/story/review/{reviewId}",
             "/api/story/review/reviews",
             "/api/story/review/search",
             "/api/comment/",
 
-            "/api/donation/",
+            "/api/donation/mine",
             "/api/donation/list",
-            "/api/donation/closing",
-            "/api/donations/lists",
+            "/api/donation/bone",
+            "/api/donations/{donationId}",
 
             "/api/adoption/home",
             "/api/adoption/",
-            "/api/adoption/detail"
+            "/api/adoption/mine",
+            "/api/adoption/detail/{adoptId}"
     };
 
     @Bean
