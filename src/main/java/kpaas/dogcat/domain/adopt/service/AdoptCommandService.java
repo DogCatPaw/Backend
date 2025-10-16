@@ -36,7 +36,7 @@ public class AdoptCommandService {
     private final ObjectStorageUtil objectStorageUtil;
 
     /** 입양 공고 작성 **/
-    public AdoptResDto.RegisterDto register(AdoptReqDto.RegisterDto dto, Long writerId, List<MultipartFile> images) {
+    public AdoptResDto.RegisterDto register(AdoptReqDto.RegisterDto dto, String writerId, List<MultipartFile> images) {
         Pet pet = petQueryService.findById(dto.getPetId());
         Member member = authCommandService.findById(writerId);
         if (adoptRepository.existsByPetId(dto.getPetId())) {
@@ -54,7 +54,7 @@ public class AdoptCommandService {
     }
 
     /** 입양 확인하기 -> 펫 소유권 이전 */
-    public AdoptResDto.DelegateDto delegate(Long adoptId, Long adopterId) {
+    public AdoptResDto.DelegateDto delegate(Long adoptId, String adopterId) {
         Adopt adopt = adoptQueryService.findById(adoptId);
 
         if (adopt.getStatus() == AdoptionStatus.ADOPTING) {

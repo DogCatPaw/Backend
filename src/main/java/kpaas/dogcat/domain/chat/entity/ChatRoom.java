@@ -27,10 +27,10 @@ public class ChatRoom {
     private RoomStatus roomStatus;
 
     @Column(nullable = false)
-    private Long initiatorId;  // 채팅 시작자 (입양자)
+    private String initiatorId;  // 채팅 시작자 (입양자)
 
     @Column(nullable = false)
-    private Long targetId;     // 상대방 (입양 공고 작성자)
+    private String targetId;     // 상대방 (입양 공고 작성자)
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adopt_id")

@@ -25,7 +25,7 @@ public class ChatParticipantQueryService {
     private final AuthCommandService authCommandService;
 
     // 참여자인지 검증
-    public boolean isRoomParticipant(Long memberId, Long roomId) {
+    public boolean isRoomParticipant(String memberId, Long roomId) {
         Member member = authCommandService.findById(memberId);
         return chatParticipantRepository.existsByChatRoomIdAndMemberId(roomId, member.getId());
     }
@@ -39,7 +39,7 @@ public class ChatParticipantQueryService {
                 .orElseThrow(() -> new CustomException(ErrorCode.PARTICIPANT_NOTFOUND));
     }
 
-    public ChatParticipant findByMemberIdAndChatRoomId(Long memberId, Long roomId) {
+    public ChatParticipant findByMemberIdAndChatRoomId(String memberId, Long roomId) {
         ChatParticipant participant = chatParticipantRepository.findByMemberIdAndChatRoomId(memberId, roomId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PARTICIPANT_NOTFOUND));
         return participant;

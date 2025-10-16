@@ -15,7 +15,7 @@ public class DonationReqDto {
     @NoArgsConstructor
     @Builder
     public static class CreateDto {
-        private Long memberId;
+        private String memberId;
         private Long petId;
         private String title;
         private Integer targetAmount;

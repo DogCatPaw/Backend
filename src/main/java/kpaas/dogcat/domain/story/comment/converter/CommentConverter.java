@@ -18,7 +18,7 @@ public class CommentConverter {
                 .build();
     }
 
-    public CommentResDTO.WriteDTO toCommentResDTO(Long memberId, Comment comment) {
+    public CommentResDTO.WriteDTO toCommentResDTO(String memberId, Comment comment) {
         return CommentResDTO.WriteDTO.builder()
                 .memberId(memberId)
                 .commentId(comment.getId())

@@ -33,7 +33,7 @@ public class ReviewQueryService {
     private final CommentQueryService commentQueryService;
 
     /** 입양 후기 상세 반환*/
-    public ReviewResDto.ReviewDetailDto getReviewDetail(Long reviewId, Long memberId) {
+    public ReviewResDto.ReviewDetailDto getReviewDetail(Long reviewId, String memberId) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOTFOUND));
         Pet pet =  review.getPet();
@@ -47,7 +47,7 @@ public class ReviewQueryService {
     }
 
     /** 입양 후기 조회용 반환 **/
-    public ReviewResDto.ReviewListDto getReviews(Long cursorId, int size, Long memberId) {
+    public ReviewResDto.ReviewListDto getReviews(Long cursorId, int size, String memberId) {
         Pageable pageable = PageRequest.of(0, size);
 
         List<Review> reviews;
@@ -70,7 +70,7 @@ public class ReviewQueryService {
     }
 
     /** 입양 후기 키워드 찾기 **/
-    public ReviewResDto.ReviewListDto search(String keyword, Long cursorId, int size, Long memberId) {
+    public ReviewResDto.ReviewListDto search(String keyword, Long cursorId, int size, String memberId) {
         Pageable pageable = PageRequest.of(0, size);
         List<Review> reviews;
         if (cursorId == null) {
@@ -93,7 +93,7 @@ public class ReviewQueryService {
 
 
     // 멤버가 null이면 좋아요 false로 조회가 가능하게끔
-    private Member findMemberOrNull(Long memberId) {
+    private Member findMemberOrNull(String memberId) {
         if (memberId == null) return null;
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));

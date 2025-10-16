@@ -26,11 +26,11 @@ public class PetCommandService {
     private final MemberRepository memberRepository;
     private final PetConverter petConverter;
     private final ObjectStorageUtil objectStorageUtil;
+    private final AuthCommandService authCommandService;
 
-    public PetResDto.registerPetResDto register(Long memberId, PetReqDTO.registerPetReqDTO dto, MultipartFile images){
+    public PetResDto.registerPetResDto register(String memberId, PetReqDTO.registerPetReqDTO dto, MultipartFile images){
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
+        Member member = authCommandService.findById(memberId);
 
         String uploaded = objectStorageUtil.upload(images);
         Pet pet = petConverter.toPet(member, dto, uploaded);

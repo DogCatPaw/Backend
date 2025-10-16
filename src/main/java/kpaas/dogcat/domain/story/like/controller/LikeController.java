@@ -6,6 +6,7 @@ import kpaas.dogcat.domain.story.like.dto.LikeResDTO;
 import kpaas.dogcat.domain.story.like.service.LikeCommandService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
+import kpaas.dogcat.global.auth.CurrentWalletAddress;
 import kpaas.dogcat.global.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,8 +25,8 @@ public class LikeController {
 
     @Operation(summary = "좋아요 누름", description = "좋아요 누릅니다. 이미 있으면 취소, 없으면 좋아요 생성")
     @PostMapping("/")
-    public CustomResponse<LikeResDTO> createLike(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public CustomResponse<LikeResDTO> createLike(@CurrentWalletAddress String walletAddress,
                                                  @RequestParam Long storyId){
-        return CustomResponse.onSuccess(SuccessCode.OK, likeCommandService.createLike(storyId, userDetails.getId()));
+        return CustomResponse.onSuccess(SuccessCode.OK, likeCommandService.createLike(storyId, walletAddress));
     }
 }

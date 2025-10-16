@@ -49,7 +49,7 @@ public class ChatMessageQueryService {
     }
 
     /** 메시지 리스트 조회 */
-    public List<ChatResDTO.ChatMessageResDTO> getChatMessages(Long roomId, Long memberId) {
+    public List<ChatResDTO.ChatMessageResDTO> getChatMessages(Long roomId, String memberId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOTFOUND));
 

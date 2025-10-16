@@ -28,10 +28,9 @@ public class ChatRoomQueryService {
     private final AuthCommandService authCommandService;
 
     /** 중복 채팅방 방지 (같은 공고 + 같은 두 유저면 하나만 생성) **/
-    public Optional<ChatRoom> findExistingRoom(Long initiatorId, Long targetId, Long adoptId) {
+    public Optional<ChatRoom> findExistingRoom(String initiatorId, String targetId, Long adoptId) {
         return chatRoomRepository.findExistingRoom(initiatorId, targetId, adoptId);
     }
-
 
     public ChatRoom getChatRoom(Long roomId) {
         ChatRoom chatroom = chatRoomRepository.findById(roomId)
@@ -40,7 +39,7 @@ public class ChatRoomQueryService {
     }
 
     // 개별 채팅방 카드 (이름, 메세지, 미읽음 수) 조회 -> 알림 보낼때 재활용할 생각
-    public ChatResDTO.ChatRoomCardDTO getChatRoomCard(Long roomId, Long memberId) {
+    public ChatResDTO.ChatRoomCardDTO getChatRoomCard(Long roomId, String memberId) {
         ChatRoom chatRoom = getChatRoom(roomId);
 
         Member loginMember = authCommandService.findById(memberId);
@@ -58,7 +57,7 @@ public class ChatRoomQueryService {
 
 
     // 채팅방 카드 리스트(이름, 메세지, 미읽음 수) 조회
-    public List<ChatResDTO.ChatRoomCardDTO> getChatRoomCards(Long memberId) {
+    public List<ChatResDTO.ChatRoomCardDTO> getChatRoomCards(String memberId) {
         List<ChatRoom> rooms = chatRoomRepository.findRoomIdsByMemberId(memberId);
 
         return rooms.stream()

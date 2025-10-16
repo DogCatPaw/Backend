@@ -97,7 +97,7 @@ public class AdoptConverter {
                 .build();
     }
 
-    public AdoptResDto.DelegateDto toDelegateDto(Adopt adopt, Long adopterId) {
+    public AdoptResDto.DelegateDto toDelegateDto(Adopt adopt, String adopterId) {
         return AdoptResDto.DelegateDto.builder()
                 .adopterId(adopterId)
                 .adoptWriterId(adopt.getWriter().getId())

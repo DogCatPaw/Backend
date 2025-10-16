@@ -15,7 +15,7 @@ public class PetResDto {
     @NoArgsConstructor
     @Builder
     public static class registerPetResDto {
-        private Long memberId;
+        private String memberId;
         private Long petId;
         private String did;
         private String petName;

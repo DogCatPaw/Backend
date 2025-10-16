@@ -27,7 +27,7 @@ public class LikeCommandService {
     private final LikeQueryService likeQueryService;
     private final LikeConverter likeConverter;
 
-    public LikeResDTO createLike(Long storyId, Long memberId) {
+    public LikeResDTO createLike(Long storyId, String memberId) {
         Story story = storyRepository.findById(storyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
 

@@ -12,6 +12,7 @@ import kpaas.dogcat.domain.chat.service.query.ChatRoomQueryService;
 import kpaas.dogcat.domain.pet.dto.PetResDto;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
+import kpaas.dogcat.global.auth.CurrentWalletAddress;
 import kpaas.dogcat.global.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,32 +37,32 @@ public class ChatController {
             "방 이름 설정이 가능하니 일단은 입양 공고 이름으로 방 생성하세요.")
     @PostMapping("/room/create")
     public CustomResponse<ChatResDTO.ChatRoomCreatedDTO> createRoom(@RequestBody ChatReqDTO.ChatRoomCreateDTO dto,
-                                                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
+                                                                    @CurrentWalletAddress String walletAddress) {
         ChatResDTO.ChatRoomCreatedDTO room = chatRoomCommandService.createRoom(
-                userDetails.getId(), dto.getAdoptWriterId(), dto.getAdoptId(), dto.getRoomName());
+                walletAddress, dto.getAdoptWriterId(), dto.getAdoptId(), dto.getRoomName());
         return CustomResponse.onSuccess(SuccessCode.CREATED, room);
     }
 
     @Operation(summary = "채팅방 입장 및 메시지 조회하기", description = "채팅방 입장 및 메세지 조회하기")
     @PostMapping("/{roomId}/enter")
     public CustomResponse<List<ChatResDTO.ChatMessageResDTO>> enterRoom(@PathVariable Long roomId,
-                                                                        @AuthenticationPrincipal CustomUserDetails userDetails) {
-        List<ChatResDTO.ChatMessageResDTO> chatMessageList = chatMessageCommandService.enterRoom(roomId, userDetails.getId());
+                                                                        @CurrentWalletAddress String walletAddress) {
+        List<ChatResDTO.ChatMessageResDTO> chatMessageList = chatMessageCommandService.enterRoom(roomId, walletAddress);
         return CustomResponse.onSuccess(SuccessCode.OK, chatMessageList);
     }
 
     @Operation(summary = "채팅방 카드 단일 조회", description = "채팅방 카드 단일 조회하기 ")
     @GetMapping("/room/card")
     public CustomResponse<ChatResDTO.ChatRoomCardDTO> getRoomCard(@RequestParam Long roomId,
-                                                                  @AuthenticationPrincipal CustomUserDetails userDetails) {
-        ChatResDTO.ChatRoomCardDTO chatRoom = chatRoomQueryService.getChatRoomCard(roomId, userDetails.getId());
+                                                                  @CurrentWalletAddress String walletAddress) {
+        ChatResDTO.ChatRoomCardDTO chatRoom = chatRoomQueryService.getChatRoomCard(roomId, walletAddress);
         return CustomResponse.onSuccess(SuccessCode.OK, chatRoom);
     }
 
     @Operation(summary = "채팅방 목록 조회", description = "채팅방 전체 목록 조회하기 ")
     @GetMapping("/room/list")
-    public CustomResponse<List<ChatResDTO.ChatRoomCardDTO>> getRoomCardList(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        List<ChatResDTO.ChatRoomCardDTO> chatRooms = chatRoomQueryService.getChatRoomCards(userDetails.getId());
+    public CustomResponse<List<ChatResDTO.ChatRoomCardDTO>> getRoomCardList(@CurrentWalletAddress String walletAddress) {
+        List<ChatResDTO.ChatRoomCardDTO> chatRooms = chatRoomQueryService.getChatRoomCards(walletAddress);
         return CustomResponse.onSuccess(SuccessCode.OK, chatRooms);
     }
 

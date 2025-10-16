@@ -43,7 +43,7 @@ public class PaymentCommandServiceImpl {
     private final RestTemplate restTemplate;
     private final PaymentConfig paymentConfig;
 
-    public PaymentResDTO.PrepareDTO preparePayment(PaymentReqDTO.PrepareDTO dto, Long memberId) {
+    public PaymentResDTO.PrepareDTO preparePayment(PaymentReqDTO.PrepareDTO dto, String memberId) {
         log.info("[ 결제 준비 시작 - 회원ID: {}, ItemId: {} ]", memberId, dto.getItemId());
 
         Member member = authCommandService.findById(memberId);
@@ -59,7 +59,7 @@ public class PaymentCommandServiceImpl {
         return paymentConverter.toPrepareDTO(savedPayment);
     }
 
-    public PaymentResDTO.ApproveDTO approvePayment(PaymentReqDTO.ApproveDTO dto, Long memberId) {
+    public PaymentResDTO.ApproveDTO approvePayment(PaymentReqDTO.ApproveDTO dto, String memberId) {
         log.info("[ 결제 승인 시작 - 회원ID: {}, orderId: {} ]", memberId, dto.getOrderId());
 
         Member member = authCommandService.findById(memberId);

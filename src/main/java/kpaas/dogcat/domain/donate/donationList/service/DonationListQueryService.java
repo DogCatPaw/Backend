@@ -30,7 +30,7 @@ public class DonationListQueryService {
     private final DonationListConverter donationListConverter;
     private final DonationRepository donationRepository;
 
-    public DonationListResDto.DonationDto getDonation(Long memberId, Long donationId) {
+    public DonationListResDto.DonationDto getDonation(String memberId, Long donationId) {
         Member member = authCommandService.findById(memberId);
         DonationList donationList = findById(donationId);
 
@@ -67,13 +67,13 @@ public class DonationListQueryService {
     }
 
     /** 내 후원 잔액 조회하기 */
-    public DonationListResDto.MyBoneBalanceDto  getMyBoneBalance(Long memberId) {
+    public DonationListResDto.MyBoneBalanceDto  getMyBoneBalance(String memberId) {
         Member member = authCommandService.findById(memberId);
         return new DonationListResDto.MyBoneBalanceDto(member.getBoneBalance());
     }
 
     /** 내 후원 내역 목록 조회하기 */
-    public DonationListResDto.MyDonationListDto getMyDonationList(Long memberId, Long cursor, int size) {
+    public DonationListResDto.MyDonationListDto getMyDonationList(String memberId, Long cursor, int size) {
         Member member = authCommandService.findById(memberId);
         Pageable pageable = PageRequest.of(0, size);
 

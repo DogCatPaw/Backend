@@ -22,7 +22,7 @@ public class ChatParticipantCommandService {
     public void saveAllParticipants(List<ChatParticipant> chatParticipants) {
         for (ChatParticipant participant : chatParticipants) {
             boolean exists = chatParticipantQueryService.isRoomParticipant(
-                    participant.getChatRoom().getId(), participant.getMember().getId());
+                    participant.getMember().getId(), participant.getChatRoom().getId());
             if (!exists) {
                 chatParticipantRepository.save(participant);
             }

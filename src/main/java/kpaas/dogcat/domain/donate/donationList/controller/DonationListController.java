@@ -9,6 +9,7 @@ import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
 import kpaas.dogcat.domain.donate.donationList.service.DonationListQueryService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
+import kpaas.dogcat.global.auth.CurrentWalletAddress;
 import kpaas.dogcat.global.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,17 +43,16 @@ public class DonationListController {
     @Operation(summary = "내가 후원한 내역 조회하기(마이페이지)", description = "내 후원 내역을 조회하는 API 입니다.")
     @GetMapping("/mine")
     public CustomResponse<DonationListResDto.MyDonationListDto> getMyDonationList(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @CurrentWalletAddress String walletAddress,
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "5") int size) {
         return CustomResponse.onSuccess(SuccessCode.OK,
-                donationListQueryService.getMyDonationList(userDetails.getId(), cursor, size));
+                donationListQueryService.getMyDonationList(walletAddress, cursor, size));
     }
 
     @Operation(summary = "현재 후원 가능한 뼈다귀 조회", description = "내 뼈다귀 잔여량을 조회하는 API 입니다.")
     @GetMapping("/bone")
-    public CustomResponse<DonationListResDto.MyBoneBalanceDto> getMyBoneBalance(
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
-        return CustomResponse.onSuccess(SuccessCode.OK, donationListQueryService.getMyBoneBalance(userDetails.getId()));
+    public CustomResponse<DonationListResDto.MyBoneBalanceDto> getMyBoneBalance(@CurrentWalletAddress String walletAddress) {
+        return CustomResponse.onSuccess(SuccessCode.OK, donationListQueryService.getMyBoneBalance(walletAddress));
     }
 }

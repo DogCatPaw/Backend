@@ -119,7 +119,7 @@ public class AdoptQueryService {
     }
 
     /** 마이페이지 - 입양 현황 조회 */
-    public AdoptResDto.MyAdoptionListDto getMyAdoptionList(Long memberId, Long cursor, int size){
+    public AdoptResDto.MyAdoptionListDto getMyAdoptionList(String memberId, Long cursor, int size){
         authCommandService.findById(memberId);
         Pageable pageable = PageRequest.of(0, size);
 

@@ -68,14 +68,14 @@ public class ChatMessageCommandService {
     }
 
     /** 메세지 조회 및 읽음 처리 */
-    public List<ChatResDTO.ChatMessageResDTO> enterRoom(Long roomId, Long memberId) {
+    public List<ChatResDTO.ChatMessageResDTO> enterRoom(Long roomId, String memberId) {
         List<ChatResDTO.ChatMessageResDTO> chatMessages = chatMessageQueryService.getChatMessages(roomId, memberId);
         markAsReadCount(roomId, memberId);
         return chatMessages;
     }
 
     /** 읽음 처리 **/
-    public void markAsReadCount(Long roomId, Long memberId) {
+    public void markAsReadCount(Long roomId, String memberId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOTFOUND));
         Member member = authCommandService.findById(memberId);

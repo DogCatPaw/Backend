@@ -29,7 +29,7 @@ public class DailyStoryCommandService {
     private final ObjectStorageUtil objectStorageUtil;
 
     public DailyStoryResDto.WriteStoryResDto writeDailyStory(
-            Long memberId, DailyStoryReqDto.WriteStoryReqDto dto, List<MultipartFile> images) {
+            String memberId, DailyStoryReqDto.WriteStoryReqDto dto, List<MultipartFile> images) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 

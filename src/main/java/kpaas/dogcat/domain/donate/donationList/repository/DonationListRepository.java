@@ -15,9 +15,9 @@ public interface DonationListRepository extends JpaRepository<DonationList, Long
     List<DonationList> findByDonationOrderByIdDesc(Donation donation, Pageable pageable);
     List<DonationList> findByDonationAndIdLessThanOrderByIdDesc(Donation donation, Long id, Pageable pageable);
 
-    List<DonationList> findByMemberIdOrderByIdDesc(Long memberId, Pageable pageable);
-    List<DonationList> findByMemberIdAndIdLessThanOrderByIdDesc(Long memberId, Long cursor, Pageable pageable);
+    List<DonationList> findByMemberIdOrderByIdDesc(String memberId, Pageable pageable);
+    List<DonationList> findByMemberIdAndIdLessThanOrderByIdDesc(String memberId, Long cursor, Pageable pageable);
     // 총 후원 금액
     @Query("SELECT COALESCE(SUM(d.amount), 0) FROM DonationList d WHERE d.member.id = :memberId")
-    Integer getTotalDonationAmount(@Param("memberId") Long memberId);
+    Integer getTotalDonationAmount(@Param("memberId") String memberId);
 }

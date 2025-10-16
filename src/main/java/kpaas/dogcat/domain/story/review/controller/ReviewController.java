@@ -8,6 +8,7 @@ import kpaas.dogcat.domain.story.review.dto.ReviewReqDTO;
 import kpaas.dogcat.domain.story.review.dto.ReviewResDto;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
+import kpaas.dogcat.global.auth.CurrentWalletAddress;
 import kpaas.dogcat.global.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -29,37 +30,37 @@ public class ReviewController {
     @Operation(summary = "입양 후기 일지 작성", description = "일지 하나를 작성합니다.")
     @PostMapping(value = "/review", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public CustomResponse<ReviewResDto.WriteReviewResDto> create(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @CurrentWalletAddress String walletAddress,
             @RequestPart("story") ReviewReqDTO.WriteReviewDTO dto,
             @RequestPart(value = "images", required = true) List<MultipartFile> images){
-        ReviewResDto.WriteReviewResDto createdReview = reviewCommandService.writeReview(userDetails.getId(), dto, images);
+        ReviewResDto.WriteReviewResDto createdReview = reviewCommandService.writeReview(walletAddress, dto, images);
         return CustomResponse.onSuccess(SuccessCode.CREATED, createdReview);
     }
 
     @Operation(summary = "입양 후기 상세 조회", description = "입양 후기 한 개의 상세 내용을 조회합니다.")
     @GetMapping("/review/{reviewId}")
-    public CustomResponse<ReviewResDto.ReviewDetailDto> getReview(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public CustomResponse<ReviewResDto.ReviewDetailDto> getReview(@CurrentWalletAddress String walletAddress,
                                                                   @PathVariable Long reviewId) {
-        Long memberId = (userDetails != null) ? userDetails.getId() : null;
+        String memberId = (walletAddress != null) ? walletAddress : null;
         return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReviewDetail(reviewId, memberId));
     }
 
     @Operation(summary = "메인화면 - 입양 후기 목록 조회", description = "입양 후기 일지 메인 화면의 목록을 조회합니다.")
     @GetMapping("/review/reviews")
-    public CustomResponse<ReviewResDto.ReviewListDto> getReviews(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public CustomResponse<ReviewResDto.ReviewListDto> getReviews(@CurrentWalletAddress String walletAddress,
                                                                  @RequestParam(required = false) Long cursorId,
                                                                  @RequestParam(defaultValue = "9") int size){
-        Long memberId = (userDetails != null) ? userDetails.getId() : null;
+        String memberId = (walletAddress != null) ? walletAddress : null;
         return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReviews(cursorId, size, memberId));
     }
 
     @Operation(summary = "입양 후기 검색하기", description = "로그인 없이 입양 후기를 검색합니다.")
     @GetMapping("/review/search")
-    public CustomResponse<ReviewResDto.ReviewListDto> search(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public CustomResponse<ReviewResDto.ReviewListDto> search(@CurrentWalletAddress String walletAddress,
                                                              @RequestParam(required = true) String keyword,
                                                              @RequestParam(required = false) Long cursorId,
                                                              @RequestParam(defaultValue = "9") int size){
-        Long memberId = (userDetails != null) ? userDetails.getId() : null;
+        String memberId = (walletAddress != null) ? walletAddress : null;
         ReviewResDto.ReviewListDto searchResult = reviewQueryService.search(keyword, cursorId, size, memberId);
         return CustomResponse.onSuccess(SuccessCode.OK, searchResult);
     }

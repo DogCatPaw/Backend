@@ -19,6 +19,6 @@ public interface AdoptRepository extends JpaRepository<Adopt, Long>, AdoptQueryD
 
     List<Adopt> findTop3ByStatusOrderByDeadlineAsc(AdoptionStatus adoptionStatus, Pageable pageable);
 
-    List<Adopt> findByAdopterIdOrderByIdDesc(Long adopterId, Pageable pageable);
-    List<Adopt> findByAdopterIdAndIdLessThanOrderByIdDesc(Long adopterId, Long cursor, Pageable pageable);
+    List<Adopt> findByAdopterIdOrderByIdDesc(String adopterId, Pageable pageable);
+    List<Adopt> findByAdopterIdAndIdLessThanOrderByIdDesc(String adopterId, Long cursor, Pageable pageable);
 }

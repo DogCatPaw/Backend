@@ -24,11 +24,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Member {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "wallet_address", nullable = false, unique = true)
-    private String walletAddress;
+    // 지갑 주소 기본키
+    @Id @Column(nullable = false, unique = true)
+    private String id;
 
     @Column(nullable = false)
     private String username;

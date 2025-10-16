@@ -10,7 +10,7 @@ public class AuthConverter {
 
     public Member toSignupEntity(AuthRequestDTO.SignupRequestDTO dto) {
         return Member.builder()
-                .walletAddress(dto.getWalletAddress())
+                .id(dto.getWalletAddress())
                 .username(dto.getUsername())
                 .nickname(dto.getNickname())
                 .gender(dto.getGender())
@@ -22,7 +22,6 @@ public class AuthConverter {
     public AuthResponseDTO.SignupResponseDTO toSignupResponseDTO(Member member) {
         return AuthResponseDTO.SignupResponseDTO.builder()
                 .id(member.getId())
-                .walletAddress(member.getWalletAddress())
                 .nickname(member.getNickname())
                 .build();
     }

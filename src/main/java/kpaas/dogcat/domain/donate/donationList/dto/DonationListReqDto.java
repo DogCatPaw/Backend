@@ -12,7 +12,7 @@ public class DonationListReqDto {
     @NoArgsConstructor
     @Builder
     public static class DonateDto {
-        public Long memberId;
+        public String memberId;
         public Long itemId;
         public Long donationId;
     }
@@ -22,7 +22,7 @@ public class DonationListReqDto {
     @NoArgsConstructor
     @Builder
     public static class DonationDto {
-        private Long memberId;
+        private String memberId;
         private Long donationId;
     }
 }

@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface PetRepository extends JpaRepository<Pet, Long> {
     boolean existsByDid(String did);
-    List<Pet> findAllByMemberId(Long memberId);
+    List<Pet> findAllByMemberId(String memberId);
 }

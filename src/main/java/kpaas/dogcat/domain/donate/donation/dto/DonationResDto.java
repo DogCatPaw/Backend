@@ -19,7 +19,7 @@ public class DonationResDto {
     @NoArgsConstructor
     @Builder
     public static class CreateDto {
-        private Long memberId;
+        private String memberId;
         private Long donationId;
         private String petDid;
         private String images;
@@ -31,7 +31,7 @@ public class DonationResDto {
     @Builder
     public static class DetailDto {
         private String dDay;
-        private Long memberId;
+        private String memberId;
         private String petName;
         private String petDid;
         private Breed breed;

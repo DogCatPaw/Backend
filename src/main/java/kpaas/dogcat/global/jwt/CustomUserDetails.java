@@ -27,7 +27,7 @@ public class CustomUserDetails implements UserDetails {
         return null;
     }
 
-    public Long getId() { return member.getId(); }
+    public String getId() { return member.getId(); }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

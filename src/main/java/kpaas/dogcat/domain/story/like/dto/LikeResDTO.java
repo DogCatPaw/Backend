@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LikeResDTO {
     private Long storyId;
-    private Long memberId;
+    private String memberId;
     private Long likeCount;
     private boolean liked;
 }

@@ -19,7 +19,7 @@ public class LikeConverter {
                 .build();
     }
 
-    public LikeResDTO toLikeResDTO(Long storyId, Long memberId, Long likeCount, boolean liked) {
+    public LikeResDTO toLikeResDTO(Long storyId, String memberId, Long likeCount, boolean liked) {
         return LikeResDTO.builder()
                 .storyId(storyId)
                 .memberId(memberId)

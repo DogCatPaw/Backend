@@ -15,7 +15,7 @@ public class DonationListResDto {
     @NoArgsConstructor
     @Builder
     public static class DonateDto {
-        public Long memberId;
+        public String memberId;
         public Long donationId;
         public Integer donationAmount;  // 후원 금액
         public Integer boneBalance;     // 남은 금액

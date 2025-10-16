@@ -28,7 +28,7 @@ public class CommentCommandService {
     private final MemberRepository memberRepository;
     private final CommentConverter commentConverter;
 
-    public CommentResDTO.WriteDTO writeComment(Long memberId, CommentReqDTO dto){
+    public CommentResDTO.WriteDTO writeComment(String memberId, CommentReqDTO dto){
         Story story = storyRepository.findById(dto.getStoryId())
                 .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
         Member member = memberRepository.findById(memberId)

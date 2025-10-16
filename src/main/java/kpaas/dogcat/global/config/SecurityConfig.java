@@ -1,8 +1,8 @@
 package kpaas.dogcat.global.config;
 
 import kpaas.dogcat.global.jwt.CustomUserDetailsService;
-import kpaas.dogcat.global.jwt.JwtFilter;
-import kpaas.dogcat.global.jwt.JwtUtil;
+//import kpaas.dogcat.global.jwt.JwtFilter;
+//import kpaas.dogcat.global.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 //@EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
-    private final JwtUtil jwtUtil;
+//    private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
 
     private String[] allowUrl = {

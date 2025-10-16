@@ -9,8 +9,8 @@ import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
-import kpaas.dogcat.global.jwt.JwtUtil;
-import kpaas.dogcat.global.redis.service.RedisService;
+//import kpaas.dogcat.global.jwt.JwtUtil;
+//import kpaas.dogcat.global.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,14 +22,14 @@ public class AuthCommandServiceImpl implements AuthCommandService {
 
     private final MemberRepository memberRepository;
     private final AuthConverter authConverter;
-    private final RedisService redisService;
-    private final JwtUtil jwtUtil;
+//    private final RedisService redisService;
+//    private final JwtUtil jwtUtil;
 
     @Override
     public AuthResponseDTO.SignupResponseDTO signUp(AuthRequestDTO.SignupRequestDTO dto) {
 
         // 1. 지갑과 닉네임은 고유해야함
-        if (memberRepository.existsByWalletAddress(dto.getWalletAddress())) {
+        if (memberRepository.existsById(dto.getWalletAddress())) {
             throw new CustomException(ErrorCode.DUPLICATED_WALLET);
         }
         if (memberRepository.existsByNickname(dto.getNickname())) {
@@ -44,11 +44,12 @@ public class AuthCommandServiceImpl implements AuthCommandService {
     @Override
     public AuthResponseDTO.LoginResponseDTO login(AuthRequestDTO.LoginRequestDTO dto) {
         //DB안에 지갑이 있으면 로그인
-        Member member = memberRepository.findByWalletAddress(dto.getWalletAddress())
-                .orElseThrow(() -> new CustomException(ErrorCode.WALLET_NOTFOUND));
+        Member member = findById(dto.getWalletAddress());
 
-        //걸리는게 없으면 로그인 시 유저 정보로 토큰 만들기
-        return createLoginToken(member);
+        return AuthResponseDTO.LoginResponseDTO.builder()
+                .id(member.getId())
+                .nickname(member.getNickname())
+                .build();
     }
 
     @Override
@@ -65,55 +66,47 @@ public class AuthCommandServiceImpl implements AuthCommandService {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
 
-        // 2. 블랙리스트 처리된 액세스 토큰인지 검증
-        if (redisService.isBlacklisted(accessToken)) {
-            throw new CustomException(ErrorCode.BLACKLISTED);
-        }
-
-        // 3. 액세스 토큰 블랙리스트 처리
-        redisService.addBlacklist(accessToken);
+//        // 2. 블랙리스트 처리된 액세스 토큰인지 검증
+//        if (redisService.isBlacklisted(accessToken)) {
+//            throw new CustomException(ErrorCode.BLACKLISTED);
+//        }
+//
+//        // 3. 액세스 토큰 블랙리스트 처리
+//        redisService.addBlacklist(accessToken);
 
         // 4. 리프레시 토큰 삭제
-        Long id = jwtUtil.getId(accessToken);
-        redisService.deleteRefreshToken(id);
+//        Long id = jwtUtil.getId(accessToken);
+//        redisService.deleteRefreshToken(id);
 
         log.info("[ 로그아웃 완료 ]");
     }
 
-    // 클라이언트가 refresh를 주면 access 토큰 재발행
-    @Override
-    public AuthResponseDTO.ReissueResponseDTO reissue(AuthRequestDTO.ReissueRequestDTO dto) {
+//    // 클라이언트가 refresh를 주면 access 토큰 재발행
+//    @Override
+//    public AuthResponseDTO.ReissueResponseDTO reissue(AuthRequestDTO.ReissueRequestDTO dto) {
+//
+//        // 유효한 리프레시토큰이면 새로운 액세스 토큰을 발급해주기
+//        if(!jwtUtil.isExpired(dto.getRefreshToken())) {
+//            Member member = memberRepository.findById(dto.getId()).orElseThrow(() ->
+//                    new CustomException(ErrorCode.NOT_FOUND_404));
+//            log.info("[ 액세스토큰 재발급 완료 ]");
+//            return reissueAccessToken(member);
+//        } else {
+//            throw new CustomException(ErrorCode.INVALID_TOKEN);
+//        }
+//    }
+//
+//
+//
+//    public AuthResponseDTO.ReissueResponseDTO reissueAccessToken(Member member) {
+//        return AuthResponseDTO.ReissueResponseDTO.builder()
+//                .id(member.getId())
+//                .nickname(member.getNickname())
+//                .accessToken(jwtUtil.createAccessToken(member))
+//                .build();
+//    }
 
-        // 유효한 리프레시토큰이면 새로운 액세스 토큰을 발급해주기
-        if(!jwtUtil.isExpired(dto.getRefreshToken())) {
-            Member member = memberRepository.findById(dto.getId()).orElseThrow(() ->
-                    new CustomException(ErrorCode.NOT_FOUND_404));
-            log.info("[ 액세스토큰 재발급 완료 ]");
-            return reissueAccessToken(member);
-        } else {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
-    }
-
-
-    public AuthResponseDTO.LoginResponseDTO createLoginToken(Member member) {
-        return AuthResponseDTO.LoginResponseDTO.builder()
-                .id(member.getId())
-                .nickname(member.getNickname())
-                .accessToken(jwtUtil.createAccessToken(member))
-                .refreshToken(jwtUtil.createRefreshToken(member))
-                .build();
-    }
-
-    public AuthResponseDTO.ReissueResponseDTO reissueAccessToken(Member member) {
-        return AuthResponseDTO.ReissueResponseDTO.builder()
-                .id(member.getId())
-                .nickname(member.getNickname())
-                .accessToken(jwtUtil.createAccessToken(member))
-                .build();
-    }
-
-    public Member findById(Long memberId) {
+    public Member findById(String memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
     }

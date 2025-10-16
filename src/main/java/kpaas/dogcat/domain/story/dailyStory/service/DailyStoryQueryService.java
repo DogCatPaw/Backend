@@ -33,7 +33,7 @@ public class DailyStoryQueryService {
     private final CommentQueryService commentQueryService;
 
     /** 일상 일지 상세 반환 **/
-    public DailyStoryResDto.StoryDetailDto getStoryDetail(Long storyId, Long memberId) {
+    public DailyStoryResDto.StoryDetailDto getStoryDetail(Long storyId, String memberId) {
         DailyStory story = dailyStoryRepository.findById(storyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
         Pet pet =  story.getPet();
@@ -47,7 +47,7 @@ public class DailyStoryQueryService {
     }
 
     /** 일상 일지 조회용 반환 **/
-    public DailyStoryResDto.StoriesListDto getStories(Long cursorId, int size, Long memberId) {
+    public DailyStoryResDto.StoriesListDto getStories(Long cursorId, int size, String memberId) {
         Pageable pageable = PageRequest.of(0, size);
 
         List<DailyStory> stories;
@@ -70,7 +70,7 @@ public class DailyStoryQueryService {
     }
 
     /** 일상 일지 키워드 기반 조회 **/
-    public DailyStoryResDto.StoriesListDto search(String keyword, Long cursorId, int size, Long memberId) {
+    public DailyStoryResDto.StoriesListDto search(String keyword, Long cursorId, int size, String memberId) {
         Pageable pageable = PageRequest.of(0, size);
         List<DailyStory> stories;
         if (cursorId == null) {
@@ -92,7 +92,7 @@ public class DailyStoryQueryService {
     }
 
     // 멤버가 null이면 좋아요 false로 조회가 가능하게끔
-    private Member findMemberOrNull(Long memberId) {
+    private Member findMemberOrNull(String memberId) {
         if (memberId == null) return null;
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));

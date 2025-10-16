@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface ChatParticipantRepository extends JpaRepository<ChatParticipant, Long> {
     List<ChatParticipant> findByChatRoomId(Long roomId);
     List<ChatParticipant> findByMemberAndChatRoom(Member member, ChatRoom chatRoom);
-    Optional<ChatParticipant> findByMemberIdAndChatRoomId(Long memberId, Long roomId);
-    boolean existsByChatRoomIdAndMemberId(Long roomId, Long memberId);
+    Optional<ChatParticipant> findByMemberIdAndChatRoomId(String memberId, Long roomId);
+    boolean existsByChatRoomIdAndMemberId(Long roomId, String memberId);
 }
 

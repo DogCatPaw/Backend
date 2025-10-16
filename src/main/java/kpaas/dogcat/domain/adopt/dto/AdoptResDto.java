@@ -35,7 +35,7 @@ public class AdoptResDto {
     @Builder
     public static class RegisterDto {
         private Long adoptId;
-        private Long targetId;
+        private String targetId;
         private String adoptTitle;
         private Long petId;
         private String images;
@@ -101,8 +101,8 @@ public class AdoptResDto {
     @NoArgsConstructor
     @Builder
     public static class DelegateDto {
-        private Long adoptWriterId;
-        private Long adopterId;
+        private String adoptWriterId;
+        private String adopterId;
         private AdoptionStatus status;
         private LocalDateTime appliedAt;
     }

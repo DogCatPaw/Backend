@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
-    Optional<ChatRoom> findById(Long roomId);
+//    Optional<ChatRoom> findById(Long roomId);
 
     @Query("""
     SELECT r FROM ChatRoom r
@@ -24,8 +24,8 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     )
 """)
     Optional<ChatRoom> findExistingRoom(
-            @Param("initiatorId") Long initiatorId,
-            @Param("targetId") Long targetId,
+            @Param("initiatorId") String initiatorId,
+            @Param("targetId") String targetId,
             @Param("adoptId") Long adoptId
     );
 
@@ -34,7 +34,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     JOIN cr.participants p
     WHERE p.member.id = :memberId
     """)
-    List<ChatRoom> findRoomIdsByMemberId(Long memberId);
+    List<ChatRoom> findRoomIdsByMemberId(String memberId);
 }
 
 
