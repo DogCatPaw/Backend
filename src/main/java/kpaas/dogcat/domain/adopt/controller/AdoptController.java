@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.adopt.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.adopt.dto.AdoptReqDto;
 import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
@@ -40,7 +41,7 @@ public class AdoptController {
 
     @Operation(summary = "입양 공고 작성", description = "입양 공고를 작성하는 API 입니다. 펫 등록이 먼저 필요합니다.")
     @PostMapping(value = "/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public CustomResponse<AdoptResDto.RegisterDto> register(@CurrentWalletAddress String walletAddress,
+    public CustomResponse<AdoptResDto.RegisterDto> register(@Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
                                                             @RequestPart AdoptReqDto.RegisterDto dto,
                                                             @RequestPart(value = "images", required = true) List<MultipartFile> images) {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptCommandService.register(dto, walletAddress, images));
@@ -68,13 +69,13 @@ public class AdoptController {
     @Operation(summary = "입양 신청하기", description = "입양 신청 완료하는 API 입니다. 펫의 소유권을 이전합니다.")
     @PostMapping("/{adoptionId}/complete")
     public CustomResponse<AdoptResDto.DelegateDto> delegate(@PathVariable Long adoptionId,
-                                                            @CurrentWalletAddress String walletAddress) {
+                                                            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptCommandService.delegate(adoptionId, walletAddress));
     }
 
     @Operation(summary = "입양 신청 현황 조회(마이페이지)", description = "마이페이지의 입양 신청 현황을 조회하는 API 입니다.")
     @GetMapping("/mine")
-    public CustomResponse<AdoptResDto.MyAdoptionListDto> getDetail(@CurrentWalletAddress String walletAddress,
+    public CustomResponse<AdoptResDto.MyAdoptionListDto> getDetail(@Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
                                                                    @RequestParam(required = false) Long cursor,
                                                                    @RequestParam(defaultValue = "5") int size) {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getMyAdoptionList(walletAddress, cursor, size));

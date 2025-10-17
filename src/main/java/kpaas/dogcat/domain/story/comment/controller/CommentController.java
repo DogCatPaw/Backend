@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.story.comment.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.story.comment.dto.CommentReqDTO;
 import kpaas.dogcat.domain.story.comment.dto.CommentResDTO;
@@ -8,6 +9,7 @@ import kpaas.dogcat.domain.story.comment.service.CommentCommandService;
 import kpaas.dogcat.domain.story.comment.service.CommentQueryService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
+import kpaas.dogcat.global.auth.CurrentWalletAddress;
 import kpaas.dogcat.global.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,9 +26,9 @@ public class CommentController {
 
     @Operation(summary = "댓글 작성", description = "댓글 작성합니다.")
     @PostMapping("/")
-    public CustomResponse<CommentResDTO.WriteDTO> write(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public CustomResponse<CommentResDTO.WriteDTO> write(@Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
                                                         @RequestBody CommentReqDTO dto){
-        return CustomResponse.onSuccess(SuccessCode.OK, commentCommandService.writeComment(userDetails.getId(), dto));
+        return CustomResponse.onSuccess(SuccessCode.OK, commentCommandService.writeComment(walletAddress, dto));
     }
 
     @Operation(summary = "댓글 조회", description = "작성된 댓글을 조회합니다.")

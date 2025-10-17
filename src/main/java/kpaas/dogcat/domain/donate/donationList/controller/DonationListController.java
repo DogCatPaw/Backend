@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.donate.donationList.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
 import kpaas.dogcat.domain.donate.donationList.service.DonationListCommandService;
@@ -43,7 +44,7 @@ public class DonationListController {
     @Operation(summary = "내가 후원한 내역 조회하기(마이페이지)", description = "내 후원 내역을 조회하는 API 입니다.")
     @GetMapping("/mine")
     public CustomResponse<DonationListResDto.MyDonationListDto> getMyDonationList(
-            @CurrentWalletAddress String walletAddress,
+            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "5") int size) {
         return CustomResponse.onSuccess(SuccessCode.OK,
@@ -52,7 +53,8 @@ public class DonationListController {
 
     @Operation(summary = "현재 후원 가능한 뼈다귀 조회", description = "내 뼈다귀 잔여량을 조회하는 API 입니다.")
     @GetMapping("/bone")
-    public CustomResponse<DonationListResDto.MyBoneBalanceDto> getMyBoneBalance(@CurrentWalletAddress String walletAddress) {
+    public CustomResponse<DonationListResDto.MyBoneBalanceDto> getMyBoneBalance(
+            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
         return CustomResponse.onSuccess(SuccessCode.OK, donationListQueryService.getMyBoneBalance(walletAddress));
     }
 }

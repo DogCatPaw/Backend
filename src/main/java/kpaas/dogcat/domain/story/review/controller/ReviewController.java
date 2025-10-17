@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.story.review.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.story.review.service.ReviewCommandService;
 import kpaas.dogcat.domain.story.review.service.ReviewQueryService;
@@ -39,27 +40,30 @@ public class ReviewController {
 
     @Operation(summary = "입양 후기 상세 조회", description = "입양 후기 한 개의 상세 내용을 조회합니다.")
     @GetMapping("/review/{reviewId}")
-    public CustomResponse<ReviewResDto.ReviewDetailDto> getReview(@CurrentWalletAddress String walletAddress,
-                                                                  @PathVariable Long reviewId) {
+    public CustomResponse<ReviewResDto.ReviewDetailDto> getReview(
+            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
+            @PathVariable Long reviewId) {
         String memberId = (walletAddress != null) ? walletAddress : null;
         return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReviewDetail(reviewId, memberId));
     }
 
     @Operation(summary = "메인화면 - 입양 후기 목록 조회", description = "입양 후기 일지 메인 화면의 목록을 조회합니다.")
     @GetMapping("/review/reviews")
-    public CustomResponse<ReviewResDto.ReviewListDto> getReviews(@CurrentWalletAddress String walletAddress,
-                                                                 @RequestParam(required = false) Long cursorId,
-                                                                 @RequestParam(defaultValue = "9") int size){
+    public CustomResponse<ReviewResDto.ReviewListDto> getReviews(
+            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "9") int size){
         String memberId = (walletAddress != null) ? walletAddress : null;
         return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReviews(cursorId, size, memberId));
     }
 
     @Operation(summary = "입양 후기 검색하기", description = "로그인 없이 입양 후기를 검색합니다.")
     @GetMapping("/review/search")
-    public CustomResponse<ReviewResDto.ReviewListDto> search(@CurrentWalletAddress String walletAddress,
-                                                             @RequestParam(required = true) String keyword,
-                                                             @RequestParam(required = false) Long cursorId,
-                                                             @RequestParam(defaultValue = "9") int size){
+    public CustomResponse<ReviewResDto.ReviewListDto> search(
+            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
+            @RequestParam(required = true) String keyword,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "9") int size){
         String memberId = (walletAddress != null) ? walletAddress : null;
         ReviewResDto.ReviewListDto searchResult = reviewQueryService.search(keyword, cursorId, size, memberId);
         return CustomResponse.onSuccess(SuccessCode.OK, searchResult);

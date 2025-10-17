@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.story.dailyStory.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryReqDto;
 import kpaas.dogcat.domain.story.dailyStory.dto.DailyStoryResDto;
@@ -30,7 +31,7 @@ public class DailyStoryController {
     @Operation(summary = "일상 일지 작성", description = "일지 하나를 작성합니다.")
     @PostMapping(value = "/daily", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public CustomResponse<DailyStoryResDto.WriteStoryResDto> create(
-            @CurrentWalletAddress String walletAddress,
+            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
             @RequestPart("story") DailyStoryReqDto.WriteStoryReqDto dto,
             @RequestPart(value = "images", required = true) List<MultipartFile> images) {
         DailyStoryResDto.WriteStoryResDto createdStory = dailyStoryCommandService.writeDailyStory(walletAddress, dto, images);
@@ -39,27 +40,30 @@ public class DailyStoryController {
 
     @Operation(summary = "일상 일지 상세 조회", description = "일지 하나를 상세 조회합니다.")
     @GetMapping("/daily/{storyId}")
-    public CustomResponse<DailyStoryResDto.StoryDetailDto> getStory(@CurrentWalletAddress String walletAddress,
-                                                                    @PathVariable Long storyId) {
+    public CustomResponse<DailyStoryResDto.StoryDetailDto> getStory(
+            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
+            @PathVariable Long storyId) {
         String memberId = (walletAddress != null) ? walletAddress : null;
         return CustomResponse.onSuccess(SuccessCode.OK, dailyStoryQueryService.getStoryDetail(storyId, memberId));
     }
 
     @Operation(summary = "메인화면 - 일상 일지 목록 조회", description = "일지 메인 화면의 일지 목록을 조회합니다.")
     @GetMapping("/daily/stories")
-    public CustomResponse<DailyStoryResDto.StoriesListDto> getStories(@CurrentWalletAddress String walletAddress,
-                                                                      @RequestParam(required = false) Long cursorId,
-                                                                      @RequestParam(defaultValue = "9") int size){
+    public CustomResponse<DailyStoryResDto.StoriesListDto> getStories(
+            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "9") int size){
         String memberId = (walletAddress != null) ? walletAddress : null;
         return CustomResponse.onSuccess(SuccessCode.OK, dailyStoryQueryService.getStories(cursorId, size, memberId));
     }
 
     @Operation(summary = "일상 일지 검색하기", description = "로그인 없이 일상 일지를 검색합니다.")
     @GetMapping("/daily/search")
-    public CustomResponse<DailyStoryResDto.StoriesListDto> search(@CurrentWalletAddress String walletAddress,
-                                                                  @RequestParam(required = true) String keyword,
-                                                                  @RequestParam(required = false) Long cursorId,
-                                                                  @RequestParam(defaultValue = "9") int size){
+    public CustomResponse<DailyStoryResDto.StoriesListDto> search(
+            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
+            @RequestParam(required = true) String keyword,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "9") int size){
         String memberId = (walletAddress != null) ? walletAddress : null;
         DailyStoryResDto.StoriesListDto searchResult = dailyStoryQueryService.search(keyword, cursorId, size, memberId);
         return CustomResponse.onSuccess(SuccessCode.OK, searchResult);
