@@ -70,14 +70,14 @@ dependencies {
 }
 
 // Q클래스 생성 경로 설정
-def querydslDir = "$buildDir/generated/querydsl"
+def querydslDir = 'src/main/generated'
 
 sourceSets {
-    main.java.srcDirs += [ querydslDir ]
+    main.java.srcDirs += [querydslDir]
 }
 
 tasks.withType(JavaCompile) {
-    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+    options.generatedSourceOutputDirectory = file(querydslDir)
 }
 
 // Q파일 클린 옵션 (선택)

@@ -16,16 +16,18 @@ public class SwaggerConfig {
     public OpenAPI swagger() {
         Info info = new Info().title("멍냥일지").description("Swagger API");
 
-        String securityScheme = "JWT TOKEN";
-        // 문서 최상단에 이 보안 스키마를 적용하는 것 -> 기본적으로 jwt token을 요구하게 된다
-        SecurityRequirement securityRequirement = new SecurityRequirement().addList(securityScheme);
+        String securityName = "X-Wallet-Address";
 
         Components components = new Components()
-                .addSecuritySchemes(securityScheme, new SecurityScheme()
-                        .name(securityScheme)
-                        .type(SecurityScheme.Type.HTTP) //Http Authorization 사용
-                        .scheme("Bearer")
-                        .bearerFormat("JWT"));
+                .addSecuritySchemes(securityName,
+                        new SecurityScheme()
+                                .name(securityName)
+                                .type(SecurityScheme.Type.APIKEY)
+                                .in(SecurityScheme.In.HEADER)
+                                .description("사용자 지갑주소 헤더"));
+
+        // 문서 최상단에 이 보안 스키마를 적용하는 것 -> 기본적으로 jwt token을 요구하게 된다
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList(securityName);
 
         return new OpenAPI()
                 .info(info)

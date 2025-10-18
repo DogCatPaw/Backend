@@ -33,36 +33,31 @@ public class SecurityConfig {
             "/swagger-resources/**",
             "/v3/api-docs/**",
 
-            "/api/story/daily/{storyId}",
-            "/api/story/daily/stories",
-            "/api/story/daily/search",
-
-            "/api/story/review/{reviewId}",
-            "/api/story/review/reviews",
-            "/api/story/review/search",
-            "/api/comment/",
-
-            "/api/donation/mine",
-            "/api/donation/list",
-            "/api/donation/bone",
-            "/api/donations/{donationId}",
-
-            "/api/adoption/home",
-            "/api/adoption/",
-            "/api/adoption/mine",
-            "/api/adoption/detail/{adoptId}"
+            "/api/story/**",
+            "/api/comment/**",
+            "/api/like/**",
+            "/api/donation/**",
+            "/api/adoption/**",
+            "/api/pet/**"
     };
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(request -> request
+                .cors(cors -> cors.configurationSource(request -> {
+                    var config = new org.springframework.web.cors.CorsConfiguration();
+                    config.addAllowedOriginPattern("*"); // Swagger / Front 모두 허용
+                    config.addAllowedHeader("*");        // X-Wallet-Address 포함
+                    config.addAllowedMethod("*");
+                    config.setAllowCredentials(true);
+                    return config;
+                }))
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(req -> req
                         .requestMatchers(allowUrl).permitAll()
                         .anyRequest().authenticated()
                 )
-                .csrf(AbstractHttpConfigurer::disable)  //jwt이기에 csrf공격 비활성화
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults());
+                .httpBasic(AbstractHttpConfigurer::disable);
 //                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
