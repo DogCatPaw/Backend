@@ -12,12 +12,12 @@ import java.time.LocalDateTime;
 @Component
 public class DailyStoryConverter {
 
-    public DailyStory toDailyStoryEntity(DailyStoryReqDto.WriteStoryReqDto dto, Member member, Pet pet, String url) {
+    public DailyStory toDailyStoryEntity(DailyStoryReqDto.WriteStoryReqDto dto, Member member, Pet pet) {
         return DailyStory.builder()
                 .title(dto.getTitle())
                 .member(member)
                 .pet(pet)
-                .images(url)
+                .images(dto.getImages())
                 .content(dto.getContent())
                 .createdAt(LocalDateTime.now())
                 .build();

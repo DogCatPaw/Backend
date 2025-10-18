@@ -36,7 +36,7 @@ public class DonationCommandService {
     private final ObjectStorageUtil objectStorageUtil;
     private static final List<DonationStatus> BLOCKING_STATUSES = List.of(DonationStatus.ACTIVE, DonationStatus.ACHIEVED);
 
-    public DonationResDto.CreateDto createDonation(DonationReqDto.CreateDto dto, List<MultipartFile> images){
+    public DonationResDto.CreateDto createDonation(DonationReqDto.CreateDto dto){
 
         // 회원과 펫 조회
         Member member = authCommandService.findById(dto.getMemberId());
@@ -48,12 +48,12 @@ public class DonationCommandService {
             throw new CustomException(ErrorCode.ALREADY_ACTIVE_DONATION);
         }
 
-        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
-        String joinedUrls = String.join(",", imageUrls);
+//        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
+//        String joinedUrls = String.join(",", imageUrls);
 
         // 후원 공고 저장
         String accountNumber = dto.getAccountNumber().replace("-", "");
-        Donation donation = donationConverter.toDonation(member, pet, dto, accountNumber, joinedUrls);
+        Donation donation = donationConverter.toDonation(member, pet, dto, accountNumber);
         Donation savedDonation = donationRepository.save(donation);
 
         return donationConverter.toCreateDto(savedDonation);

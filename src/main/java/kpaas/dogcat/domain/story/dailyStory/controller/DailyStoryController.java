@@ -29,12 +29,11 @@ public class DailyStoryController {
     private final DailyStoryCommandService dailyStoryCommandService;
 
     @Operation(summary = "일상 일지 작성", description = "일지 하나를 작성합니다.")
-    @PostMapping(value = "/daily", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/daily")
     public CustomResponse<DailyStoryResDto.WriteStoryResDto> create(
             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
-            @RequestPart("story") DailyStoryReqDto.WriteStoryReqDto dto,
-            @RequestPart(value = "images", required = true) List<MultipartFile> images) {
-        DailyStoryResDto.WriteStoryResDto createdStory = dailyStoryCommandService.writeDailyStory(walletAddress, dto, images);
+            @RequestBody DailyStoryReqDto.WriteStoryReqDto dto) {
+        DailyStoryResDto.WriteStoryResDto createdStory = dailyStoryCommandService.writeDailyStory(walletAddress, dto);
         return CustomResponse.onSuccess(SuccessCode.CREATED, createdStory);
     }
 

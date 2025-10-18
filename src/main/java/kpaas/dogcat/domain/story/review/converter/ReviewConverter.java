@@ -12,12 +12,12 @@ import java.time.LocalDateTime;
 @Component
 public class ReviewConverter {
 
-    public Review toReviewEntity(ReviewReqDTO.WriteReviewDTO dto, Member member, Pet pet, String url) {
+    public Review toReviewEntity(ReviewReqDTO.WriteReviewDTO dto, Member member, Pet pet) {
         return Review.builder()
                 .title(dto.getTitle())
                 .member(member)
                 .pet(pet)
-                .images(url)
+                .images(dto.getImages())
                 .content(dto.getContent())
                 .adoptionAgency(dto.getAdoptionAgency())
                 .adoptionDate(dto.getAdoptionDate())    //입양일

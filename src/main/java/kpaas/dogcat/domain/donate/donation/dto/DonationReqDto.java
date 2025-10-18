@@ -25,5 +25,6 @@ public class DonationReqDto {
         private String bankName;        //은행
         private String accountNumber;   //계좌
         private String accountHolder;   //예금주명
+        private String images;
     }
 }

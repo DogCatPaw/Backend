@@ -36,17 +36,17 @@ public class AdoptCommandService {
     private final ObjectStorageUtil objectStorageUtil;
 
     /** 입양 공고 작성 **/
-    public AdoptResDto.RegisterDto register(AdoptReqDto.RegisterDto dto, String writerId, List<MultipartFile> images) {
+    public AdoptResDto.RegisterDto register(AdoptReqDto.RegisterDto dto, String writerId) {
         Pet pet = petQueryService.findById(dto.getPetId());
         Member member = authCommandService.findById(writerId);
         if (adoptRepository.existsByPetId(dto.getPetId())) {
             throw new CustomException(ErrorCode.ALEADY_ACTIVE_ADOPTION);
         }
 
-        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
-        String joinedUrls = String.join(",", imageUrls);
+//        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
+//        String joinedUrls = String.join(",", imageUrls);
 
-        Adopt adopt = adoptConverter.toAdopt(pet, member, dto, joinedUrls);
+        Adopt adopt = adoptConverter.toAdopt(pet, member, dto);
         pet.setAdopt(adopt);            // 연관관계 양쪽 설정
         adoptRepository.save(adopt);    // 주인인 Pet만 save해도 adopt까지 cascade로 저장됨
 

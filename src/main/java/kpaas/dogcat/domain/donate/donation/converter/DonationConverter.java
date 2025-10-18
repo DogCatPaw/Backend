@@ -15,7 +15,7 @@ import java.util.List;
 public class DonationConverter {
 
     public Donation toDonation(Member member, Pet pet, DonationReqDto.CreateDto dto,
-                               String accountNumber, String joinedUrls) {
+                               String accountNumber) {
         return Donation.builder()
                 .member(member)
                 .pet(pet)
@@ -24,7 +24,7 @@ public class DonationConverter {
                 .deadline(dto.getDeadline())
                 .category(dto.getCategory())
                 .content(dto.getContent())
-                .images(joinedUrls)
+                .images(dto.getImages())
                 .bankName(dto.getBankName())
                 .accountNumber(accountNumber)
                 .accountHolder(dto.getAccountHolder())

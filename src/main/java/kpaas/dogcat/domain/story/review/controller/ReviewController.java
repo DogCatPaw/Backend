@@ -29,12 +29,11 @@ public class ReviewController {
     private final ReviewCommandService reviewCommandService;
 
     @Operation(summary = "입양 후기 일지 작성", description = "일지 하나를 작성합니다.")
-    @PostMapping(value = "/review", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/review")
     public CustomResponse<ReviewResDto.WriteReviewResDto> create(
             @CurrentWalletAddress String walletAddress,
-            @RequestPart("story") ReviewReqDTO.WriteReviewDTO dto,
-            @RequestPart(value = "images", required = true) List<MultipartFile> images){
-        ReviewResDto.WriteReviewResDto createdReview = reviewCommandService.writeReview(walletAddress, dto, images);
+            @RequestBody ReviewReqDTO.WriteReviewDTO dto){
+        ReviewResDto.WriteReviewResDto createdReview = reviewCommandService.writeReview(walletAddress, dto);
         return CustomResponse.onSuccess(SuccessCode.CREATED, createdReview);
     }
 

@@ -29,17 +29,17 @@ public class ReviewCommandService {
     private final ObjectStorageUtil objectStorageUtil;
 
     public ReviewResDto.WriteReviewResDto writeReview(
-            String memberId, ReviewReqDTO.WriteReviewDTO dto, List<MultipartFile> images) {
+            String memberId, ReviewReqDTO.WriteReviewDTO dto) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 
         Pet pet = petRepository.findById(dto.getPetId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PET_NOTFOUND));
 
-        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
-        String joinedUrls = String.join(",", imageUrls);
+//        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
+//        String joinedUrls = String.join(",", imageUrls);
 
-        Review review = reviewConverter.toReviewEntity(dto, member, pet, joinedUrls);
+        Review review = reviewConverter.toReviewEntity(dto, member, pet);
         Review savedReview = reviewRepository.save(review);
 
         return reviewConverter.toWriteReviewResDTO(member, savedReview, pet);

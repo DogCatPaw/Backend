@@ -21,5 +21,6 @@ public class ReviewReqDTO {
         private String content;
         private String adoptionAgency;
         private LocalDate adoptionDate;
+        private String images;
     }
 }

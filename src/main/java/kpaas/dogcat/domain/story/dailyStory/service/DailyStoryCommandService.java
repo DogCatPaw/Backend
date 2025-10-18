@@ -29,17 +29,17 @@ public class DailyStoryCommandService {
     private final ObjectStorageUtil objectStorageUtil;
 
     public DailyStoryResDto.WriteStoryResDto writeDailyStory(
-            String memberId, DailyStoryReqDto.WriteStoryReqDto dto, List<MultipartFile> images) {
+            String memberId, DailyStoryReqDto.WriteStoryReqDto dto) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 
         Pet pet = petRepository.findById(dto.getPetId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PET_NOTFOUND));
 
-        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
-        String joinedUrls = String.join(",", imageUrls);
+//        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
+//        String joinedUrls = String.join(",", imageUrls);
 
-        DailyStory story = dailyStoryConverter.toDailyStoryEntity(dto, member, pet, joinedUrls);
+        DailyStory story = dailyStoryConverter.toDailyStoryEntity(dto, member, pet);
         DailyStory savedStory = dailyStoryRepository.save(story);
 
         return dailyStoryConverter.toWriteStoryResDto(member, savedStory, pet);

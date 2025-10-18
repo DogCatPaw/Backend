@@ -27,10 +27,9 @@ public class DonationController {
     private final DonationQueryService donationQueryService;
 
     @Operation(summary = "후원 공고 글 작성하기", description = "후원 공고글을 작성하는 API 입니다.")
-    @PostMapping(value = "/posts", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public CustomResponse<DonationResDto.CreateDto> create(@RequestPart DonationReqDto.CreateDto dto,
-                                                           @RequestPart(value = "images", required = true) List<MultipartFile> images) {
-        return CustomResponse.onSuccess(SuccessCode.CREATED, donationCommandService.createDonation(dto, images));
+    @PostMapping(value = "/posts")
+    public CustomResponse<DonationResDto.CreateDto> create(@RequestBody DonationReqDto.CreateDto dto) {
+        return CustomResponse.onSuccess(SuccessCode.CREATED, donationCommandService.createDonation(dto));
     }
 
     @Operation(summary = "후원 공고 글 상세 보기 + 후원 내역 조회", description = "후원 공고글을 상세 보기하는 API 입니다." +

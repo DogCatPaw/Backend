@@ -12,12 +12,12 @@ import java.util.List;
 @Component
 public class AdoptConverter {
 
-    public Adopt toAdopt(Pet pet, Member writer, AdoptReqDto.RegisterDto dto, String joinedUrls) {
+    public Adopt toAdopt(Pet pet, Member writer, AdoptReqDto.RegisterDto dto) {
         return Adopt.builder()
                 .pet(pet)
                 .writer(writer)
                 .title(dto.getTitle())
-                .images(joinedUrls)
+                .images(dto.getImages())
                 .region(dto.getRegion())
                 .district(dto.getDistrict())
                 .shelterName(dto.getShelterName())

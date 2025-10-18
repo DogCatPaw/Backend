@@ -17,5 +17,6 @@ public class DailyStoryReqDto {
         private Long petId;
         private String title;
         private String content;
+        private String images;
     }
 }
