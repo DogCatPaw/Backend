@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PetConverter {
-    public Pet toPet(Member member, PetReqDTO.registerPetReqDTO dto, String images) {
+    public Pet toPet(Member member, PetReqDTO.registerPetReqDTO dto) {
         return Pet.builder()
                 .did(dto.getDid())
                 .member(member)
                 .petName(dto.getPetName())
-                .petProfile(images)
+                .petProfile(dto.getImages())
                 .breed(dto.getBreed())
                 .old(dto.getOld())
                 .weight(dto.getWeight())

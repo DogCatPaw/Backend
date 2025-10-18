@@ -26,5 +26,6 @@ public class PetReqDTO {
         private String feature;
         private boolean isNeutral;      // 중성화 여부
         private String specifics;
+        private String images;
     }
 }

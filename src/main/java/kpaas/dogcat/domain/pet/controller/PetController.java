@@ -29,11 +29,10 @@ public class PetController {
     private final PetQueryService petQueryService;
 
     @Operation(summary = "반려동물 등록", description = "사용자별 반려동물 등록하는 API 입니다.")
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping
     public CustomResponse<PetResDto.registerPetResDto> register(@Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
-                                                                @RequestPart PetReqDTO.registerPetReqDTO dto,
-                                                                @RequestPart MultipartFile images) {
-        return CustomResponse.onSuccess(SuccessCode.CREATED, petCommandService.register(walletAddress, dto, images));
+                                                                @RequestBody PetReqDTO.registerPetReqDTO dto) {
+        return CustomResponse.onSuccess(SuccessCode.CREATED, petCommandService.register(walletAddress, dto));
     }
 
     @Operation(summary = "내 반려동물 조회", description = "내 반려동물 조회하는 API 입니다. 마이페이지와 입양 공고 등록 시 사용하세요.")

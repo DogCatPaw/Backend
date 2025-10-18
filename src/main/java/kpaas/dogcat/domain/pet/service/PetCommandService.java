@@ -28,12 +28,12 @@ public class PetCommandService {
     private final ObjectStorageUtil objectStorageUtil;
     private final AuthCommandService authCommandService;
 
-    public PetResDto.registerPetResDto register(String memberId, PetReqDTO.registerPetReqDTO dto, MultipartFile images){
+    public PetResDto.registerPetResDto register(String memberId, PetReqDTO.registerPetReqDTO dto){
 
         Member member = authCommandService.findById(memberId);
 
-        String uploaded = objectStorageUtil.upload(images);
-        Pet pet = petConverter.toPet(member, dto, uploaded);
+//        String uploaded = objectStorageUtil.upload(images);
+        Pet pet = petConverter.toPet(member, dto);
         Pet savedPet = petRepository.save(pet);
         log.info("[ Pet registered successfully ]");
         return new PetResDto.registerPetResDto(memberId, savedPet.getId(), savedPet.getDid(), savedPet.getPetName());
