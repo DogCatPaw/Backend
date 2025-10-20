@@ -39,6 +39,20 @@ public class AdoptController {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getHomeData());
     }
 
+    @Operation(summary = "입양 공고 상세 페이지 조회", description = "입양 공고의 상세 페이지를 조회하는 API 입니다.")
+    @GetMapping("/detail/{adoptId}")
+    public CustomResponse<AdoptResDto.DetailDto> getDetail(@PathVariable Long adoptId) {
+        return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getDetails(adoptId));
+    }
+
+    @Operation(summary = "입양 신청 현황 조회(마이페이지)", description = "마이페이지의 입양 신청 현황을 조회하는 API 입니다.")
+    @GetMapping("/mine")
+    public CustomResponse<AdoptResDto.MyAdoptionListDto> getDetail(@Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
+                                                                   @RequestParam(required = false) Long cursor,
+                                                                   @RequestParam(defaultValue = "5") int size) {
+        return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getMyAdoptionList(walletAddress, cursor, size));
+    }
+
     @Operation(summary = "입양 공고 작성", description = "입양 공고를 작성하는 API 입니다. 펫 등록이 먼저 필요합니다.")
     @PostMapping(value = "/post")
     public CustomResponse<AdoptResDto.RegisterDto> register(@Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
@@ -59,12 +73,6 @@ public class AdoptController {
                 cursor, size, status, breed, region, district));
     }
 
-    @Operation(summary = "입양 공고 상세 페이지 조회", description = "입양 공고의 상세 페이지를 조회하는 API 입니다.")
-    @GetMapping("/detail/{adoptId}")
-    public CustomResponse<AdoptResDto.DetailDto> getDetail(@PathVariable Long adoptId) {
-        return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getDetails(adoptId));
-    }
-
     @Operation(summary = "입양 신청하기", description = "입양 신청 완료하는 API 입니다. 펫의 소유권을 이전합니다.")
     @PostMapping("/{adoptionId}/complete")
     public CustomResponse<AdoptResDto.DelegateDto> delegate(@PathVariable Long adoptionId,
@@ -72,11 +80,4 @@ public class AdoptController {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptCommandService.delegate(adoptionId, walletAddress));
     }
 
-    @Operation(summary = "입양 신청 현황 조회(마이페이지)", description = "마이페이지의 입양 신청 현황을 조회하는 API 입니다.")
-    @GetMapping("/mine")
-    public CustomResponse<AdoptResDto.MyAdoptionListDto> getDetail(@Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
-                                                                   @RequestParam(required = false) Long cursor,
-                                                                   @RequestParam(defaultValue = "5") int size) {
-        return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getMyAdoptionList(walletAddress, cursor, size));
-    }
 }
