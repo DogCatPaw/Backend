@@ -22,10 +22,10 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         String sessionId = accessor.getSessionId();
 
-        if(accessor.getCommand() == StompCommand.CONNECT) {
-            chatEntryService.connectSocket(accessor);
-        }
-        else if(accessor.getCommand() == StompCommand.SUBSCRIBE) {
+//        if(accessor.getCommand() == StompCommand.CONNECT) {
+//            chatEntryService.connectSocket(accessor);
+//        }
+        if(accessor.getCommand() == StompCommand.SUBSCRIBE) {
             chatEntryService.subscribeSocket(accessor);
         }
         return message;

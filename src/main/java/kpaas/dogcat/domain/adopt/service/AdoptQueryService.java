@@ -12,7 +12,6 @@ import kpaas.dogcat.domain.pet.converter.PetConverter;
 import kpaas.dogcat.domain.pet.dto.PetResDto;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.enums.Breed;
-import kpaas.dogcat.domain.pet.service.PetQueryService;
 import kpaas.dogcat.domain.story.dailyStory.service.DailyStoryQueryService;
 import kpaas.dogcat.domain.story.review.service.ReviewQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
@@ -60,7 +59,7 @@ public class AdoptQueryService {
                 .build();
     }
 
-    public List<AdoptResDto.PreviewDto> get3LatestAdoptions() {
+    public List<AdoptResDto.AdoptPreviewDto> get3LatestAdoptions() {
         Pageable pageable = PageRequest.of(0, 3);
 
         List<Adopt> adopts = adoptRepository.findTop3ByStatusOrderByDeadlineAsc(AdoptionStatus.ACTIVE, pageable);
@@ -75,15 +74,15 @@ public class AdoptQueryService {
     }
 
     /** 입양 공고 상태 + 품종 + 지역 + 시군구 별 조회**/
-    public AdoptResDto.PreviewListDto getAdoptions(Long cursor, int size,
-                                                   AdoptionStatus status,
-                                                   Breed breed,
-                                                   Region region,
-                                                   String district) {
+    public AdoptResDto.AdoptPreviewListDto getAdoptions(Long cursor, int size,
+                                                        AdoptionStatus status,
+                                                        Breed breed,
+                                                        Region region,
+                                                        String district) {
 
         List<Adopt> adoptions = adoptRepository.searchAdoptions(cursor, size, status, breed, region, district);
 
-        List<AdoptResDto.PreviewDto> adoptionDtos = adoptions.stream()
+        List<AdoptResDto.AdoptPreviewDto> adoptionDtos = adoptions.stream()
                 .map(adoption -> {
                     Pet pet = adoption.getPet();
                     String thumbnailUrl = adoption.getImages().split(",")[0];

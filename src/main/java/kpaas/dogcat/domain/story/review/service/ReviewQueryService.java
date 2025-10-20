@@ -120,11 +120,19 @@ public class ReviewQueryService {
         List<Review> reviews = reviewRepository.findTopPopularReview(pageable);
 
         return reviews.stream()
-                .map(r -> reviewConverter.toReviewPreviewDTO(
-                        r, r.getImages().split(",")[0],
-                        likeQueryService.getLikeCount(r.getId()),
-                        false, commentQueryService.getCommentCount(r.getId())
-                ))
+                .map(r -> {
+                    String image = r.getImages();
+                    String imageUrl = (image == null || image.isBlank())
+                            ? null : image.split(",")[0];
+
+                    return reviewConverter.toReviewPreviewDTO(
+                            r,
+                            imageUrl,
+                            likeQueryService.getLikeCount(r.getId()),
+                            false,
+                            commentQueryService.getCommentCount(r.getId())
+                    );
+                })
                 .toList();
     }
 }

@@ -54,7 +54,7 @@ public class DonationResDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class PreviewDto {
+    public static class DonationPreviewDto {
         private Long donationId;
         private String dDay;
         private String thumbnail;
@@ -70,8 +70,8 @@ public class DonationResDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class PreviewListDto {
-        private List<DonationResDto.PreviewDto> donations;
+    public static class DonationPreviewListDto {
+        private List<DonationPreviewDto> donations;
         private Long nextCursor;
     }
 }

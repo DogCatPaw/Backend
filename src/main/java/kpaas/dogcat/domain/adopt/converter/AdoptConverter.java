@@ -37,8 +37,8 @@ public class AdoptConverter {
                 .build();
     }
 
-    public AdoptResDto.PreviewDto toPreviewChatDto(String dDay, String thumbnail, Pet pet, Adopt adoption) {
-        return AdoptResDto.PreviewDto.builder()
+    public AdoptResDto.AdoptPreviewDto toPreviewChatDto(String dDay, String thumbnail, Pet pet, Adopt adoption) {
+        return AdoptResDto.AdoptPreviewDto.builder()
                 .adoptId(adoption.getId())
                 .thumbnail(thumbnail)
                 .title(adoption.getTitle())
@@ -52,8 +52,8 @@ public class AdoptConverter {
                 .build();
     }
 
-    public AdoptResDto.PreviewDto toPreviewDto(String dDay, String thumbnail, Pet pet, Adopt adoption) {
-        return AdoptResDto.PreviewDto.builder()
+    public AdoptResDto.AdoptPreviewDto toPreviewDto(String dDay, String thumbnail, Pet pet, Adopt adoption) {
+        return AdoptResDto.AdoptPreviewDto.builder()
                 .adoptId(adoption.getId())
                 .thumbnail(thumbnail)
                 .title(adoption.getTitle())
@@ -67,8 +67,8 @@ public class AdoptConverter {
                 .build();
     }
 
-    public AdoptResDto.PreviewListDto toPreviewListDto(List<AdoptResDto.PreviewDto> adoptionDtos, Long nextCursor) {
-        return AdoptResDto.PreviewListDto.builder()
+    public AdoptResDto.AdoptPreviewListDto toPreviewListDto(List<AdoptResDto.AdoptPreviewDto> adoptionDtos, Long nextCursor) {
+        return AdoptResDto.AdoptPreviewListDto.builder()
                 .adoptions(adoptionDtos)
                 .nextCursor(nextCursor)
                 .build();

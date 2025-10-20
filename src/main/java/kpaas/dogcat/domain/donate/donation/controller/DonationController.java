@@ -11,11 +11,7 @@ import kpaas.dogcat.domain.pet.enums.Breed;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Tag(name = "후원 관련 API")
 @RestController
@@ -53,10 +49,10 @@ public class DonationController {
             "status 파라미터는 ACTIVE, ACHIEVED, CLOSED처럼 대문자로 보내주세요." +
             "cursor와 size에 아무 값도 입력하지 않아도 되며, 기본 사이즈는 9입니다. 다음 조회는 nextCursor을 사용하세요.")
     @GetMapping("/list")
-    public CustomResponse<DonationResDto.PreviewListDto> getDonationList(@RequestParam(required = false) Long cursor,
-                                                                         @RequestParam(defaultValue = "9") int size,
-                                                                         @RequestParam(required = false) Breed breed,
-                                                                         @RequestParam(required = false) DonationStatus status) {
+    public CustomResponse<DonationResDto.DonationPreviewListDto> getDonationList(@RequestParam(required = false) Long cursor,
+                                                                                 @RequestParam(defaultValue = "9") int size,
+                                                                                 @RequestParam(required = false) Breed breed,
+                                                                                 @RequestParam(required = false) DonationStatus status) {
         return CustomResponse.onSuccess(donationQueryService.getDonations(cursor, size, breed, status));
     }
 }

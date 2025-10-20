@@ -7,9 +7,6 @@ import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Component
 public class DonationConverter {
@@ -64,9 +61,9 @@ public class DonationConverter {
                 .build();
     }
 
-    public DonationResDto.PreviewDto toHomeDto(String thumbnailUrl, String dDay,
-                                               int patronCount, int progress, Donation donation) {
-        return DonationResDto.PreviewDto.builder()
+    public DonationResDto.DonationPreviewDto toHomeDto(String thumbnailUrl, String dDay,
+                                                       int patronCount, int progress, Donation donation) {
+        return DonationResDto.DonationPreviewDto.builder()
                 .donationId(donation.getId())
                 .dDay(dDay)
                 .thumbnail(thumbnailUrl)

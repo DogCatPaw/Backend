@@ -119,11 +119,21 @@ public class DailyStoryQueryService {
         List<DailyStory> stories = dailyStoryRepository.findTopPopularDailyStories(pageable);
 
         return stories.stream()
-                .map(r -> dailyStoryConverter.toStoryPreviewDTO(
-                        r, r.getImages().split(",")[0],
-                        likeQueryService.getLikeCount(r.getId()),
-                        false, commentQueryService.getCommentCount(r.getId())
-                ))
+                .map(r -> {
+                    String image = r.getImages();
+                    // 이미지가 null이면 null, 아니면 첫 번째 URL만
+                    String imageUrl = (image == null || image.isBlank())
+                            ? null
+                            : image.split(",")[0];
+
+                    return dailyStoryConverter.toStoryPreviewDTO(
+                            r,
+                            imageUrl,
+                            likeQueryService.getLikeCount(r.getId()),
+                            false,
+                            commentQueryService.getCommentCount(r.getId())
+                    );
+                })
                 .toList();
     }
 }

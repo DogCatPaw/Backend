@@ -13,15 +13,9 @@ import kpaas.dogcat.domain.pet.enums.Breed;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import kpaas.dogcat.global.auth.CurrentWalletAddress;
-import kpaas.dogcat.global.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -63,12 +57,12 @@ public class AdoptController {
     @Operation(summary = "메인 화면 - 입양 공고 조회 (cursor 기반)", description = "입양 공고를 cursor로 조회하는 API 입니다. " +
             "\"cursor와 size에 아무 값도 입력하지 않아도 되며, 기본 사이즈는 9입니다. 다음 조회는 nextCursor을 사용하세요.")
     @GetMapping("/")
-    public CustomResponse<AdoptResDto.PreviewListDto> getRegistration(@RequestParam(required = false) Long cursor,
-                                                                      @RequestParam(defaultValue = "9") int size,
-                                                                      @RequestParam(required = false) AdoptionStatus status,
-                                                                      @RequestParam(required = false) Breed breed,
-                                                                      @RequestParam(required = false) Region region,
-                                                                      @RequestParam(required = false) String district) {
+    public CustomResponse<AdoptResDto.AdoptPreviewListDto> getRegistration(@RequestParam(required = false) Long cursor,
+                                                                           @RequestParam(defaultValue = "9") int size,
+                                                                           @RequestParam(required = false) AdoptionStatus status,
+                                                                           @RequestParam(required = false) Breed breed,
+                                                                           @RequestParam(required = false) Region region,
+                                                                           @RequestParam(required = false) String district) {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getAdoptions(
                 cursor, size, status, breed, region, district));
     }

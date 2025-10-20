@@ -52,7 +52,7 @@ public class DonationQueryService {
     }
 
     /** 후원 공고 마감일 임박순 3개 리턴 **/
-    public List<DonationResDto.PreviewDto> get3ClosingSoonDonations() {
+    public List<DonationResDto.DonationPreviewDto> get3ClosingSoonDonations() {
         Pageable pageable = PageRequest.of(0, 3);
 
         return donationRepository.findTop3ByStatusOrderByDeadlineAsc(DonationStatus.ACTIVE, pageable)
@@ -68,12 +68,12 @@ public class DonationQueryService {
     }
 
     /** 후원 공고 (품종 + 상태 별 + 마감일 임박 순) 조회*/
-    public DonationResDto.PreviewListDto getDonations(Long cursor, int size,
-                                                      Breed breed,
-                                                      DonationStatus status) {
+    public DonationResDto.DonationPreviewListDto getDonations(Long cursor, int size,
+                                                              Breed breed,
+                                                              DonationStatus status) {
         List<Donation> donations = donationRepository.searchDonations(cursor, size, breed, status);
 
-        List<DonationResDto.PreviewDto> donationDtos = donations.stream()
+        List<DonationResDto.DonationPreviewDto> donationDtos = donations.stream()
                 .map(donation -> {
                     String thumbnailUrl = donation.getImages().split(",")[0];
                     String dDay = getDday(donation);
@@ -86,7 +86,7 @@ public class DonationQueryService {
         // 다음 커서 계산
         Long nextCursor = donations.size() < size ? null : donations.get(donations.size() - 1).getId();
 
-        return DonationResDto.PreviewListDto.builder()
+        return DonationResDto.DonationPreviewListDto.builder()
                 .donations(donationDtos)
                 .nextCursor(nextCursor)
                 .build();
