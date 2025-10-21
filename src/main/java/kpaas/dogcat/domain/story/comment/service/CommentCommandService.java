@@ -37,6 +37,7 @@ public class CommentCommandService {
         changeCommentCount(story.getId());
         Comment comment = commentConverter.toComment(member, story, dto);
         commentRepository.save(comment);
+        log.info("[ 댓글 작성 - 사용자: {}, 내용: {} ]", memberId, comment.getComment());
 
         return commentConverter.toCommentResDTO(memberId, comment);
     }

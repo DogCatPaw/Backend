@@ -35,6 +35,7 @@ public class ChatRoomCommandService {
     private final AdoptQueryService adoptQueryService;
 
     public ChatResDTO.ChatRoomCreatedDTO createRoom(String initiatorId, String targetId, Long adoptId, String roomName) {
+        log.info("[ 채팅방 생성 - 입양 채팅 신청자 = {}, 입양 공고 작성자 = {}, adoptId = {} ]", initiatorId, targetId, adoptId);
         // 사용자 & 입양 공고 검증
         Member initiator = authCommandService.findById(initiatorId);    // 입양원하는 사용자
         Member target = authCommandService.findById(targetId);          // 입양 공고 작성자

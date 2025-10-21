@@ -13,11 +13,13 @@ import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import kpaas.dogcat.global.objectStorage.ObjectStorageUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReviewCommandService {
@@ -30,6 +32,7 @@ public class ReviewCommandService {
 
     public ReviewResDto.WriteReviewResDto writeReview(
             String memberId, ReviewReqDTO.WriteReviewDTO dto) {
+        log.info("[ 입양 후기 작성하기 ]");
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 

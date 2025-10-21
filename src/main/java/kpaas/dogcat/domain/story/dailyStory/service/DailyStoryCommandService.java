@@ -13,11 +13,13 @@ import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import kpaas.dogcat.global.objectStorage.ObjectStorageUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DailyStoryCommandService {
@@ -30,6 +32,7 @@ public class DailyStoryCommandService {
 
     public DailyStoryResDto.WriteStoryResDto writeDailyStory(
             String memberId, DailyStoryReqDto.WriteStoryReqDto dto) {
+        log.info("[ 일상 일지 작성하기 ]");
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
 

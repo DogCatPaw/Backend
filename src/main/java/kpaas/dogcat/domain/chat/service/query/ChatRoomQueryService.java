@@ -42,6 +42,7 @@ public class ChatRoomQueryService {
     public ChatResDTO.ChatRoomCardDTO getChatRoomCard(Long roomId, String memberId) {
         ChatRoom chatRoom = getChatRoom(roomId);
 
+        log.info("[ 채팅방 카드 조회 - 사용자 = {}, 채팅방 = {} ]", memberId, roomId);
         Member loginMember = authCommandService.findById(memberId);
         Member targetMember = chatParticipantQueryService.getTargetMember(chatRoom, loginMember);
         Long unreadCount = chatMessageQueryService.getUnreadCount(chatRoom, loginMember);
@@ -58,6 +59,7 @@ public class ChatRoomQueryService {
 
     // 채팅방 카드 리스트(이름, 메세지, 미읽음 수) 조회
     public List<ChatResDTO.ChatRoomCardDTO> getChatRoomCards(String memberId) {
+        log.info("[ 채팅방 카드 리스트 조회 - 사용자 = {} ]", memberId);
         List<ChatRoom> rooms = chatRoomRepository.findRoomIdsByMemberId(memberId);
 
         return rooms.stream()

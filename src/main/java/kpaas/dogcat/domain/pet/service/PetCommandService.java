@@ -31,7 +31,7 @@ public class PetCommandService {
 //        String uploaded = objectStorageUtil.upload(images);
         Pet pet = petConverter.toPet(member, dto);
         Pet savedPet = petRepository.save(pet);
-        log.info("[ Pet registered successfully ]");
+        log.info("[ Pet 등록 완료 ]");
         return new PetResDto.RegisterPetResDto(memberId, savedPet.getId(), savedPet.getDid(), savedPet.getPetName());
     }
 }

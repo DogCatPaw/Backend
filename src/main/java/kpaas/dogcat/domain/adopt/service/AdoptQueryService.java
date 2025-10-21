@@ -46,11 +46,13 @@ public class AdoptQueryService {
     }
 
     public PetResDto.PetChatDto getAdoptionForChatting(Adopt adopt) {
+        log.info("[ 채팅방 상단 입양 공고 조회 ]");
         Pet pet = adopt.getPet();
         return petConverter.toPetChatDto(pet);
     }
 
     public AdoptResDto.HomeDto getHomeData() {
+        log.info("[ 홈 - 메인 화면 조회 ]");
         return AdoptResDto.HomeDto.builder()
                 .popularReviews(reviewQueryService.get3PopularReviews())
                 .popularStories(dailyStoryQueryService.get3PopularStories())
@@ -101,6 +103,7 @@ public class AdoptQueryService {
 
     /** 입양 공고 상세 페이지 조회 */
     public AdoptResDto.DetailDto getDetails(Long adoptId){
+        log.info("[ 입양 공고 상세 페이지 조회: {} ]", adoptId);
         Adopt adopt = adoptRepository.findWithPetById(adoptId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ADOPTION_NOTFOUND));
 
@@ -122,6 +125,7 @@ public class AdoptQueryService {
 
     /** 마이페이지 - 입양 현황 조회 */
     public AdoptResDto.MyAdoptionListDto getMyAdoptionList(String memberId, Long cursor, int size){
+        log.info("[ 마이페이지 - 입양 현황 조회 ]");
         authCommandService.findById(memberId);
         Pageable pageable = PageRequest.of(0, size);
 

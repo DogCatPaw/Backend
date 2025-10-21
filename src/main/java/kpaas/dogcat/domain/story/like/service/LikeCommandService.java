@@ -28,6 +28,7 @@ public class LikeCommandService {
     private final LikeConverter likeConverter;
 
     public LikeResDTO createLike(Long storyId, String memberId) {
+        log.info("[ 좋아요 누르기 - 스토리: {} ]", storyId);
         Story story = storyRepository.findById(storyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
 
@@ -44,9 +45,11 @@ public class LikeCommandService {
         boolean alreadyLike = likeRepository.existsByStoryIdAndMemberId(story.getId(), member.getId());
         if (alreadyLike) {
             likeRepository.deleteByStoryIdAndMemberId(story.getId(), member.getId());
+            log.info("[ 좋아요 누르기 취소 ]");
         } else {
             Like savedLike = likeConverter.toLike(story, member);
             likeRepository.save(savedLike);
+            log.info("[ 좋아요 누르기 완료 ]");
         }
         return alreadyLike;
     }

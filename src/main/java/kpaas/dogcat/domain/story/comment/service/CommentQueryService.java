@@ -35,6 +35,7 @@ public class CommentQueryService {
     }
 
     public CommentResDTO.GetCommentListDTO getComments(Long storyId, Long cursor, int size) {
+        log.info("[ 댓글 조회 ]");
         Story story = storyRepository.findById(storyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
 

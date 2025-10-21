@@ -69,6 +69,7 @@ public class ChatMessageCommandService {
 
     /** 메세지 조회 및 읽음 처리 */
     public List<ChatResDTO.ChatMessageResDTO> enterRoom(Long roomId, String memberId) {
+        log.info("[ 채팅방 입장 - 사용자 = {}, 채팅방 = {} ]", memberId, roomId);
         List<ChatResDTO.ChatMessageResDTO> chatMessages = chatMessageQueryService.getChatMessages(roomId, memberId);
         markAsReadCount(roomId, memberId);
         return chatMessages;

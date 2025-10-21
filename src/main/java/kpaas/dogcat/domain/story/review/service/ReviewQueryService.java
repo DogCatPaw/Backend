@@ -34,6 +34,7 @@ public class ReviewQueryService {
 
     /** 입양 후기 상세 반환*/
     public ReviewResDto.ReviewDetailDto getReviewDetail(Long reviewId, String memberId) {
+        log.info("[ 입양 후기 상세 보기 - 스토리: {} ]", reviewId);
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOTFOUND));
         Pet pet =  review.getPet();
@@ -48,6 +49,7 @@ public class ReviewQueryService {
 
     /** 입양 후기 조회 (키워드 + cursor) **/
     public ReviewResDto.ReviewListDto search(String keyword, Long cursorId, int size, String memberId) {
+        log.info("[ 입양 후기 메인 화면 조회 ]");
         Pageable pageable = PageRequest.of(0, size);
         List<Review> reviews;
 

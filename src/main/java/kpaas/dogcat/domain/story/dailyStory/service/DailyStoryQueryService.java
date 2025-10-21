@@ -35,6 +35,7 @@ public class DailyStoryQueryService {
 
     /** 일상 일지 상세 반환 **/
     public DailyStoryResDto.StoryDetailDto getStoryDetail(Long storyId, String memberId) {
+        log.info("[ 일상 일지 상세 보기 - 스토리: {} ]", storyId);
         DailyStory story = dailyStoryRepository.findById(storyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
         Pet pet =  story.getPet();
@@ -49,6 +50,7 @@ public class DailyStoryQueryService {
 
     /** 일상 일지 키워드 기반 조회 **/
     public DailyStoryResDto.StoriesListDto search(String keyword, Long cursorId, int size, String memberId) {
+        log.info("[ 일상 일지 메인 화면 조회 ]");
         Pageable pageable = PageRequest.of(0, size);
         List<DailyStory> stories;
 

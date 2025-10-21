@@ -32,6 +32,7 @@ public class ChatParticipantQueryService {
     }
 
     public ChatResDTO.CheckPermissionResDTO checkPermission(String memberId, Long roomId) {
+        log.info("[ 채팅방 권한 검증 - 입양 채팅 신청자 = {}, 채팅방 = {} ]", memberId, roomId);
         boolean isParticipants = isRoomParticipant(memberId, roomId);
         return ChatResDTO.CheckPermissionResDTO.builder()
                 .canJoin(isParticipants)

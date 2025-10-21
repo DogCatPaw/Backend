@@ -38,6 +38,7 @@ public class DonationQueryService {
 
     // 후원 공고 상세 보기 + 후원 내역 조회
     public DonationResDto.DetailDto getDonationDetail(Long donationId, Long cursor, int size) {
+        log.info("[ 후원 공고 상세 페이지 조회: {} ]", donationId);
         Donation donation = findById(donationId);
 
         String dDay = getDday(donation);

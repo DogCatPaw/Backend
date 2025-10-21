@@ -31,6 +31,7 @@ public class PetQueryService {
 
     // 내 펫 목록 조회
     public List<PetResDto.MyPetDto> getMyPetList(String memberId) {
+        log.info("[ 내 펫 목록 조회하기 - 사용자: {} ]", memberId);
         authCommandService.findById(memberId);
         List<Pet> pets = petRepository.findAllByMemberId(memberId);
         List<PetResDto.MyPetDto> myPetList = pets.stream()
