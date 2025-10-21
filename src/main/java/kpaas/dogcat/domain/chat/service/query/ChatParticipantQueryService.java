@@ -1,5 +1,6 @@
 package kpaas.dogcat.domain.chat.service.query;
 
+import kpaas.dogcat.domain.chat.dto.ChatResDTO;
 import kpaas.dogcat.domain.chat.entity.ChatParticipant;
 import kpaas.dogcat.domain.chat.entity.ChatRoom;
 import kpaas.dogcat.domain.chat.repository.ChatParticipantRepository;
@@ -28,6 +29,13 @@ public class ChatParticipantQueryService {
     public boolean isRoomParticipant(String memberId, Long roomId) {
         Member member = authCommandService.findById(memberId);
         return chatParticipantRepository.existsByChatRoomIdAndMemberId(roomId, member.getId());
+    }
+
+    public ChatResDTO.CheckPermissionResDTO checkPermission(String memberId, Long roomId) {
+        boolean isParticipants = isRoomParticipant(memberId, roomId);
+        return ChatResDTO.CheckPermissionResDTO.builder()
+                .canJoin(isParticipants)
+                .build();
     }
 
     // 참여자 2명 중에서 나를 제외한 한명 (상대방)

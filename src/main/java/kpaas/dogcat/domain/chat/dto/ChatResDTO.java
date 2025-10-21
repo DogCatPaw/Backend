@@ -37,4 +37,12 @@ public class ChatResDTO {
         private String message;
         private boolean isRead; //상대가 읽었는지 여부
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class CheckPermissionResDTO {
+        private boolean canJoin;
+    }
 }

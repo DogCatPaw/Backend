@@ -9,6 +9,7 @@ import kpaas.dogcat.domain.chat.dto.ChatResDTO;
 import kpaas.dogcat.domain.chat.service.command.ChatMessageCommandService;
 import kpaas.dogcat.domain.chat.service.query.ChatMessageQueryService;
 import kpaas.dogcat.domain.chat.service.command.ChatRoomCommandService;
+import kpaas.dogcat.domain.chat.service.query.ChatParticipantQueryService;
 import kpaas.dogcat.domain.chat.service.query.ChatRoomQueryService;
 import kpaas.dogcat.domain.pet.dto.PetResDto;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
@@ -33,6 +34,7 @@ public class ChatController {
     private final ChatRoomQueryService chatRoomQueryService;
     private final ChatMessageQueryService chatMessageQueryService;
     private final ChatMessageCommandService chatMessageCommandService;
+    private final ChatParticipantQueryService chatParticipantQueryService;
 
     @Operation(summary = "채팅방 생성하기", description = "adoptWriterId에 입양공고를 작성한 사람을 넣어주고, 입양 공고 번호를 넣어주세요." +
             "방 이름 설정이 가능하니 일단은 입양 공고 이름으로 방 생성하세요.")
@@ -42,6 +44,16 @@ public class ChatController {
         ChatResDTO.ChatRoomCreatedDTO room = chatRoomCommandService.createRoom(
                 walletAddress, dto.getAdoptWriterId(), dto.getAdoptId(), dto.getRoomName());
         return CustomResponse.onSuccess(SuccessCode.CREATED, room);
+    }
+
+    @Operation(summary = "채팅방 참여 권한 확인", description = "NestJS Gateway에서 사용하는 권한 체크 API")
+    @GetMapping("/room/permission")
+    public CustomResponse<ChatResDTO.CheckPermissionResDTO> checkPermission(
+            @RequestParam Long roomId,
+            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress
+    ) {
+        ChatResDTO.CheckPermissionResDTO canJoin = chatParticipantQueryService.checkPermission(walletAddress, roomId);
+        return CustomResponse.onSuccess(SuccessCode.OK, canJoin);
     }
 
     @Operation(summary = "채팅방 입장 및 메시지 조회하기", description = "채팅방 입장 및 메세지 조회하기")
