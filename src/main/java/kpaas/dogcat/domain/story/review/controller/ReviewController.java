@@ -42,21 +42,11 @@ public class ReviewController {
 
     @Operation(summary = "메인화면 - 입양 후기 목록 조회", description = "입양 후기 일지 메인 화면의 목록을 조회합니다.")
     @GetMapping("/review/reviews")
-    public CustomResponse<ReviewResDto.ReviewListDto> getReviews(
-            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
-            @RequestParam(required = false) Long cursorId,
-            @RequestParam(defaultValue = "9") int size){
-        String memberId = (walletAddress != null) ? walletAddress : null;
-        return CustomResponse.onSuccess(SuccessCode.OK, reviewQueryService.getReviews(cursorId, size, memberId));
-    }
-
-    @Operation(summary = "입양 후기 검색하기", description = "로그인 없이 입양 후기를 검색합니다.")
-    @GetMapping("/review/search")
     public CustomResponse<ReviewResDto.ReviewListDto> search(
             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
-            @RequestParam(required = true) String keyword,
+            @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Long cursorId,
-            @RequestParam(defaultValue = "9") int size){
+            @RequestParam(defaultValue = "9") int size) {
         String memberId = (walletAddress != null) ? walletAddress : null;
         ReviewResDto.ReviewListDto searchResult = reviewQueryService.search(keyword, cursorId, size, memberId);
         return CustomResponse.onSuccess(SuccessCode.OK, searchResult);

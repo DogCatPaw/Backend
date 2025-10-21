@@ -46,37 +46,23 @@ public class ReviewQueryService {
         return reviewConverter.toReviewDetailDTO(review, pet, likeCount, liked, commentCount);
     }
 
-    /** 입양 후기 조회용 반환 **/
-    public ReviewResDto.ReviewListDto getReviews(Long cursorId, int size, String memberId) {
-        Pageable pageable = PageRequest.of(0, size);
-
-        List<Review> reviews;
-        if (cursorId == null) {
-            reviews = reviewRepository.findAllByOrderByIdDesc(pageable);
-        } else {
-            reviews = reviewRepository.findByIdLessThanOrderByIdDesc(cursorId, pageable);
-        }
-
-        Member member = findMemberOrNull(memberId);
-        List<ReviewResDto.ReviewDto> reviewList = reviews.stream()
-                .map(review -> mapToPreviewDTO(review, member))
-                .toList();
-        Long nextCursor = reviews.size() < size ? null : reviews.get(reviews.size() - 1).getId();
-
-        return ReviewResDto.ReviewListDto.builder()
-                .reviews(reviewList)
-                .nextCursor(nextCursor)
-                .build();
-    }
-
-    /** 입양 후기 키워드 찾기 **/
+    /** 입양 후기 조회 (키워드 + cursor) **/
     public ReviewResDto.ReviewListDto search(String keyword, Long cursorId, int size, String memberId) {
         Pageable pageable = PageRequest.of(0, size);
         List<Review> reviews;
-        if (cursorId == null) {
-            reviews = reviewRepository.findByTitleContainingFirstPage(keyword, pageable);
+
+        if (keyword == null || keyword.isBlank()) {
+            if (cursorId == null) {
+                reviews = reviewRepository.findAllByOrderByIdDesc(pageable);
+            } else {
+                reviews = reviewRepository.findByIdLessThanOrderByIdDesc(cursorId, pageable);
+            }
         } else {
-            reviews = reviewRepository.findByTitleContainingAfterCursor(keyword, cursorId, pageable);
+            if (cursorId == null) {
+                reviews = reviewRepository.findByTitleContainingFirstPage(keyword, pageable);
+            } else {
+                reviews = reviewRepository.findByTitleContainingAfterCursor(keyword, cursorId, pageable);
+            }
         }
 
         Member member = findMemberOrNull(memberId);

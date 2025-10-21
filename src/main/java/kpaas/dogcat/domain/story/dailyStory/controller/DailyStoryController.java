@@ -44,17 +44,7 @@ public class DailyStoryController {
     @GetMapping("/daily/stories")
     public CustomResponse<DailyStoryResDto.StoriesListDto> getStories(
             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
-            @RequestParam(required = false) Long cursorId,
-            @RequestParam(defaultValue = "9") int size){
-        String memberId = (walletAddress != null) ? walletAddress : null;
-        return CustomResponse.onSuccess(SuccessCode.OK, dailyStoryQueryService.getStories(cursorId, size, memberId));
-    }
-
-    @Operation(summary = "일상 일지 검색하기", description = "로그인 없이 일상 일지를 검색합니다.")
-    @GetMapping("/daily/search")
-    public CustomResponse<DailyStoryResDto.StoriesListDto> search(
-            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
-            @RequestParam(required = true) String keyword,
+            @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue = "9") int size){
         String memberId = (walletAddress != null) ? walletAddress : null;

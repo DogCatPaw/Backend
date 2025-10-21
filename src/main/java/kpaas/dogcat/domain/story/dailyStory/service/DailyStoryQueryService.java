@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,37 +47,23 @@ public class DailyStoryQueryService {
         return dailyStoryConverter.toStoryDetailDto(story, pet, likeCount, liked, commentCount);
     }
 
-    /** 일상 일지 조회용 반환 **/
-    public DailyStoryResDto.StoriesListDto getStories(Long cursorId, int size, String memberId) {
-        Pageable pageable = PageRequest.of(0, size);
-
-        List<DailyStory> stories;
-        if (cursorId == null) {
-            stories = dailyStoryRepository.findAllByOrderByIdDesc(pageable);
-        } else {
-            stories = dailyStoryRepository.findByIdLessThanOrderByIdDesc(cursorId, pageable);
-        }
-
-        Member member = findMemberOrNull(memberId);
-        List<DailyStoryResDto.StoryPreviewDto> storyList = stories.stream()
-                .map(story -> mapToPreviewDTO(story, member))
-                .toList();
-        Long nextCursor = stories.size() < size ? null : stories.get(stories.size() - 1).getId();
-
-        return DailyStoryResDto.StoriesListDto.builder()
-                .stories(storyList)
-                .nextCursor(nextCursor)
-                .build();
-    }
-
     /** 일상 일지 키워드 기반 조회 **/
     public DailyStoryResDto.StoriesListDto search(String keyword, Long cursorId, int size, String memberId) {
         Pageable pageable = PageRequest.of(0, size);
         List<DailyStory> stories;
-        if (cursorId == null) {
-            stories = dailyStoryRepository.findByTitleContainingFirstPage(keyword, pageable);
+
+        if (keyword == null || keyword.isBlank()) {
+            if (cursorId == null) {
+                stories = dailyStoryRepository.findAllByOrderByIdDesc(pageable);
+            } else {
+                stories = dailyStoryRepository.findByIdLessThanOrderByIdDesc(cursorId, pageable);
+            }
         } else {
-            stories = dailyStoryRepository.findByTitleContainingAfterCursor(keyword, cursorId, pageable);
+            if (cursorId == null) {
+                stories = dailyStoryRepository.findByTitleContainingFirstPage(keyword, pageable);
+            } else {
+                stories = dailyStoryRepository.findByTitleContainingAfterCursor(keyword, cursorId, pageable);
+            }
         }
 
         Member member = findMemberOrNull(memberId);
