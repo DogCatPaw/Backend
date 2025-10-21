@@ -65,6 +65,8 @@ public class ChatMessageCommandService {
                     .build();
             chatReadStatusRepository.save(readStatus);
         }
+        log.info("[ 채팅방 메세지 저장 완료 - 채팅방 = {}, 발신자 = {}, 내용 = {} ]",
+                chatMessageReqDTO.getRoomId(), sender.getId(), savedMessage.getChatMessage());
     }
 
     /** 메세지 조회 및 읽음 처리 */
