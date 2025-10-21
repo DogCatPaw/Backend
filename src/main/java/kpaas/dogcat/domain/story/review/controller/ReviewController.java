@@ -3,21 +3,15 @@ package kpaas.dogcat.domain.story.review.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kpaas.dogcat.domain.story.review.service.ReviewCommandService;
-import kpaas.dogcat.domain.story.review.service.ReviewQueryService;
 import kpaas.dogcat.domain.story.review.dto.ReviewReqDTO;
 import kpaas.dogcat.domain.story.review.dto.ReviewResDto;
+import kpaas.dogcat.domain.story.review.service.ReviewCommandService;
+import kpaas.dogcat.domain.story.review.service.ReviewQueryService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import kpaas.dogcat.global.auth.CurrentWalletAddress;
-import kpaas.dogcat.global.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Tag(name = "입양 후기 일지 API")
 @RestController
