@@ -62,9 +62,10 @@ public class AdoptController {
                                                                            @RequestParam(required = false) AdoptionStatus status,
                                                                            @RequestParam(required = false) Breed breed,
                                                                            @RequestParam(required = false) Region region,
-                                                                           @RequestParam(required = false) String district) {
+                                                                           @RequestParam(required = false) String district,
+                                                                           @RequestParam(required = false) String keyword) {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getAdoptions(
-                cursor, size, status, breed, region, district));
+                cursor, size, status, breed, region, district, keyword));
     }
 
     @Operation(summary = "입양 신청하기", description = "입양 신청 완료하는 API 입니다. 펫의 소유권을 이전합니다.")

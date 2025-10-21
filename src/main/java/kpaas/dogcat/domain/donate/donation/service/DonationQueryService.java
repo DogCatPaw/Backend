@@ -70,8 +70,10 @@ public class DonationQueryService {
     /** 후원 공고 (품종 + 상태 별 + 마감일 임박 순) 조회*/
     public DonationResDto.DonationPreviewListDto getDonations(Long cursor, int size,
                                                               Breed breed,
-                                                              DonationStatus status) {
-        List<Donation> donations = donationRepository.searchDonations(cursor, size, breed, status);
+                                                              DonationStatus status,
+                                                              String keyword) {
+        log.info("[ 후원 공고 메인 화면 조회 ]");
+        List<Donation> donations = donationRepository.searchDonations(cursor, size, breed, status, keyword);
 
         List<DonationResDto.DonationPreviewDto> donationDtos = donations.stream()
                 .map(donation -> {

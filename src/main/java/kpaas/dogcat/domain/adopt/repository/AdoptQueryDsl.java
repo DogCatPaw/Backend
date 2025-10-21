@@ -12,5 +12,6 @@ public interface AdoptQueryDsl {
                                 AdoptionStatus status,
                                 Breed breed,
                                 Region region,
-                                String district);
+                                String district,
+                                String keyword);
 }

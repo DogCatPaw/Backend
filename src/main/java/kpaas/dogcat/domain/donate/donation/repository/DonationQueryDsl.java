@@ -12,5 +12,6 @@ import java.util.List;
 public interface DonationQueryDsl {
     List<Donation> searchDonations(Long cursor, int size,
                                    Breed breed,
-                                   DonationStatus status);
+                                   DonationStatus status,
+                                   String keyword);
 }

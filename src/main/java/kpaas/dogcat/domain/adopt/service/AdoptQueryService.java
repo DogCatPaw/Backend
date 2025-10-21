@@ -78,9 +78,12 @@ public class AdoptQueryService {
                                                         AdoptionStatus status,
                                                         Breed breed,
                                                         Region region,
-                                                        String district) {
+                                                        String district,
+                                                        String keyword) {
 
-        List<Adopt> adoptions = adoptRepository.searchAdoptions(cursor, size, status, breed, region, district);
+        log.info("[ 입양 공고 메인 화면 조회 ]");
+        List<Adopt> adoptions = adoptRepository.searchAdoptions
+                (cursor, size, status, breed, region, district, keyword);
 
         List<AdoptResDto.AdoptPreviewDto> adoptionDtos = adoptions.stream()
                 .map(adoption -> {

@@ -20,7 +20,8 @@ public class DonationQueryDslImpl implements DonationQueryDsl {
     @Override
     public List<Donation> searchDonations(Long cursor, int size,
                                           Breed breed,
-                                          DonationStatus status) {
+                                          DonationStatus status,
+                                          String keyword) {
         QDonation donation = QDonation.donation;
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -30,9 +31,16 @@ public class DonationQueryDslImpl implements DonationQueryDsl {
         else
             builder.and(donation.status.eq(DonationStatus.ACTIVE));
 
+        // 품종 필터
         if (breed != null)
             builder.and(donation.pet.breed.eq(breed));
 
+        // 키워드 검색
+        if (keyword != null && !keyword.isBlank()) {
+            builder.and(donation.title.containsIgnoreCase(keyword));
+        }
+
+        // 커서 기반 페이징
         if (cursor != null)
             builder.and(donation.id.lt(cursor));
 
