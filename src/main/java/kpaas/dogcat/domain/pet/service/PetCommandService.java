@@ -1,6 +1,5 @@
 package kpaas.dogcat.domain.pet.service;
 
-import kpaas.dogcat.domain.adopt.service.AdoptQueryService;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
 import kpaas.dogcat.domain.member.service.AuthCommandService;
@@ -9,13 +8,10 @@ import kpaas.dogcat.domain.pet.dto.PetReqDTO;
 import kpaas.dogcat.domain.pet.dto.PetResDto;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.repository.PetRepository;
-import kpaas.dogcat.global.apiPayload.code.CustomException;
-import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import kpaas.dogcat.global.objectStorage.ObjectStorageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -28,7 +24,7 @@ public class PetCommandService {
     private final ObjectStorageUtil objectStorageUtil;
     private final AuthCommandService authCommandService;
 
-    public PetResDto.registerPetResDto register(String memberId, PetReqDTO.registerPetReqDTO dto){
+    public PetResDto.RegisterPetResDto register(String memberId, PetReqDTO.registerPetReqDTO dto){
 
         Member member = authCommandService.findById(memberId);
 
@@ -36,6 +32,6 @@ public class PetCommandService {
         Pet pet = petConverter.toPet(member, dto);
         Pet savedPet = petRepository.save(pet);
         log.info("[ Pet registered successfully ]");
-        return new PetResDto.registerPetResDto(memberId, savedPet.getId(), savedPet.getDid(), savedPet.getPetName());
+        return new PetResDto.RegisterPetResDto(memberId, savedPet.getId(), savedPet.getDid(), savedPet.getPetName());
     }
 }

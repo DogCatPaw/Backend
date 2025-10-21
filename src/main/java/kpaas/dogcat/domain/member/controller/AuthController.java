@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "멍냥일지 Swagger API")
+@Tag(name = "회원가입/로그인 API")
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor

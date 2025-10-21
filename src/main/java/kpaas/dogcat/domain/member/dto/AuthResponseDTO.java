@@ -1,7 +1,8 @@
 package kpaas.dogcat.domain.member.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
+
+import java.util.List;
 
 public class AuthResponseDTO {
 

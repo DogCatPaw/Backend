@@ -10,12 +10,8 @@ import kpaas.dogcat.domain.pet.service.PetQueryService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import kpaas.dogcat.global.auth.CurrentWalletAddress;
-import kpaas.dogcat.global.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -30,7 +26,7 @@ public class PetController {
 
     @Operation(summary = "반려동물 등록", description = "사용자별 반려동물 등록하는 API 입니다.")
     @PostMapping
-    public CustomResponse<PetResDto.registerPetResDto> register(@Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
+    public CustomResponse<PetResDto.RegisterPetResDto> register(@Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
                                                                 @RequestBody PetReqDTO.registerPetReqDTO dto) {
         return CustomResponse.onSuccess(SuccessCode.CREATED, petCommandService.register(walletAddress, dto));
     }

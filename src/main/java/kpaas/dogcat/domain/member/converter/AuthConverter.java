@@ -3,6 +3,7 @@ package kpaas.dogcat.domain.member.converter;
 import kpaas.dogcat.domain.member.dto.AuthRequestDTO;
 import kpaas.dogcat.domain.member.dto.AuthResponseDTO;
 import kpaas.dogcat.domain.member.entity.Member;
+import kpaas.dogcat.domain.member.enums.Role;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,6 +17,8 @@ public class AuthConverter {
                 .gender(dto.getGender())
                 .old(dto.getOld())
                 .phoneNumber(String.valueOf(dto.getPhoneNumber()))
+                .profileUrl(dto.getProfileUrl())
+                .role(dto.getRole())
                 .build();
     }
 

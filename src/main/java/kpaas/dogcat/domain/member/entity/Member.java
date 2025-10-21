@@ -5,6 +5,7 @@ import kpaas.dogcat.domain.adopt.entity.Adopt;
 import kpaas.dogcat.domain.donate.donation.entity.Donation;
 import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
 import kpaas.dogcat.domain.member.enums.Gender;
+import kpaas.dogcat.domain.member.enums.Role;
 import kpaas.dogcat.global.payment.entity.Payment;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
@@ -13,7 +14,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +26,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Member {
 
     // 지갑 주소 기본키
@@ -50,6 +55,13 @@ public class Member {
 
     @Builder.Default
     private Integer settledBalance = 0; // 정산된 후원금
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Pet> pets = new ArrayList<>();
