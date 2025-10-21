@@ -49,6 +49,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         return AuthResponseDTO.LoginResponseDTO.builder()
                 .walletAddress(member.getId())
                 .nickname(member.getNickname())
+                .role(member.getRole())
                 .build();
     }
 

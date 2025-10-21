@@ -1,5 +1,6 @@
 package kpaas.dogcat.domain.member.dto;
 
+import kpaas.dogcat.domain.member.enums.Role;
 import lombok.*;
 
 public class AuthResponseDTO {
@@ -16,6 +17,7 @@ public class AuthResponseDTO {
     public static class LoginResponseDTO {
         private String walletAddress;
         private String nickname;
+        private Role role;
     }
 
     @Getter

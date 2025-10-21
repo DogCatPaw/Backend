@@ -2,19 +2,17 @@ package kpaas.dogcat.global.payment.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kpaas.dogcat.global.apiPayload.CustomResponse;
+import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import kpaas.dogcat.global.auth.CurrentWalletAddress;
+import kpaas.dogcat.global.payment.dto.PaymentReqDTO;
+import kpaas.dogcat.global.payment.dto.PaymentResDTO;
+import kpaas.dogcat.global.payment.service.PaymentCommandServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import kpaas.dogcat.global.apiPayload.CustomResponse;
-import kpaas.dogcat.global.apiPayload.code.SuccessCode;
-import kpaas.dogcat.global.jwt.CustomUserDetails;
-import kpaas.dogcat.global.payment.dto.PaymentReqDTO;
-import kpaas.dogcat.global.payment.dto.PaymentResDTO;
-import kpaas.dogcat.global.payment.service.PaymentCommandServiceImpl;
 
 @Tag(name = "후원 관련 API")
 @RestController

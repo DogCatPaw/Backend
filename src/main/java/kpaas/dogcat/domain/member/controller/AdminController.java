@@ -10,6 +10,7 @@ import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import kpaas.dogcat.global.auth.CurrentWalletAddress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ public class AdminController {
     private final AdminQueryService adminQueryService;
 
     /** 회원id와 반려동물id 조회*/
+    @GetMapping
     public CustomResponse<AdminResDto.MemberListResponseDto> getMembers(
             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime cursor,

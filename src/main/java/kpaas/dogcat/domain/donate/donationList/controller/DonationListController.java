@@ -3,17 +3,14 @@ package kpaas.dogcat.domain.donate.donationList.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
-import kpaas.dogcat.domain.donate.donationList.service.DonationListCommandService;
 import kpaas.dogcat.domain.donate.donationList.dto.DonationListReqDto;
 import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
+import kpaas.dogcat.domain.donate.donationList.service.DonationListCommandService;
 import kpaas.dogcat.domain.donate.donationList.service.DonationListQueryService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
 import kpaas.dogcat.global.auth.CurrentWalletAddress;
-import kpaas.dogcat.global.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "후원 관련 API")
