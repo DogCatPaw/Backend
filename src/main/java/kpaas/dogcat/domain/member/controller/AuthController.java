@@ -43,11 +43,4 @@ public class AuthController {
         authCommandService.logout(request, response);
         return CustomResponse.onSuccess(SuccessCode.OK);
     }
-
-//    @Operation(summary = "리이슈", description = "액세스 토큰을 재발행합니다. id와 refresh 필요")
-//    @PostMapping("/reissue")
-//    public CustomResponse<AuthResponseDTO.ReissueResponseDTO> reissue(@RequestBody AuthRequestDTO.ReissueRequestDTO dto) {
-//        AuthResponseDTO.ReissueResponseDTO reissue = authCommandService.reissue(dto);
-//        return CustomResponse.onSuccess(SuccessCode.OK, reissue);
-//    }
 }

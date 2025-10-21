@@ -24,7 +24,7 @@ public class AuthConverter {
 
     public AuthResponseDTO.SignupResponseDTO toSignupResponseDTO(Member member) {
         return AuthResponseDTO.SignupResponseDTO.builder()
-                .id(member.getId())
+                .walletAddress(member.getId())
                 .nickname(member.getNickname())
                 .build();
     }

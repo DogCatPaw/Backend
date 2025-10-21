@@ -47,7 +47,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         Member member = findById(dto.getWalletAddress());
 
         return AuthResponseDTO.LoginResponseDTO.builder()
-                .id(member.getId())
+                .walletAddress(member.getId())
                 .nickname(member.getNickname())
                 .build();
     }
