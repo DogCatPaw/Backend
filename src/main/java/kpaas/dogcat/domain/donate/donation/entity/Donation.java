@@ -45,6 +45,7 @@ public class Donation {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false, length = 2000)
     private String images;
 
     // 계좌 정보

@@ -33,7 +33,7 @@ public class Adopt {
     private String title;
     private String content;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2000)
     private String images;
 
     @Enumerated(EnumType.STRING)

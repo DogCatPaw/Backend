@@ -48,6 +48,7 @@ public class Story {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false, length = 2000)
     private String images;
 
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true)
