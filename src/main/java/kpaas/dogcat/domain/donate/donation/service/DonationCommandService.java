@@ -72,6 +72,8 @@ public class DonationCommandService {
                 log.info("[ 후원 공고 마감 처리 완료: '{}' (ID={}) ]", donation.getTitle(), donation.getId());
             }
         }
+        donationRepository.saveAll(openDonations);
+        log.info("[ 후원 공고 마감 처리 완료 ]");
     }
 
     // 매월 20일 정산 -> 정산 완료
@@ -89,5 +91,7 @@ public class DonationCommandService {
             donation.changeStatus(DonationStatus.SETTLED);
             log.info("[ 정산 금액 지급 - 후원 공고: {}번, 총액: {}, 지급금: {} ]", donation.getId(), current, finalAmount);
         }
+        donationRepository.saveAll(closedDonations);
+        log.info("[ 정산 금액 지급 완료 ]");
     }
 }

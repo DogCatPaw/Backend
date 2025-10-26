@@ -15,14 +15,14 @@ public class DonationScheduler {
     private final DonationCommandService donationCommandService;
 
     // 매일 자정에 마감된 후원글 상태 변경
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
     @Transactional
     public void closeExpiredDonations() {
         donationCommandService.closeDonation();
     }
 
     // 매월 20일 정각에 정산 금액 지급
-    @Scheduled(cron = "0 0 0 20 * ?")
+    @Scheduled(cron = "0 0 0 20 * ?", zone = "Asia/Seoul")
     @Transactional
     public void settleDonations() {
         donationCommandService.settleDonation();
