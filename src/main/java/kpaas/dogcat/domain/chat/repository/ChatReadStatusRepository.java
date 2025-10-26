@@ -22,11 +22,10 @@ public interface ChatReadStatusRepository extends JpaRepository<ChatReadStatus, 
     @Query("""
     UPDATE ChatReadStatus crs 
        SET crs.isRead = true 
-     WHERE crs.chatRoom = :chatRoom 
-       AND crs.member = :member 
+     WHERE crs.chatRoom.id = :roomId 
+       AND crs.member.id = :memberId 
        AND crs.isRead = false
-""")
-    int markAsRead(@Param("chatRoom") ChatRoom chatRoom, @Param("member") Member member);
-
+    """)
+    int markAsRead(@Param("roomId") Long roomId, @Param("memberId") String memberId);
     Long countByChatRoomAndMemberAndIsReadFalse(ChatRoom chatRoom, Member member);
 }

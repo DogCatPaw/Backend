@@ -82,7 +82,7 @@ public class ChatMessageCommandService {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOTFOUND));
         Member member = authCommandService.findById(memberId);
-        int updatedCount = chatReadStatusRepository.markAsRead(chatRoom, member);
+        int updatedCount = chatReadStatusRepository.markAsRead(roomId, memberId);
         log.info("[ 읽은 메세지 수 ] : {}", updatedCount);
     }
 }
