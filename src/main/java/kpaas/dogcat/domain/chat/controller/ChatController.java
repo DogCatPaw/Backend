@@ -2,6 +2,8 @@ package kpaas.dogcat.domain.chat.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.chat.dto.ChatReqDTO;
 import kpaas.dogcat.domain.chat.dto.ChatResDTO;
@@ -35,6 +37,12 @@ public class ChatController {
 
     @Operation(summary = "채팅방 생성하기", description = "adoptWriterId에 입양공고를 작성한 사람을 넣어주고, 입양 공고 번호를 넣어주세요." +
             "방 이름 설정이 가능하니 일단은 입양 공고 이름으로 방 생성하세요.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON201", description = "성공입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
+            @ApiResponse(responseCode = "ADOPTION404", description = "해당되는 입양 공고가 없습니다."),
+            @ApiResponse(responseCode = "ROOM_409", description = "자신을 단독 참여자로 채팅방 생성이 불가합니다.")
+    })
     @PostMapping("/room/create")
     public CustomResponse<ChatResDTO.ChatRoomCreatedDTO> createRoom(@RequestBody ChatReqDTO.ChatRoomCreateDTO dto,
                                                                     @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
@@ -44,6 +52,10 @@ public class ChatController {
     }
 
     @Operation(summary = "채팅방 참여 권한 확인", description = "NestJS Gateway에서 사용하는 권한 체크 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다.")
+    })
     @GetMapping("/room/permission")
     public CustomResponse<ChatResDTO.CheckPermissionResDTO> checkPermission(
             @RequestParam Long roomId,
@@ -53,7 +65,12 @@ public class ChatController {
         return CustomResponse.onSuccess(SuccessCode.OK, canJoin);
     }
 
-    @Operation(summary = "채팅방 입장 및 메시지 조회하기", description = "채팅방 입장 및 메세지 조회하기")
+    @Operation(summary = "채팅방 메시지 조회하기 및 읽음 처리", description = "채팅방 입장 및 메세지 조회하기")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
+            @ApiResponse(responseCode = "ROOM_404", description = "채팅방이 없습니다.")
+    })
     @PostMapping("/{roomId}/enter")
     public CustomResponse<List<ChatResDTO.ChatMessageResDTO>> enterRoom(@PathVariable Long roomId,
                                                                         @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
@@ -62,6 +79,12 @@ public class ChatController {
     }
 
     @Operation(summary = "채팅방 카드 단일 조회", description = "채팅방 카드 단일 조회하기 ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
+            @ApiResponse(responseCode = "PARTICIPANT_404", description = "채팅 참여자가 없습니다."),
+            @ApiResponse(responseCode = "MESSAGE_404", description = "채팅 메시지가 없습니다.")
+    })
     @GetMapping("/room/card")
     public CustomResponse<ChatResDTO.ChatRoomCardDTO> getRoomCard(@RequestParam Long roomId,
                                                                   @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
@@ -77,6 +100,11 @@ public class ChatController {
     }
 
     @Operation(summary = "채팅방 상단 입양 공고 조회", description = "해당되는 입양 공고를 채팅방 상단에 띄우는 API입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공입니다"),
+            @ApiResponse(responseCode = "ADOPTION404", description = "해당되는 입양 공고가 없습니다."),
+            @ApiResponse(responseCode = "ROOM_404", description = "채팅방이 없습니다.")
+    })
     @GetMapping("/room/{roomId}/adoption")
     public CustomResponse<PetResDto.PetChatDto> getAdoptInfoForChat(@PathVariable Long roomId) {
         PetResDto.PetChatDto adoptInfo = chatMessageQueryService.getAdoptInfo(roomId);

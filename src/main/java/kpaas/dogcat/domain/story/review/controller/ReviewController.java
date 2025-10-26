@@ -2,6 +2,8 @@ package kpaas.dogcat.domain.story.review.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.story.review.dto.ReviewReqDTO;
 import kpaas.dogcat.domain.story.review.dto.ReviewResDto;
@@ -23,6 +25,11 @@ public class ReviewController {
     private final ReviewCommandService reviewCommandService;
 
     @Operation(summary = "입양 후기 일지 작성", description = "일지 하나를 작성합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON201", description = "성공입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
+            @ApiResponse(responseCode = "PET_404", description = "등록된 반려동물이 없습니다. 등록 먼저 해주세요!")
+    })
     @PostMapping(value = "/review")
     public CustomResponse<ReviewResDto.WriteReviewResDto> create(
             @CurrentWalletAddress String walletAddress,
@@ -32,6 +39,10 @@ public class ReviewController {
     }
 
     @Operation(summary = "입양 후기 상세 조회", description = "입양 후기 한 개의 상세 내용을 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공입니다"),
+            @ApiResponse(responseCode = "STORY_404", description = "등록된 입양 후기가 없습니다.")
+    })
     @GetMapping("/review/{reviewId}")
     public CustomResponse<ReviewResDto.ReviewDetailDto> getReview(
             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,

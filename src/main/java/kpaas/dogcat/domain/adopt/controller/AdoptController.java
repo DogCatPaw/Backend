@@ -2,6 +2,8 @@ package kpaas.dogcat.domain.adopt.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.adopt.dto.AdoptReqDto;
 import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
@@ -34,6 +36,10 @@ public class AdoptController {
     }
 
     @Operation(summary = "입양 공고 상세 페이지 조회", description = "입양 공고의 상세 페이지를 조회하는 API 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공입니다"),
+            @ApiResponse(responseCode = "ADOPTION404", description = "해당되는 입양 공고가 없습니다.")
+    })
     @GetMapping("/detail/{adoptId}")
     public CustomResponse<AdoptResDto.AdoptDetailDto> getDetail(@PathVariable Long adoptId) {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getDetails(adoptId));
@@ -48,6 +54,12 @@ public class AdoptController {
     }
 
     @Operation(summary = "입양 공고 작성", description = "입양 공고를 작성하는 API 입니다. 펫 등록이 먼저 필요합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON201", description = "성공입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
+            @ApiResponse(responseCode = "PET_404", description = "등록된 반려동물이 없습니다. 등록 먼저 해주세요!"),
+            @ApiResponse(responseCode = "ADOPTION400", description = "해당 펫과 관련된 입양 공고가 이미 존재합니다.")
+    })
     @PostMapping(value = "/post")
     public CustomResponse<AdoptResDto.RegisterDto> register(@Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
                                                             @RequestBody AdoptReqDto.RegisterDto dto) {
@@ -69,6 +81,13 @@ public class AdoptController {
     }
 
     @Operation(summary = "입양 신청하기", description = "입양 신청 완료하는 API 입니다. 펫의 소유권을 이전합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON201", description = "성공입니다"),
+            @ApiResponse(responseCode = "ADOPTION404", description = "해당되는 입양 공고가 없습니다."),
+            @ApiResponse(responseCode = "ADOPTION400", description = "입양 절차 진행중입니다."),
+            @ApiResponse(responseCode = "ADOPTION400", description = "입양 완료된 공고입니다."),
+            @ApiResponse(responseCode = "ADOPTION400", description = "자기 자신이 입양할 수 없습니다.")
+    })
     @PostMapping("/{adoptionId}/complete")
     public CustomResponse<AdoptResDto.DelegateDto> delegate(@PathVariable Long adoptionId,
                                                             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {

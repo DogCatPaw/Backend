@@ -1,6 +1,9 @@
 package kpaas.dogcat.domain.member.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.member.dto.AdminResDto;
 import kpaas.dogcat.domain.member.dto.AuthResponseDTO;
@@ -26,6 +29,12 @@ public class AdminController {
     private final AdminQueryService adminQueryService;
 
     /** 회원id와 반려동물id 조회*/
+    @Operation(summary = "회원id와 반려동물id를 조회", description = "회원id와 반려동물id를 조회하는 API입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
+            @ApiResponse(responseCode = "COMMON403", description = "접근이 금지되었습니다")
+    })
     @GetMapping
     public CustomResponse<AdminResDto.MemberListResponseDto> getMembers(
             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,

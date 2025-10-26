@@ -2,6 +2,8 @@ package kpaas.dogcat.domain.story.comment.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.story.comment.dto.CommentReqDTO;
 import kpaas.dogcat.domain.story.comment.dto.CommentResDTO;
@@ -23,6 +25,11 @@ public class CommentController {
     private final CommentQueryService commentQueryService;
 
     @Operation(summary = "댓글 작성", description = "댓글 작성합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON201", description = "성공입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
+            @ApiResponse(responseCode = "STORY_404", description = "등록된 일상 일지가 없습니다.")
+    })
     @PostMapping("/")
     public CustomResponse<CommentResDTO.WriteDTO> write(@Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
                                                         @RequestBody CommentReqDTO dto){
@@ -30,6 +37,10 @@ public class CommentController {
     }
 
     @Operation(summary = "댓글 조회", description = "작성된 댓글을 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공입니다"),
+            @ApiResponse(responseCode = "STORY_404", description = "등록된 일상 일지가 없습니다.")
+    })
     @GetMapping("/")
     public CustomResponse<CommentResDTO.GetCommentListDTO> getComment(@RequestParam Long storyId,
                                                                       @RequestParam(required = false) Long cursor,

@@ -25,21 +25,16 @@ public enum ErrorCode implements BaseCode {
             "COMMON500",
             "서버 내부 오류가 발생했습니다"),
 
-    VALIDATION_FAILED(HttpStatus.BAD_REQUEST, "VALID400_0", "잘못된 파라미터 입니다."),
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "TOKEN401" ,"유효한 토큰이 아닙니다." ),
-    NULL_TOKEN(HttpStatus.INTERNAL_SERVER_ERROR, "ACCESS_NULL", "액세스토큰이 비어있습니다."),
-    DUPLICATED_WALLET(HttpStatus.CONFLICT, "WALLET409" , "중복된 지갑입니다."),
-    DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "DUPLICATED_NICKNAME", "중복된 닉네임입니다."),
-    INCORRECT_PASSWORD(HttpStatus.CONFLICT, "INCORRECT_PASSWORD" , "비밀번호가 일치하지 않습니다."),
+    VALIDATION_FAILED(HttpStatus.BAD_REQUEST, "VALID_400", "잘못된 파라미터 입니다."),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "AUTH_401" ,"유효한 토큰이 아닙니다." ),
+    DUPLICATED_WALLET(HttpStatus.CONFLICT, "WALLET_409" , "이미 가입된 회원입니다."),
+    DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "AUTH_409", "중복된 닉네임입니다."),
 
-    BLACKLISTED(HttpStatus.FORBIDDEN, "BLACKLISTED", "블랙리스트 처리된 액세스토큰입니다."),
-
-    CONFLICT_VC(HttpStatus.CONFLICT, "DUPLICATED_VC", "이미 등록된 VC입니다."),
-    DUPLICATED_MEMBER(HttpStatus.BAD_REQUEST, "MEMBER400", "이미 가입된 회원입니다."),
-    MEMBER_NOTFOUND(HttpStatus.NOT_FOUND, "MEMBER_NOTFOUND", "회원이 없습니다."),
+    CONFLICT_VC(HttpStatus.CONFLICT, "AUTH_409", "이미 등록된 VC입니다."),
+    MEMBER_NOTFOUND(HttpStatus.NOT_FOUND, "MEMBER_404", "회원이 없습니다."),
     WALLET_NOTFOUND(HttpStatus.NOT_FOUND, "WALLET_404", "회원(지갑)이 없습니다."),
 
-    ROOM_NOTFOUND(HttpStatus.NOT_FOUND, "ROOM_NOTFOUND", "채팅방이 없습니다."),
+    ROOM_NOTFOUND(HttpStatus.NOT_FOUND, "ROOM_404", "채팅방이 없습니다."),
     PARTICIPANT_NOTFOUND(HttpStatus.NOT_FOUND, "PARTICIPANT_404", "채팅 참여자가 없습니다."),
     PARTICIPANT_NO_AUTH(HttpStatus.UNAUTHORIZED, "PARTICIPANT_403", "해당 채팅방의 참여자 권한이 없습니다."),
     ROOM_NO_AUTH(HttpStatus.UNAUTHORIZED, "ROOM_403" ,"해당 채팅방에 권한이 없습니다."),
@@ -47,15 +42,16 @@ public enum ErrorCode implements BaseCode {
     CHAT_CANNOT_WITH_SELF(HttpStatus.CONFLICT, "ROOM_409" , "자신을 단독 참여자로 채팅방 생성이 불가합니다."),
 
     PET_NOTFOUND(HttpStatus.NOT_FOUND, "PET_404", "등록된 반려동물이 없습니다. 등록 먼저 해주세요!"),
+
     DAILYSTORY_NOTFOUND(HttpStatus.NOT_FOUND, "STORY_404", "등록된 일상 일지가 없습니다."),
     REVIEW_NOTFOUND(HttpStatus.NOT_FOUND, "STORY_404", "등록된 입양 후기가 없습니다."),
     IMAGE_REQUIRED(HttpStatus.NOT_FOUND, "STORY_404", "이미지 파일을 업로드해주세요."),
 
     // 후원 결제 관련 에러 추가
-    INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "PAYMENT_400", "결제 금액은 1000원 이상만 가능합니다."),
+    INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "PAYMENT400", "결제 금액은 1000원 이상만 가능합니다."),
     ITEM_NOTFOUND(HttpStatus.NOT_FOUND, "ITEM404", "구매할 물품이 없습니다."),
     PAYMENT_NOTFOUND(HttpStatus.NOT_FOUND, "PAYMENT404", "결제가 없습니다."),
-    PAYMENT_AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "PAYMENT_400", "결제 금액이 일치하지 않습니다."),
+    PAYMENT_AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "PAYMENT400", "결제 금액이 일치하지 않습니다."),
     PAYMENT_WAITING_FOR_DEPOSIT(HttpStatus.BAD_REQUEST, "PAYMENT400", "가상계좌 입금이 아직 완료되지 않았습니다."),
     PAYMENT_IN_PROGRESS(HttpStatus.BAD_REQUEST, "PAYMENT400", "결제 인증은 완료되었으나, 아직 최종 승인되지 않았습니다."),
     PAYMENT_CANCELED(HttpStatus.BAD_REQUEST, "PAYMENT400", "결제가 취소되었습니다."),

@@ -1,6 +1,8 @@
 package kpaas.dogcat.domain.donate.donation.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.donate.donation.dto.DonationReqDto;
 import kpaas.dogcat.domain.donate.donation.dto.DonationResDto;
@@ -23,6 +25,12 @@ public class DonationController {
     private final DonationQueryService donationQueryService;
 
     @Operation(summary = "후원 공고 글 작성하기", description = "후원 공고글을 작성하는 API 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON201", description = "성공입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
+            @ApiResponse(responseCode = "PET_404", description = "등록된 반려동물이 없습니다. 등록 먼저 해주세요!"),
+            @ApiResponse(responseCode = "DONATION400", description = "해당 펫과 관련된 후원 공고가 이미 존재합니다.")
+    })
     @PostMapping(value = "/posts")
     public CustomResponse<DonationResDto.CreateDto> create(@RequestBody DonationReqDto.CreateDto dto) {
         return CustomResponse.onSuccess(SuccessCode.CREATED, donationCommandService.createDonation(dto));

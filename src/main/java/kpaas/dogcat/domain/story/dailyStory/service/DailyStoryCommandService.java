@@ -39,9 +39,6 @@ public class DailyStoryCommandService {
         Pet pet = petRepository.findById(dto.getPetId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PET_NOTFOUND));
 
-//        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
-//        String joinedUrls = String.join(",", imageUrls);
-
         DailyStory story = dailyStoryConverter.toDailyStoryEntity(dto, member, pet);
         DailyStory savedStory = dailyStoryRepository.save(story);
 
