@@ -74,8 +74,8 @@ public class AdoptConverter {
                 .build();
     }
 
-    public AdoptResDto.DetailDto toDetailDto(Adopt adopt) {
-        return AdoptResDto.DetailDto.builder()
+    public AdoptResDto.AdoptDetailDto toAdoptDetailDto(Adopt adopt) {
+        return AdoptResDto.AdoptDetailDto.builder()
                 .title(adopt.getTitle())
                 .content(adopt.getContent())
                 .images(adopt.getImages())

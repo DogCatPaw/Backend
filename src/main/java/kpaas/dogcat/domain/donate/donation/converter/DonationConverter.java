@@ -37,10 +37,10 @@ public class DonationConverter {
                 .build();
     }
 
-    public DonationResDto.DetailDto toDetailDto(String dDay, int patronCount, int progress,
-                                                Donation donation,
-                                                DonationListResDto.DonationListDto donationListDto) {
-        return DonationResDto.DetailDto.builder()
+    public DonationResDto.DonationDetailDto toDonationDetailDto(String dDay, int patronCount, int progress,
+                                                                Donation donation,
+                                                                DonationListResDto.DonationListDto donationListDto) {
+        return DonationResDto.DonationDetailDto.builder()
                 .dDay(dDay)
                 .memberId(donation.getMember().getId())
                 .petName(donation.getPet().getPetName())

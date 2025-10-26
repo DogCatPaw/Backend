@@ -35,7 +35,7 @@ public class AdoptController {
 
     @Operation(summary = "입양 공고 상세 페이지 조회", description = "입양 공고의 상세 페이지를 조회하는 API 입니다.")
     @GetMapping("/detail/{adoptId}")
-    public CustomResponse<AdoptResDto.DetailDto> getDetail(@PathVariable Long adoptId) {
+    public CustomResponse<AdoptResDto.AdoptDetailDto> getDetail(@PathVariable Long adoptId) {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptQueryService.getDetails(adoptId));
     }
 

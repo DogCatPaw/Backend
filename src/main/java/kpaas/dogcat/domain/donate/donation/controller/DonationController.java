@@ -31,10 +31,10 @@ public class DonationController {
     @Operation(summary = "후원 공고 글 상세 보기 + 후원 내역 조회", description = "후원 공고글을 상세 보기하는 API 입니다." +
             "후원 내역은 기본적으로 5개를 반환하며, 조정이 가능합니다.")
     @GetMapping("/{donationId}")
-    public CustomResponse<DonationResDto.DetailDto> getDonation(@PathVariable Long donationId,
-                                                                @RequestParam(required = false) Long cursor,
-                                                                @RequestParam(defaultValue = "5") int size) {
-        DonationResDto.DetailDto donationDetail = donationQueryService.getDonationDetail(donationId, cursor, size);
+    public CustomResponse<DonationResDto.DonationDetailDto> getDonation(@PathVariable Long donationId,
+                                                                        @RequestParam(required = false) Long cursor,
+                                                                        @RequestParam(defaultValue = "5") int size) {
+        DonationResDto.DonationDetailDto donationDetail = donationQueryService.getDonationDetail(donationId, cursor, size);
         return CustomResponse.onSuccess(SuccessCode.OK, donationDetail);
     }
 

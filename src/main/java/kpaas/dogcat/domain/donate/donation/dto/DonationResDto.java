@@ -29,7 +29,7 @@ public class DonationResDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class DetailDto {
+    public static class DonationDetailDto {
         private String dDay;
         private String memberId;
         private String petName;

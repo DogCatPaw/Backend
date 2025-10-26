@@ -37,7 +37,7 @@ public class DonationQueryService {
     }
 
     // 후원 공고 상세 보기 + 후원 내역 조회
-    public DonationResDto.DetailDto getDonationDetail(Long donationId, Long cursor, int size) {
+    public DonationResDto.DonationDetailDto getDonationDetail(Long donationId, Long cursor, int size) {
         log.info("[ 후원 공고 상세 페이지 조회: {} ]", donationId);
         Donation donation = findById(donationId);
 
@@ -49,7 +49,7 @@ public class DonationQueryService {
         DonationListResDto.DonationListDto donationListDto
                 = donationListQueryService.getDonationList(donationId, cursor, size);
 
-        return donationConverter.toDetailDto(dDay, patronCount, progress, donation, donationListDto);
+        return donationConverter.toDonationDetailDto(dDay, patronCount, progress, donation, donationListDto);
     }
 
     /** 후원 공고 마감일 임박순 3개 리턴 **/

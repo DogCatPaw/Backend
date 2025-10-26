@@ -72,7 +72,7 @@ public class AdoptResDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class DetailDto {
+    public static class AdoptDetailDto {
         private String title;
         private String content;
         private String images;

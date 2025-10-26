@@ -102,12 +102,12 @@ public class AdoptQueryService {
     }
 
     /** 입양 공고 상세 페이지 조회 */
-    public AdoptResDto.DetailDto getDetails(Long adoptId){
+    public AdoptResDto.AdoptDetailDto getDetails(Long adoptId){
         log.info("[ 입양 공고 상세 페이지 조회: {} ]", adoptId);
         Adopt adopt = adoptRepository.findWithPetById(adoptId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ADOPTION_NOTFOUND));
 
-        return adoptConverter.toDetailDto(adopt);
+        return adoptConverter.toAdoptDetailDto(adopt);
     }
 
     /** 디데이 계산 **/
