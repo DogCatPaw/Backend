@@ -50,7 +50,7 @@ public class Adopt {
     private String contact;
 
     @Column(nullable = false)
-    private LocalDate deadLine;
+    private LocalDate deadline;
 
     @Enumerated(EnumType.STRING)
     private AdoptionStatus status;
@@ -98,7 +98,7 @@ public class Adopt {
         if (dto.getDistrict() != null) this.district = dto.getDistrict();
         if (dto.getShelterName() != null) this.shelterName = dto.getShelterName();
         if (dto.getContact() != null) this.contact = dto.getContact();
-        if (dto.getDeadLine() != null) this.deadLine = dto.getDeadLine();
+        if (dto.getDeadline() != null) this.deadline = dto.getDeadline();
         if (dto.getStatus() != null) this.status = dto.getStatus();
         if (dto.getImages() != null) this.images = dto.getImages();
     }

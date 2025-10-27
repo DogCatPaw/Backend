@@ -22,7 +22,7 @@ public class AdoptConverter {
                 .district(dto.getDistrict())
                 .shelterName(dto.getShelterName())
                 .contact(dto.getContact())
-                .deadLine(dto.getDeadLine())
+                .deadline(dto.getDeadline())
                 .status(dto.getStatus())
                 .build();
     }
@@ -93,7 +93,7 @@ public class AdoptConverter {
                 .district(adopt.getDistrict())
                 .shelterName(adopt.getShelterName())
                 .status(adopt.getStatus())
-                .deadline(adopt.getDeadLine())
+                .deadline(adopt.getDeadline())
                 .build();
     }
 

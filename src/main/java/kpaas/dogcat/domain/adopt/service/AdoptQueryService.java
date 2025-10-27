@@ -64,7 +64,7 @@ public class AdoptQueryService {
     public List<AdoptResDto.AdoptPreviewDto> get3LatestAdoptions() {
         Pageable pageable = PageRequest.of(0, 3);
 
-        List<Adopt> adopts = adoptRepository.findTop3ByStatusOrderByDeadLineAsc(AdoptionStatus.ACTIVE, pageable);
+        List<Adopt> adopts = adoptRepository.findTop3ByStatusOrderByDeadlineAsc(AdoptionStatus.ACTIVE, pageable);
         return adopts.stream()
                 .map(adoption -> {
                     Pet pet = adoption.getPet();
@@ -113,7 +113,7 @@ public class AdoptQueryService {
     /** 디데이 계산 **/
     public String getDday(Adopt adopt){
         LocalDate today = LocalDate.now();
-        long daysLeft = ChronoUnit.DAYS.between(today, adopt.getDeadLine());
+        long daysLeft = ChronoUnit.DAYS.between(today, adopt.getDeadline());
         String dDay;
 
         if (daysLeft > 0) dDay = "D-" + daysLeft;

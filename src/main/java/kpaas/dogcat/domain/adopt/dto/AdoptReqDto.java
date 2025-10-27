@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class AdoptReqDto {
 
@@ -24,7 +23,7 @@ public class AdoptReqDto {
         private String district;
         private String shelterName;
         private String contact;
-        private LocalDate deadLine;
+        private LocalDate deadline;
         private AdoptionStatus status;
         private String images;
     }
