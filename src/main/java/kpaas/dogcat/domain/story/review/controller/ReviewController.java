@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "입양 후기 일지 API")
 @RestController
-@RequestMapping("/api/story")
+@RequestMapping("/api/story/review")
 @RequiredArgsConstructor
 public class ReviewController {
 
@@ -30,7 +30,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
             @ApiResponse(responseCode = "PET_404", description = "등록된 반려동물이 없습니다. 등록 먼저 해주세요!")
     })
-    @PostMapping(value = "/review")
+    @PostMapping()
     public CustomResponse<ReviewResDto.WriteReviewResDto> create(
             @CurrentWalletAddress String walletAddress,
             @RequestBody ReviewReqDTO.WriteReviewDTO dto){
@@ -43,7 +43,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "COMMON200", description = "성공입니다"),
             @ApiResponse(responseCode = "STORY_404", description = "등록된 입양 후기가 없습니다.")
     })
-    @GetMapping("/review/{reviewId}")
+    @GetMapping("/{reviewId}")
     public CustomResponse<ReviewResDto.ReviewDetailDto> getReview(
             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
             @PathVariable Long reviewId) {
@@ -52,7 +52,7 @@ public class ReviewController {
     }
 
     @Operation(summary = "메인화면 - 입양 후기 목록 조회", description = "입양 후기 일지 메인 화면의 목록을 조회합니다.")
-    @GetMapping("/review/reviews")
+    @GetMapping("/reviews")
     public CustomResponse<ReviewResDto.ReviewListDto> search(
             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
             @RequestParam(required = false) String keyword,
@@ -61,5 +61,20 @@ public class ReviewController {
         String memberId = (walletAddress != null) ? walletAddress : null;
         ReviewResDto.ReviewListDto searchResult = reviewQueryService.search(keyword, cursorId, size, memberId);
         return CustomResponse.onSuccess(SuccessCode.OK, searchResult);
+    }
+
+    @Operation(summary = "입양 후기 삭제", description = "작성된 입양 후기를 삭제합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
+            @ApiResponse(responseCode = "STORY_404", description = "등록된 입양 후기가 없습니다."),
+            @ApiResponse(responseCode = "COMMON401", description = "삭제할 권한이 없습니다.")
+
+    })
+    @DeleteMapping("/{storyId}")
+    public CustomResponse<?> deleteStory(@PathVariable Long storyId,
+                                         @Parameter(hidden = true) @CurrentWalletAddress String walletAddress){
+        reviewCommandService.delete(storyId, walletAddress);
+        return CustomResponse.onSuccess(SuccessCode.OK);
     }
 }

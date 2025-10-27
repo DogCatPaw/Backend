@@ -2,8 +2,10 @@ package kpaas.dogcat.domain.story.review.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
+import kpaas.dogcat.domain.member.service.AuthCommandService;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.repository.PetRepository;
+import kpaas.dogcat.domain.story.dailyStory.entity.DailyStory;
 import kpaas.dogcat.domain.story.review.converter.ReviewConverter;
 import kpaas.dogcat.domain.story.review.dto.ReviewReqDTO;
 import kpaas.dogcat.domain.story.review.dto.ReviewResDto;
@@ -25,26 +27,34 @@ import java.util.List;
 public class ReviewCommandService {
 
     private final ReviewRepository reviewRepository;
-    private final MemberRepository memberRepository;
     private final PetRepository petRepository;
     private final ReviewConverter reviewConverter;
     private final ObjectStorageUtil objectStorageUtil;
+    private final AuthCommandService authCommandService;
 
     public ReviewResDto.WriteReviewResDto writeReview(
             String memberId, ReviewReqDTO.WriteReviewDTO dto) {
         log.info("[ 입양 후기 작성하기 ]");
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
-
+        Member member = authCommandService.findById(memberId);
         Pet pet = petRepository.findById(dto.getPetId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PET_NOTFOUND));
-
-//        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
-//        String joinedUrls = String.join(",", imageUrls);
 
         Review review = reviewConverter.toReviewEntity(dto, member, pet);
         Review savedReview = reviewRepository.save(review);
 
         return reviewConverter.toWriteReviewResDTO(member, savedReview, pet);
+    }
+
+    public void delete(Long storyId, String walletAddress) {
+        Member member = authCommandService.findById(walletAddress);
+        Review story = reviewRepository.findById(storyId)
+                .orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOTFOUND));
+
+        boolean isStoryWriter = story.getMember().equals(member);
+        if (!isStoryWriter) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_401);
+        }
+        reviewRepository.delete(story);
+        log.info("[ 입양 후기 삭제 완료 - 스토리: {}, 작성자: {}", storyId, walletAddress);
     }
 }

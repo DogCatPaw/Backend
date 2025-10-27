@@ -1,6 +1,8 @@
 package kpaas.dogcat.global.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
+import kpaas.dogcat.global.apiPayload.code.CustomException;
+import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -28,9 +30,7 @@ public class WalletAddressResolver implements HandlerMethodArgumentResolver {
         String walletAddress = request.getHeader(HEADER_NAME);
 
         if (walletAddress == null) {
-            log.warn("[WalletAddressResolver] 🚫 No X-Wallet-Address header found.");
-        } else {
-            log.info("[WalletAddressResolver] ✅ Received X-Wallet-Address: {}", walletAddress);
+            throw new CustomException(ErrorCode.MISSING_WALLET_HEADER);
         }
 
         return walletAddress;

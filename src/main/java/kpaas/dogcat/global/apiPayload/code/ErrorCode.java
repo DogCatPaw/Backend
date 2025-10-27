@@ -30,9 +30,9 @@ public enum ErrorCode implements BaseCode {
     DUPLICATED_WALLET(HttpStatus.CONFLICT, "WALLET_409" , "이미 가입된 회원입니다."),
     DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "AUTH_409", "중복된 닉네임입니다."),
 
-    CONFLICT_VC(HttpStatus.CONFLICT, "AUTH_409", "이미 등록된 VC입니다."),
     MEMBER_NOTFOUND(HttpStatus.NOT_FOUND, "MEMBER_404", "회원이 없습니다."),
     WALLET_NOTFOUND(HttpStatus.NOT_FOUND, "WALLET_404", "회원(지갑)이 없습니다."),
+    MISSING_WALLET_HEADER(HttpStatus.BAD_REQUEST, "AUTH400", "요청 헤더에 X-Wallet-Address가 없습니다."),
 
     ROOM_NOTFOUND(HttpStatus.NOT_FOUND, "ROOM_404", "채팅방이 없습니다."),
     PARTICIPANT_NOTFOUND(HttpStatus.NOT_FOUND, "PARTICIPANT_404", "채팅 참여자가 없습니다."),
@@ -78,6 +78,7 @@ public enum ErrorCode implements BaseCode {
     ADOPTION_ADOPTING(HttpStatus.BAD_REQUEST, "ADOPTION400", "입양 절차 진행중입니다."),
     ADOPTION_COMPLETED(HttpStatus.BAD_REQUEST, "ADOPTION400", "입양 완료된 공고입니다."),
     ADOPTION_BAD_REQUEST(HttpStatus.BAD_REQUEST, "ADOPTION400", "자기 자신이 입양할 수 없습니다.");
+
 
 
 

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "일상 일지 API")
 @RestController
-@RequestMapping("/api/story")
+@RequestMapping("/api/story/daily")
 @RequiredArgsConstructor
 public class DailyStoryController {
 
@@ -30,7 +30,7 @@ public class DailyStoryController {
             @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
             @ApiResponse(responseCode = "PET_404", description = "등록된 반려동물이 없습니다. 등록 먼저 해주세요!")
     })
-    @PostMapping(value = "/daily")
+    @PostMapping()
     public CustomResponse<DailyStoryResDto.WriteStoryResDto> create(
             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
             @RequestBody DailyStoryReqDto.WriteStoryReqDto dto) {
@@ -43,7 +43,7 @@ public class DailyStoryController {
             @ApiResponse(responseCode = "COMMON200", description = "성공입니다"),
             @ApiResponse(responseCode = "STORY_404", description = "등록된 일상 일지가 없습니다.")
     })
-    @GetMapping("/daily/{storyId}")
+    @GetMapping("/{storyId}")
     public CustomResponse<DailyStoryResDto.StoryDetailDto> getStory(
             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
             @PathVariable Long storyId) {
@@ -52,7 +52,7 @@ public class DailyStoryController {
     }
 
     @Operation(summary = "메인화면 - 일상 일지 목록 조회", description = "일지 메인 화면의 일지 목록을 조회합니다.")
-    @GetMapping("/daily/stories")
+    @GetMapping("/stories")
     public CustomResponse<DailyStoryResDto.StoriesListDto> getStories(
             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
             @RequestParam(required = false) String keyword,
@@ -61,5 +61,20 @@ public class DailyStoryController {
         String memberId = (walletAddress != null) ? walletAddress : null;
         DailyStoryResDto.StoriesListDto searchResult = dailyStoryQueryService.search(keyword, cursorId, size, memberId);
         return CustomResponse.onSuccess(SuccessCode.OK, searchResult);
+    }
+
+    @Operation(summary = "일지 삭제", description = "작성된 일지를 삭제합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
+            @ApiResponse(responseCode = "STORY_404", description = "등록된 일상 일지가 없습니다."),
+            @ApiResponse(responseCode = "COMMON401", description = "삭제할 권한이 없습니다.")
+
+    })
+    @DeleteMapping("/{storyId}")
+    public CustomResponse<?> deleteStory(@PathVariable Long storyId,
+                                         @Parameter(hidden = true) @CurrentWalletAddress String walletAddress){
+        dailyStoryCommandService.delete(storyId, walletAddress);
+        return CustomResponse.onSuccess(SuccessCode.OK);
     }
 }
