@@ -46,6 +46,7 @@ public enum ErrorCode implements BaseCode {
     DAILYSTORY_NOTFOUND(HttpStatus.NOT_FOUND, "STORY_404", "등록된 일상 일지가 없습니다."),
     REVIEW_NOTFOUND(HttpStatus.NOT_FOUND, "STORY_404", "등록된 입양 후기가 없습니다."),
     IMAGE_REQUIRED(HttpStatus.NOT_FOUND, "STORY_404", "이미지 파일을 업로드해주세요."),
+    COMMENT_NOTFOUND(HttpStatus.NOT_FOUND, "COMMENT_404", "해당되는 댓글이 없습니다."),
 
     // 후원 결제 관련 에러 추가
     INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "PAYMENT400", "결제 금액은 1000원 이상만 가능합니다."),
@@ -77,6 +78,7 @@ public enum ErrorCode implements BaseCode {
     ADOPTION_ADOPTING(HttpStatus.BAD_REQUEST, "ADOPTION400", "입양 절차 진행중입니다."),
     ADOPTION_COMPLETED(HttpStatus.BAD_REQUEST, "ADOPTION400", "입양 완료된 공고입니다."),
     ADOPTION_BAD_REQUEST(HttpStatus.BAD_REQUEST, "ADOPTION400", "자기 자신이 입양할 수 없습니다.");
+
 
 
     private final HttpStatus httpStatus;

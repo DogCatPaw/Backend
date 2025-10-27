@@ -13,4 +13,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     List<Comment> findByStoryIdOrderByCreatedAtAsc(Long storyId, Pageable pageable);
     List<Comment> findByStoryIdAndIdGreaterThanOrderByCreatedAtAsc(Long storyId, Long cursor, Pageable pageable);
+
+    Object findByStoryId(Long storyId);
 }

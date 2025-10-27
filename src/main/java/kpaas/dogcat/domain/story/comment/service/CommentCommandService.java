@@ -2,6 +2,7 @@ package kpaas.dogcat.domain.story.comment.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
+import kpaas.dogcat.domain.member.service.AuthCommandService;
 import kpaas.dogcat.domain.story.comment.converter.CommentConverter;
 import kpaas.dogcat.domain.story.comment.dto.CommentReqDTO;
 import kpaas.dogcat.domain.story.comment.dto.CommentResDTO;
@@ -27,6 +28,7 @@ public class CommentCommandService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final CommentConverter commentConverter;
+    private final AuthCommandService authCommandService;
 
     public CommentResDTO.WriteDTO writeComment(String memberId, CommentReqDTO dto){
         Story story = storyRepository.findById(dto.getStoryId())
@@ -44,5 +46,22 @@ public class CommentCommandService {
 
     public Long changeCommentCount(Long storyId){
         return commentQueryService.getCommentCount(storyId) + 1;
+    }
+
+    public void delete(Long commentId, String walletAddress) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOTFOUND));
+        Member member = authCommandService.findById(walletAddress);
+
+        // 권한 확인: 본인 댓글이거나 스토리 작성자만 삭제 가능
+        boolean isCommentWriter = comment.getMember().equals(member);
+        boolean isStoryWriter = comment.getStory().getMember().equals(member);
+
+        if (!isCommentWriter && !isStoryWriter) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_401);
+        }
+
+        commentRepository.delete(comment);
+        log.info("[ 댓글 삭제 완료 - 스토리: {}, 댓글: {}", comment.getStory(), commentId);
     }
 }

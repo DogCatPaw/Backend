@@ -47,4 +47,19 @@ public class CommentController {
                                                                       @RequestParam(defaultValue = "5") int size){
         return CustomResponse.onSuccess(SuccessCode.OK, commentQueryService.getComments(storyId, cursor, size));
     }
+
+    @Operation(summary = "댓글 삭제", description = "작성된 댓글을 삭제합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
+            @ApiResponse(responseCode = "COMMENT_404", description = "해당되는 댓글이 없습니다."),
+            @ApiResponse(responseCode = "COMMON401", description = "삭제할 권한이 없습니다.")
+
+    })
+    @DeleteMapping("/{commentId}")
+    public CustomResponse<?> deleteComment(@PathVariable Long commentId,
+                                           @Parameter(hidden = true) @CurrentWalletAddress String walletAddress){
+        commentCommandService.delete(commentId, walletAddress);
+        return CustomResponse.onSuccess(SuccessCode.OK);
+    }
 }
