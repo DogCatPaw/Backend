@@ -13,12 +13,9 @@ import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.service.PetQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
-import kpaas.dogcat.global.objectStorage.ObjectStorageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,23 +30,20 @@ public class DonationCommandService {
     private final AuthCommandService authCommandService;
     private final PetQueryService petQueryService;
     private final DonationConverter donationConverter;
-    private final ObjectStorageUtil objectStorageUtil;
+    private final DonationQueryService donationQueryService;
     private static final List<DonationStatus> BLOCKING_STATUSES = List.of(DonationStatus.ACTIVE, DonationStatus.ACHIEVED);
 
-    public DonationResDto.CreateDto createDonation(DonationReqDto.CreateDto dto){
 
-        // 회원과 펫 조회
-        Member member = authCommandService.findById(dto.getMemberId());
+    public DonationResDto.CreateDto createDonation(DonationReqDto.CreateDto dto, String walletAddress) {
+        log.info("[ 후원 공고 작성하기 ]");
+        Member member = authCommandService.findById(walletAddress);
         Pet pet = petQueryService.findById(dto.getPetId());
 
         // 진행 중인 공고가 하나라도 있으면 생성 차단
         if (donationRepository.existsByPetIdAndMemberIdAndStatusIn(
-                dto.getPetId(), dto.getMemberId(), BLOCKING_STATUSES)) {
+                dto.getPetId(), walletAddress, BLOCKING_STATUSES)) {
             throw new CustomException(ErrorCode.ALREADY_ACTIVE_DONATION);
         }
-
-//        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
-//        String joinedUrls = String.join(",", imageUrls);
 
         // 후원 공고 저장
         String accountNumber = dto.getAccountNumber().replace("-", "");
@@ -93,5 +87,29 @@ public class DonationCommandService {
         }
         donationRepository.saveAll(closedDonations);
         log.info("[ 정산 금액 지급 완료 ]");
+    }
+
+    public void patchDonation(Long donationId, DonationReqDto.CreateDto dto, String walletAddress) {
+        Donation donation = donationQueryService.findById(donationId);
+        Member member = authCommandService.findById(walletAddress);
+
+        if (!donation.getMember().getId().equals(member.getId())) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_401);
+        }
+        if (donation.getStatus() != DonationStatus.ACTIVE) {
+            throw new CustomException(ErrorCode.CANNOT_UPDATE_DONATION);
+        }
+
+        // dto의 petId가 내 펫 목록 안에 포함돼 있는지 확인
+        List<Pet> myPets = petQueryService.getMyPets(walletAddress);
+        boolean isMyPet = myPets.stream()
+                .anyMatch(pet -> pet.getId().equals(dto.getPetId()));
+        if (!isMyPet) {
+            throw new CustomException(ErrorCode.PET_NOT_OWNED);
+        }
+
+        donation.update(dto);
+        log.info("[ 후원 공고 수정 완료 - 후원글: {}, 작성자: {}, 펫: {} ]",
+                donation.getId(), donation.getMember().getId(), donation.getPet().getId());
     }
 }

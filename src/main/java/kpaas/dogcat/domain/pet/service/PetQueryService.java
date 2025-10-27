@@ -29,6 +29,10 @@ public class PetQueryService {
                 .orElseThrow(() -> new CustomException(ErrorCode.PET_NOTFOUND));
     }
 
+    public List<Pet> getMyPets(String memberId) {
+        return petRepository.findAllByMemberId(memberId);
+    }
+
     // 내 펫 목록 조회
     public List<PetResDto.MyPetDto> getMyPetList(String memberId) {
         log.info("[ 내 펫 목록 조회하기 - 사용자: {} ]", memberId);

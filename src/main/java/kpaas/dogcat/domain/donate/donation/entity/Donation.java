@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.donate.donation.entity;
 
 import jakarta.persistence.*;
+import kpaas.dogcat.domain.donate.donation.dto.DonationReqDto;
 import kpaas.dogcat.domain.donate.donation.enums.Category;
 import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
@@ -81,5 +82,18 @@ public class Donation {
 
     public void updateCurrentAmount(Integer amount) {
         this.currentAmount = amount;
+    }
+
+    public void update(DonationReqDto.CreateDto dto) {
+        if (dto.getTitle() != null) this.title = dto.getTitle();
+        if (dto.getTargetAmount() != null) this.targetAmount = dto.getTargetAmount();
+        if (dto.getDeadline() != null) this.deadline = dto.getDeadline();
+        if (dto.getCategory() != null) this.category = dto.getCategory();
+        if (dto.getContent() != null) this.content = dto.getContent();
+        if (dto.getBankName() != null) this.bankName = dto.getBankName();
+        if (dto.getAccountNumber() != null) this.accountNumber = dto.getAccountNumber();
+        if (dto.getAccountHolder() != null) this.accountHolder = dto.getAccountHolder();
+        if (dto.getImages() != null) this.images = dto.getImages();
+        if (dto.getPetId() != null) this.pet = Pet.builder().id(dto.getPetId()).build();
     }
 }

@@ -6,6 +6,9 @@ import kpaas.dogcat.domain.adopt.repository.AdoptRepository;
 import kpaas.dogcat.domain.adopt.dto.AdoptReqDto;
 import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
 import kpaas.dogcat.domain.adopt.entity.Adopt;
+import kpaas.dogcat.domain.donate.donation.dto.DonationReqDto;
+import kpaas.dogcat.domain.donate.donation.entity.Donation;
+import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.service.AuthCommandService;
 import kpaas.dogcat.domain.pet.entity.Pet;
@@ -74,5 +77,29 @@ public class AdoptCommandService {
         adopt.updateStatus(AdoptionStatus.ADOPTED);
 
         return adoptConverter.toDelegateDto(adopt, adopterId);
+    }
+
+    public void patchAdoption(Long adoptionId, AdoptReqDto.RegisterDto dto, String walletAddress) {
+        Adopt adoption = adoptQueryService.findById(adoptionId);
+        Member member = authCommandService.findById(walletAddress);
+
+        if (!adoption.getWriter().getId().equals(member.getId())) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_401);
+        }
+        if (adoption.getStatus() != AdoptionStatus.ACTIVE) {
+            throw new CustomException(ErrorCode.CANNOT_UPDATE_ADOPTION);
+        }
+
+        // dto의 petId가 내 펫 목록 안에 포함돼 있는지 확인
+        List<Pet> myPets = petQueryService.getMyPets(walletAddress);
+        boolean isMyPet = myPets.stream()
+                .anyMatch(pet -> pet.getId().equals(dto.getPetId()));
+        if (!isMyPet) {
+            throw new CustomException(ErrorCode.PET_NOT_OWNED);
+        }
+
+        adoption.update(dto);
+        log.info("[ 입양 공고 수정 완료 - 입양글: {}, 작성자: {}, 펫: {} ]",
+                adoption.getId(), adoption.getWriter().getId(), adoption.getPet().getId());
     }
 }

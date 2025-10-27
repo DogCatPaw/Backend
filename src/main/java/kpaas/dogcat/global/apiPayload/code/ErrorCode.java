@@ -13,7 +13,7 @@ public enum ErrorCode implements BaseCode {
             "잘못된 요청입니다"),
     UNAUTHORIZED_401(HttpStatus.UNAUTHORIZED,
             "COMMON401",
-            "인증이 필요합니다"),
+            "권한이 없습니다. 인증이 필요합니다"),
     FORBIDDEN_403(HttpStatus.FORBIDDEN,
             "COMMON403",
             "접근이 금지되었습니다"),
@@ -42,6 +42,7 @@ public enum ErrorCode implements BaseCode {
     CHAT_CANNOT_WITH_SELF(HttpStatus.CONFLICT, "ROOM_409" , "자신을 단독 참여자로 채팅방 생성이 불가합니다."),
 
     PET_NOTFOUND(HttpStatus.NOT_FOUND, "PET_404", "등록된 반려동물이 없습니다. 등록 먼저 해주세요!"),
+    PET_NOT_OWNED(HttpStatus.BAD_REQUEST, "PET_400", "내 반려동물이 아닙니다."),
 
     DAILYSTORY_NOTFOUND(HttpStatus.NOT_FOUND, "STORY_404", "등록된 일상 일지가 없습니다."),
     REVIEW_NOTFOUND(HttpStatus.NOT_FOUND, "STORY_404", "등록된 입양 후기가 없습니다."),
@@ -71,13 +72,15 @@ public enum ErrorCode implements BaseCode {
     DONATION_INVALID(HttpStatus.NOT_FOUND, "DONATION404", "해당 후원 공고는 마감되었습니다."),
     DONATION_OVERFLOW(HttpStatus.BAD_REQUEST, "DONATION400", "목표 후원 금액 미만으로 후원바랍니다."),
     ALREADY_ACTIVE_DONATION(HttpStatus.BAD_REQUEST, "DONATION400", "해당 펫과 관련된 후원 공고가 이미 존재합니다."),
+    CANNOT_UPDATE_DONATION(HttpStatus.BAD_REQUEST, "DONATION400", "후원 공고 수정이 불가능합니다."),
 
     // 입양
     ALEADY_ACTIVE_ADOPTION(HttpStatus.BAD_REQUEST, "ADOPTION400", "해당 펫과 관련된 입양 공고가 이미 존재합니다."),
     ADOPTION_NOTFOUND(HttpStatus.NOT_FOUND, "ADOPTION404", "해당되는 입양 공고가 없습니다."),
     ADOPTION_ADOPTING(HttpStatus.BAD_REQUEST, "ADOPTION400", "입양 절차 진행중입니다."),
     ADOPTION_COMPLETED(HttpStatus.BAD_REQUEST, "ADOPTION400", "입양 완료된 공고입니다."),
-    ADOPTION_BAD_REQUEST(HttpStatus.BAD_REQUEST, "ADOPTION400", "자기 자신이 입양할 수 없습니다.");
+    ADOPTION_BAD_REQUEST(HttpStatus.BAD_REQUEST, "ADOPTION400", "자기 자신이 입양할 수 없습니다."),
+    CANNOT_UPDATE_ADOPTION(HttpStatus.BAD_REQUEST, "ADOPTION400", "입양 공고 수정이 불가능합니다.");
 
 
 

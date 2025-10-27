@@ -11,6 +11,7 @@ import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
 import kpaas.dogcat.domain.adopt.enums.Region;
 import kpaas.dogcat.domain.adopt.service.AdoptCommandService;
 import kpaas.dogcat.domain.adopt.service.AdoptQueryService;
+import kpaas.dogcat.domain.donate.donation.dto.DonationReqDto;
 import kpaas.dogcat.domain.pet.enums.Breed;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
@@ -92,6 +93,22 @@ public class AdoptController {
     public CustomResponse<AdoptResDto.DelegateDto> delegate(@PathVariable Long adoptionId,
                                                             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptCommandService.delegate(adoptionId, walletAddress));
+    }
+
+    @Operation(summary = "입양 공고 글 수정하기", description = "입양 공고글을 수정하는 API 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "수정 완료입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
+            @ApiResponse(responseCode = "ADOPTION404", description = "해당되는 입양 공고가 없습니다."),
+            @ApiResponse(responseCode = "ADOPTION400", description = "입양 공고 수정이 불가능합니다."),
+            @ApiResponse(responseCode = "PET_404", description = "내 반려동물이 아닙니다.")
+    })
+    @PatchMapping("/{adoptionId}")
+    public CustomResponse<?> patch(@PathVariable Long adoptionId,
+                                   @RequestBody AdoptReqDto.RegisterDto dto,
+                                   @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
+        adoptCommandService.patchAdoption(adoptionId, dto, walletAddress);
+        return CustomResponse.onSuccess(SuccessCode.UPDATED);
     }
 
 }

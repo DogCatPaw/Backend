@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.adopt.entity;
 
 import jakarta.persistence.*;
+import kpaas.dogcat.domain.adopt.dto.AdoptReqDto;
 import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
 import kpaas.dogcat.domain.adopt.enums.Region;
 import kpaas.dogcat.domain.chat.entity.ChatRoom;
@@ -49,7 +50,7 @@ public class Adopt {
     private String contact;
 
     @Column(nullable = false)
-    private LocalDate deadline;
+    private LocalDate deadLine;
 
     @Enumerated(EnumType.STRING)
     private AdoptionStatus status;
@@ -87,5 +88,18 @@ public class Adopt {
 
     public void updateStatus(AdoptionStatus status) {
         this.status = status;
+    }
+
+    public void update(AdoptReqDto.RegisterDto dto) {
+        if (dto.getPetId() != null) this.pet = Pet.builder().id(dto.getPetId()).build();
+        if (dto.getTitle() != null) this.title = dto.getTitle();
+        if (dto.getContent() != null) this.content = dto.getContent();
+        if (dto.getRegion() != null) this.region = dto.getRegion();
+        if (dto.getDistrict() != null) this.district = dto.getDistrict();
+        if (dto.getShelterName() != null) this.shelterName = dto.getShelterName();
+        if (dto.getContact() != null) this.contact = dto.getContact();
+        if (dto.getDeadLine() != null) this.deadLine = dto.getDeadLine();
+        if (dto.getStatus() != null) this.status = dto.getStatus();
+        if (dto.getImages() != null) this.images = dto.getImages();
     }
 }

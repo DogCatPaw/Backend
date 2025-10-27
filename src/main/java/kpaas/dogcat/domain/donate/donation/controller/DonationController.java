@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.donate.donation.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +13,7 @@ import kpaas.dogcat.domain.donate.donation.service.DonationQueryService;
 import kpaas.dogcat.domain.pet.enums.Breed;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;
+import kpaas.dogcat.global.auth.CurrentWalletAddress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +34,9 @@ public class DonationController {
             @ApiResponse(responseCode = "DONATION400", description = "해당 펫과 관련된 후원 공고가 이미 존재합니다.")
     })
     @PostMapping(value = "/posts")
-    public CustomResponse<DonationResDto.CreateDto> create(@RequestBody DonationReqDto.CreateDto dto) {
-        return CustomResponse.onSuccess(SuccessCode.CREATED, donationCommandService.createDonation(dto));
+    public CustomResponse<DonationResDto.CreateDto> create(@RequestBody DonationReqDto.CreateDto dto,
+                                                           @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
+        return CustomResponse.onSuccess(SuccessCode.CREATED, donationCommandService.createDonation(dto, walletAddress));
     }
 
     @Operation(summary = "후원 공고 글 상세 보기 + 후원 내역 조회", description = "후원 공고글을 상세 보기하는 API 입니다." +
@@ -56,5 +59,21 @@ public class DonationController {
                                                                                  @RequestParam(required = false) DonationStatus status,
                                                                                  @RequestParam(required = false) String keyword) {
         return CustomResponse.onSuccess(donationQueryService.getDonations(cursor, size, breed, status, keyword));
+    }
+
+    @Operation(summary = "후원 공고 글 수정하기", description = "후원 공고글을 수정하는 API 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "수정 완료입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),
+            @ApiResponse(responseCode = "DONATION404", description = "해당되는 후원 공고가 없습니다."),
+            @ApiResponse(responseCode = "DONATION400", description = "후원 공고 수정이 불가능합니다."),
+            @ApiResponse(responseCode = "PET_404", description = "내 반려동물이 아닙니다.")
+    })
+    @PatchMapping("/{donationId}")
+    public CustomResponse<?> patch(@PathVariable Long donationId,
+                                   @RequestBody DonationReqDto.CreateDto dto,
+                                   @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
+        donationCommandService.patchDonation(donationId, dto, walletAddress);
+        return CustomResponse.onSuccess(SuccessCode.UPDATED);
     }
 }
