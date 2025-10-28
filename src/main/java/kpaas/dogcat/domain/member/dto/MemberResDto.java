@@ -1,13 +1,19 @@
 package kpaas.dogcat.domain.member.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 public class MemberResDto {
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class SignupResDto {
+        private String walletAddress;
+        private String nickname;
+    }
 
     @Data
     @AllArgsConstructor

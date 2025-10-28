@@ -1,7 +1,7 @@
 package kpaas.dogcat.domain.stories.review.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.repository.PetRepository;
 import kpaas.dogcat.domain.stories.review.converter.ReviewConverter;
@@ -24,13 +24,12 @@ public class ReviewCommandService {
     private final ReviewRepository reviewRepository;
     private final PetRepository petRepository;
     private final ReviewConverter reviewConverter;
-    private final ObjectStorageUtil objectStorageUtil;
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService memberQueryService;
 
     public ReviewResDto.WriteReviewResDto writeReview(
             String memberId, ReviewReqDTO.WriteReviewDTO dto) {
         log.info("[ 입양 후기 작성하기 ]");
-        Member member = authCommandService.findById(memberId);
+        Member member = memberQueryService.findById(memberId);
         Pet pet = petRepository.findById(dto.getPetId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PET_NOTFOUND));
 
@@ -41,7 +40,7 @@ public class ReviewCommandService {
     }
 
     public void delete(Long storyId, String walletAddress) {
-        Member member = authCommandService.findById(walletAddress);
+        Member member = memberQueryService.findById(walletAddress);
         Review story = reviewRepository.findById(storyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOTFOUND));
 

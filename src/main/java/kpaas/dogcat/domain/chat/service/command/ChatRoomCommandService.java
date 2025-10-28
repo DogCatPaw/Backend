@@ -2,6 +2,7 @@ package kpaas.dogcat.domain.chat.service.command;
 
 import kpaas.dogcat.domain.chat.dto.ChatReqDto;
 import kpaas.dogcat.domain.chat.service.query.ChatRoomQueryService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +14,6 @@ import kpaas.dogcat.domain.chat.entity.ChatRoom;
 import kpaas.dogcat.domain.chat.entity.RoomStatus;
 import kpaas.dogcat.domain.chat.repository.ChatRoomRepository;
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.member.service.AuthCommandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,14 +32,14 @@ public class ChatRoomCommandService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomQueryService chatRoomQueryService;
     private final ChatParticipantCommandService chatParticipantCommandService;
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService memberQueryService;
     private final AdoptQueryService adoptQueryService;
 
     public ChatResDTO.ChatRoomCreatedDto createRoom(String initiatorId, ChatReqDto.ChatRoomCreateDto dto) {
         // 사용자 & 입양 공고 검증
-        Member initiator = authCommandService.findById(initiatorId);    // 입양원하는 사용자
+        Member initiator = memberQueryService.findById(initiatorId);    // 입양원하는 사용자
         Adopt adopt = adoptQueryService.findById(dto.getAdoptId());
-        Member target = authCommandService.findById(adopt.getWriter().getId());          // 입양 공고 작성자
+        Member target = memberQueryService.findById(adopt.getWriter().getId());          // 입양 공고 작성자
         log.info("[ 채팅방 생성 - 입양 채팅 신청자 = {}, 입양 공고 작성자 = {}, adoptId = {} ]",
                 initiatorId, target.getId(), adopt.getId());
 

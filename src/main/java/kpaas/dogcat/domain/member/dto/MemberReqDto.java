@@ -3,12 +3,15 @@ package kpaas.dogcat.domain.member.dto;
 import kpaas.dogcat.domain.member.enums.Gender;
 import kpaas.dogcat.domain.member.enums.Role;
 import kpaas.dogcat.domain.member.enums.Type;
-import lombok.Getter;
+import lombok.*;
 
-public class AuthRequestDTO {
+public class MemberReqDto {
 
-    @Getter
-    public static class SignupRequestDTO {
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class SignupReqDto {
         private String walletAddress;
         private String username;
         private String nickname;
@@ -20,16 +23,5 @@ public class AuthRequestDTO {
         private String email;
         private String profileUrl;
         private Role role;
-    }
-
-    @Getter
-    public static class LoginRequestDTO {
-        private String walletAddress;
-    }
-
-    @Getter
-    public static class ReissueRequestDTO {
-        private Long id;
-        private String refreshToken;
     }
 }

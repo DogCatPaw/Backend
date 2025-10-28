@@ -7,7 +7,7 @@ import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
 import kpaas.dogcat.domain.adopt.enums.Region;
 import kpaas.dogcat.domain.adopt.repository.AdoptRepository;
 import kpaas.dogcat.domain.donate.donation.service.DonationQueryService;
-import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.domain.pet.converter.PetConverter;
 import kpaas.dogcat.domain.pet.dto.PetResDto;
 import kpaas.dogcat.domain.pet.entity.Pet;
@@ -38,7 +38,7 @@ public class AdoptQueryService {
     private final DonationQueryService donationQueryService;
     private final AdoptRepository adoptRepository;
     private final AdoptConverter adoptConverter;
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService memberQueryService;
     private final PetConverter petConverter;
 
     public Adopt findById(Long adoptId) {
@@ -126,7 +126,7 @@ public class AdoptQueryService {
     /** 마이페이지 - 입양 현황 조회 */
     public AdoptResDto.MyAdoptionListDto getMyAdoptionList(String memberId, Long cursor, int size){
         log.info("[ 마이페이지 - 입양 현황 조회 ]");
-        authCommandService.findById(memberId);
+        memberQueryService.findById(memberId);
         Pageable pageable = PageRequest.of(0, size);
 
         List<Adopt> adoptList = (cursor == null)

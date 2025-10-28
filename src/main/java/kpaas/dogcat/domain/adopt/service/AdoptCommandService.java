@@ -6,11 +6,8 @@ import kpaas.dogcat.domain.adopt.repository.AdoptRepository;
 import kpaas.dogcat.domain.adopt.dto.AdoptReqDto;
 import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
 import kpaas.dogcat.domain.adopt.entity.Adopt;
-import kpaas.dogcat.domain.donate.donation.dto.DonationReqDto;
-import kpaas.dogcat.domain.donate.donation.entity.Donation;
-import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.service.PetQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
@@ -20,9 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -31,23 +26,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdoptCommandService {
 
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService memberQueryService;
     private final PetQueryService petQueryService;
     private final AdoptRepository adoptRepository;
     private final AdoptConverter adoptConverter;
     private final AdoptQueryService adoptQueryService;
-    private final ObjectStorageUtil objectStorageUtil;
 
     /** 입양 공고 작성 **/
     public AdoptResDto.RegisterDto register(AdoptReqDto.RegisterDto dto, String writerId) {
         Pet pet = petQueryService.findById(dto.getPetId());
-        Member member = authCommandService.findById(writerId);
+        Member member = memberQueryService.findById(writerId);
         if (adoptRepository.existsByPetId(dto.getPetId())) {
             throw new CustomException(ErrorCode.ALEADY_ACTIVE_ADOPTION);
         }
-
-//        List<String> imageUrls = objectStorageUtil.uploadMultiple(images);
-//        String joinedUrls = String.join(",", imageUrls);
 
         Adopt adopt = adoptConverter.toAdopt(pet, member, dto);
         pet.setAdopt(adopt);            // 연관관계 양쪽 설정
@@ -65,7 +56,7 @@ public class AdoptCommandService {
         } else if (adopt.getStatus() == AdoptionStatus.ADOPTED) {
             throw new CustomException(ErrorCode.ADOPTION_COMPLETED);
         }
-        Member adopter = authCommandService.findById(adopterId);
+        Member adopter = memberQueryService.findById(adopterId);
         if (adopter.equals(adopt.getWriter())) {
             throw new CustomException(ErrorCode.ADOPTION_BAD_REQUEST);
         }
@@ -81,7 +72,7 @@ public class AdoptCommandService {
 
     public void patchAdoption(Long adoptionId, AdoptReqDto.RegisterDto dto, String walletAddress) {
         Adopt adoption = adoptQueryService.findById(adoptionId);
-        Member member = authCommandService.findById(walletAddress);
+        Member member = memberQueryService.findById(walletAddress);
 
         if (!adoption.getWriter().getId().equals(member.getId())) {
             throw new CustomException(ErrorCode.UNAUTHORIZED_401);

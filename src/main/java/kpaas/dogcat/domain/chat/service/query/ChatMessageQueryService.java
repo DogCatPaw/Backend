@@ -11,7 +11,7 @@ import kpaas.dogcat.domain.chat.repository.ChatMessageRepository;
 import kpaas.dogcat.domain.chat.repository.ChatReadStatusRepository;
 import kpaas.dogcat.domain.chat.repository.ChatRoomRepository;
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.domain.pet.dto.PetResDto;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
@@ -30,7 +30,7 @@ import java.util.List;
 public class ChatMessageQueryService {
 
     private final ChatParticipantQueryService chatParticipantQueryService;
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService memberQueryService;
     private final ChatMessageRepository chatMessageRepository;
     private final ChatReadStatusRepository chatReadStatusRepository;
     private final ChatRoomRepository chatRoomRepository;
@@ -53,7 +53,7 @@ public class ChatMessageQueryService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOTFOUND));
 
         // 로그인된 사용자가 참여자가 맞는지 확인
-        Member me = authCommandService.findById(memberId);
+        Member me = memberQueryService.findById(memberId);
         chatParticipantQueryService.findByMemberIdAndChatRoomId(memberId, roomId);
 
         // 상대방 찾기

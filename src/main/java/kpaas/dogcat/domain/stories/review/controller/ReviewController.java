@@ -15,7 +15,7 @@ import kpaas.dogcat.global.auth.CurrentWalletAddress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "입양 후기 일지 API")
+@Tag(name = "입양 후기 API")
 @RestController
 @RequestMapping("/api/story/review")
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class ReviewController {
     private final ReviewQueryService reviewQueryService;
     private final ReviewCommandService reviewCommandService;
 
-    @Operation(summary = "입양 후기 일지 작성", description = "일지 하나를 작성합니다.")
+    @Operation(summary = "입양 후기 작성", description = "일지 하나를 작성합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "COMMON201", description = "성공입니다"),
             @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다."),

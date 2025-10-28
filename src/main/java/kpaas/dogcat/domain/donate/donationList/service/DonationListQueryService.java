@@ -7,7 +7,7 @@ import kpaas.dogcat.domain.donate.donationList.dto.DonationListResDto;
 import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
 import kpaas.dogcat.domain.donate.donationList.repository.DonationListRepository;
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +26,12 @@ import java.util.List;
 public class DonationListQueryService {
 
     private final DonationListRepository donationListRepository;
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService memberQueryService;
     private final DonationListConverter donationListConverter;
     private final DonationRepository donationRepository;
 
     public DonationListResDto.DonationDto getDonation(String memberId, Long donationId) {
-        Member member = authCommandService.findById(memberId);
+        Member member = memberQueryService.findById(memberId);
         DonationList donationList = findById(donationId);
 
         return donationListConverter.toDonationDto(member, donationList);
@@ -68,13 +68,13 @@ public class DonationListQueryService {
 
     /** 내 후원 잔액 조회하기 */
     public DonationListResDto.MyBoneBalanceDto  getMyBoneBalance(String memberId) {
-        Member member = authCommandService.findById(memberId);
+        Member member = memberQueryService.findById(memberId);
         return new DonationListResDto.MyBoneBalanceDto(member.getBoneBalance());
     }
 
     /** 내 후원 내역 목록 조회하기 */
     public DonationListResDto.MyDonationListDto getMyDonationList(String memberId, Long cursor, int size) {
-        Member member = authCommandService.findById(memberId);
+        Member member = memberQueryService.findById(memberId);
         Pageable pageable = PageRequest.of(0, size);
 
         List<DonationList> donationLists = (cursor == null)

@@ -8,7 +8,7 @@ import kpaas.dogcat.domain.donate.donation.entity.Donation;
 import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.donate.donation.repository.DonationRepository;
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.service.PetQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
@@ -27,7 +27,7 @@ import java.util.List;
 public class DonationCommandService {
 
     private final DonationRepository donationRepository;
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService memberQueryService;
     private final PetQueryService petQueryService;
     private final DonationConverter donationConverter;
     private final DonationQueryService donationQueryService;
@@ -36,7 +36,7 @@ public class DonationCommandService {
 
     public DonationResDto.CreateDto createDonation(DonationReqDto.CreateDto dto, String walletAddress) {
         log.info("[ 후원 공고 작성하기 ]");
-        Member member = authCommandService.findById(walletAddress);
+        Member member = memberQueryService.findById(walletAddress);
         Pet pet = petQueryService.findById(dto.getPetId());
 
         // 진행 중인 공고가 하나라도 있으면 생성 차단
@@ -91,7 +91,7 @@ public class DonationCommandService {
 
     public void patchDonation(Long donationId, DonationReqDto.CreateDto dto, String walletAddress) {
         Donation donation = donationQueryService.findById(donationId);
-        Member member = authCommandService.findById(walletAddress);
+        Member member = memberQueryService.findById(walletAddress);
 
         if (!donation.getMember().getId().equals(member.getId())) {
             throw new CustomException(ErrorCode.UNAUTHORIZED_401);

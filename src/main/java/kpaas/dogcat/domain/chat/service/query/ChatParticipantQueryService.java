@@ -5,7 +5,7 @@ import kpaas.dogcat.domain.chat.entity.ChatParticipant;
 import kpaas.dogcat.domain.chat.entity.ChatRoom;
 import kpaas.dogcat.domain.chat.repository.ChatParticipantRepository;
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +23,11 @@ import java.util.List;
 public class ChatParticipantQueryService {
 
     private final ChatParticipantRepository chatParticipantRepository;
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService memberQueryService;
 
     // 참여자인지 검증
     public boolean isRoomParticipant(String memberId, Long roomId) {
-        Member member = authCommandService.findById(memberId);
+        Member member = memberQueryService.findById(memberId);
         return chatParticipantRepository.existsByChatRoomIdAndMemberId(roomId, member.getId());
     }
 

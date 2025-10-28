@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kpaas.dogcat.domain.member.dto.AdminResDto;
-import kpaas.dogcat.domain.member.dto.AuthResponseDTO;
 import kpaas.dogcat.domain.member.service.AdminQueryService;
 import kpaas.dogcat.global.apiPayload.CustomResponse;
 import kpaas.dogcat.global.apiPayload.code.SuccessCode;

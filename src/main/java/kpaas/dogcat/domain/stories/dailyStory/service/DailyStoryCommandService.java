@@ -1,7 +1,7 @@
 package kpaas.dogcat.domain.stories.dailyStory.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.repository.PetRepository;
 import kpaas.dogcat.domain.stories.dailyStory.converter.DailyStoryConverter;
@@ -11,7 +11,6 @@ import kpaas.dogcat.domain.stories.dailyStory.entity.DailyStory;
 import kpaas.dogcat.domain.stories.dailyStory.repository.DailyStoryRepository;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
-import kpaas.dogcat.global.objectStorage.ObjectStorageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,15 +21,14 @@ import org.springframework.stereotype.Service;
 public class DailyStoryCommandService {
 
     private final DailyStoryRepository dailyStoryRepository;
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService memberQueryService;
     private final PetRepository petRepository;
     private final DailyStoryConverter dailyStoryConverter;
-    private final ObjectStorageUtil objectStorageUtil;
 
     public DailyStoryResDto.WriteStoryResDto writeDailyStory(
             String memberId, DailyStoryReqDto.WriteStoryReqDto dto) {
         log.info("[ 일상 일지 작성하기 ]");
-        Member member = authCommandService.findById(memberId);
+        Member member = memberQueryService.findById(memberId);
         Pet pet = petRepository.findById(dto.getPetId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PET_NOTFOUND));
 
@@ -41,7 +39,7 @@ public class DailyStoryCommandService {
     }
 
     public void delete(Long storyId, String walletAddress) {
-        Member member = authCommandService.findById(walletAddress);
+        Member member = memberQueryService.findById(walletAddress);
         DailyStory story = dailyStoryRepository.findById(storyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
 

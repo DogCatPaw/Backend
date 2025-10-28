@@ -1,6 +1,6 @@
 package kpaas.dogcat.global.payment.service;
 
-import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -37,7 +37,7 @@ public class PaymentCommandServiceImpl {
 
     private final PaymentRepository paymentRepository;
     private final MemberRepository memberRepository;
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService memberQueryService;
     private final ItemRepository itemRepository;
     private final PaymentConverter paymentConverter;
     private final RestTemplate restTemplate;
@@ -46,7 +46,7 @@ public class PaymentCommandServiceImpl {
     public PaymentResDTO.PrepareDTO preparePayment(PaymentReqDTO.PrepareDTO dto, String memberId) {
         log.info("[ 결제 준비 시작 - 회원ID: {}, ItemId: {} ]", memberId, dto.getItemId());
 
-        Member member = authCommandService.findById(memberId);
+        Member member = memberQueryService.findById(memberId);
         Item item = itemRepository.findById(dto.getItemId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOTFOUND));
 
@@ -62,7 +62,7 @@ public class PaymentCommandServiceImpl {
     public PaymentResDTO.ApproveDTO approvePayment(PaymentReqDTO.ApproveDTO dto, String memberId) {
         log.info("[ 결제 승인 시작 - 회원ID: {}, orderId: {} ]", memberId, dto.getOrderId());
 
-        Member member = authCommandService.findById(memberId);
+        Member member = memberQueryService.findById(memberId);
         Payment payment = paymentRepository.findByOrderId(dto.getOrderId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PAYMENT_NOTFOUND));
 

@@ -12,7 +12,7 @@ import kpaas.dogcat.domain.donate.item.Item;
 import kpaas.dogcat.domain.donate.item.ItemRepository;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
-import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class DonationListCommandService {
 
     private final DonationQueryService donationQueryService;
     private final DonationListRepository donationListRepository;
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService memberQueryService;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
     private final DonationListConverter donationListConverter;
@@ -39,7 +39,7 @@ public class DonationListCommandService {
 
         // 후원 공고 확인
         Donation donation = donationQueryService.findById(dto.getDonationId());
-        Member member = authCommandService.findById(dto.getMemberId());
+        Member member = memberQueryService.findById(dto.getMemberId());
         Item item = itemRepository.findById(dto.getItemId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOTFOUND));
 

@@ -2,7 +2,7 @@ package kpaas.dogcat.domain.stories.comment.service;
 
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.repository.MemberRepository;
-import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.domain.stories.comment.converter.CommentConverter;
 import kpaas.dogcat.domain.stories.comment.dto.CommentReqDTO;
 import kpaas.dogcat.domain.stories.comment.dto.CommentResDTO;
@@ -28,7 +28,7 @@ public class CommentCommandService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final CommentConverter commentConverter;
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService authCommandService;
 
     public CommentResDTO.WriteDTO writeComment(String memberId, CommentReqDTO dto){
         Story story = storyRepository.findById(dto.getStoryId())

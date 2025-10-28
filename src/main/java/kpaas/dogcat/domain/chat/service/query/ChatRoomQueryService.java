@@ -5,7 +5,7 @@ import kpaas.dogcat.domain.chat.entity.ChatMessage;
 import kpaas.dogcat.domain.chat.entity.ChatRoom;
 import kpaas.dogcat.domain.chat.repository.ChatRoomRepository;
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class ChatRoomQueryService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageQueryService chatMessageQueryService;
     private final ChatParticipantQueryService chatParticipantQueryService;
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService memberQueryService;
 
     /** 중복 채팅방 방지 (같은 공고 + 같은 두 유저면 하나만 생성) **/
     public Optional<ChatRoom> findExistingRoom(String initiatorId, String targetId, Long adoptId) {
@@ -43,7 +43,7 @@ public class ChatRoomQueryService {
         ChatRoom chatRoom = getChatRoom(roomId);
 
         log.info("[ 채팅방 카드 조회 - 사용자 = {}, 채팅방 = {} ]", memberId, roomId);
-        Member loginMember = authCommandService.findById(memberId);
+        Member loginMember = memberQueryService.findById(memberId);
         Member targetMember = chatParticipantQueryService.getTargetMember(chatRoom, loginMember);
         Long unreadCount = chatMessageQueryService.getUnreadCount(chatRoom, loginMember);
         ChatMessage latestMessage = chatMessageQueryService.getLatestMessage(chatRoom);

@@ -12,7 +12,7 @@ import kpaas.dogcat.domain.chat.repository.ChatRoomRepository;
 import kpaas.dogcat.domain.chat.service.query.ChatMessageQueryService;
 import kpaas.dogcat.domain.chat.service.query.ChatParticipantQueryService;
 import kpaas.dogcat.domain.member.entity.Member;
-import kpaas.dogcat.domain.member.service.AuthCommandService;
+import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import java.util.List;
 public class ChatMessageCommandService {
 
     private final ChatParticipantQueryService chatParticipantQueryService;
-    private final AuthCommandService authCommandService;
+    private final MemberQueryService memberQueryService;
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatReadStatusRepository chatReadStatusRepository;
@@ -81,7 +81,7 @@ public class ChatMessageCommandService {
     public void markAsReadCount(Long roomId, String memberId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOTFOUND));
-        Member member = authCommandService.findById(memberId);
+        Member member = memberQueryService.findById(memberId);
         int updatedCount = chatReadStatusRepository.markAsRead(roomId, memberId);
         log.info("[ 읽은 메세지 수 ] : {}", updatedCount);
     }
