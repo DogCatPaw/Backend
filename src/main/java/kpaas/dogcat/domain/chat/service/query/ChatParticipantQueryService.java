@@ -31,11 +31,11 @@ public class ChatParticipantQueryService {
         return chatParticipantRepository.existsByChatRoomIdAndMemberId(roomId, member.getId());
     }
 
-    public ChatResDTO.CheckPermissionResDTO checkPermission(String memberId, Long roomId) {
+    public ChatResDTO.CheckPermissionResDto checkPermission(String memberId, Long roomId) {
         log.info("[ 채팅방 권한 검증 - 입양 채팅 신청자 = {}, 채팅방 = {} ]", memberId, roomId);
         boolean isParticipants = isRoomParticipant(memberId, roomId);
         log.info("[ 채팅방 권한 검증 ]", isParticipants);
-        return ChatResDTO.CheckPermissionResDTO.builder()
+        return ChatResDTO.CheckPermissionResDto.builder()
                 .canJoin(isParticipants)
                 .build();
     }

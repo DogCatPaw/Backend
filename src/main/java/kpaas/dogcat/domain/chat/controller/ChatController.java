@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kpaas.dogcat.domain.chat.dto.ChatReqDTO;
+import kpaas.dogcat.domain.chat.dto.ChatReqDto;
 import kpaas.dogcat.domain.chat.dto.ChatResDTO;
 import kpaas.dogcat.domain.chat.service.command.ChatMessageCommandService;
 import kpaas.dogcat.domain.chat.service.command.ChatRoomCommandService;
@@ -44,10 +44,9 @@ public class ChatController {
             @ApiResponse(responseCode = "ROOM_409", description = "자신을 단독 참여자로 채팅방 생성이 불가합니다.")
     })
     @PostMapping("/room/create")
-    public CustomResponse<ChatResDTO.ChatRoomCreatedDTO> createRoom(@RequestBody ChatReqDTO.ChatRoomCreateDTO dto,
+    public CustomResponse<ChatResDTO.ChatRoomCreatedDto> createRoom(@RequestBody ChatReqDto.ChatRoomCreateDto dto,
                                                                     @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
-        ChatResDTO.ChatRoomCreatedDTO room = chatRoomCommandService.createRoom(
-                walletAddress, dto.getAdoptWriterId(), dto.getAdoptId(), dto.getRoomName());
+        ChatResDTO.ChatRoomCreatedDto room = chatRoomCommandService.createRoom(walletAddress, dto);
         return CustomResponse.onSuccess(SuccessCode.CREATED, room);
     }
 
@@ -57,11 +56,11 @@ public class ChatController {
             @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다.")
     })
     @GetMapping("/room/permission")
-    public CustomResponse<ChatResDTO.CheckPermissionResDTO> checkPermission(
+    public CustomResponse<ChatResDTO.CheckPermissionResDto> checkPermission(
             @RequestParam Long roomId,
             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress
     ) {
-        ChatResDTO.CheckPermissionResDTO canJoin = chatParticipantQueryService.checkPermission(walletAddress, roomId);
+        ChatResDTO.CheckPermissionResDto canJoin = chatParticipantQueryService.checkPermission(walletAddress, roomId);
         return CustomResponse.onSuccess(SuccessCode.OK, canJoin);
     }
 
@@ -72,9 +71,9 @@ public class ChatController {
             @ApiResponse(responseCode = "ROOM_404", description = "채팅방이 없습니다.")
     })
     @PostMapping("/{roomId}/enter")
-    public CustomResponse<List<ChatResDTO.ChatMessageResDTO>> enterRoom(@PathVariable Long roomId,
+    public CustomResponse<List<ChatResDTO.ChatMessageResDto>> enterRoom(@PathVariable Long roomId,
                                                                         @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
-        List<ChatResDTO.ChatMessageResDTO> chatMessageList = chatMessageCommandService.enterRoom(roomId, walletAddress);
+        List<ChatResDTO.ChatMessageResDto> chatMessageList = chatMessageCommandService.enterRoom(roomId, walletAddress);
         return CustomResponse.onSuccess(SuccessCode.OK, chatMessageList);
     }
 
@@ -86,16 +85,16 @@ public class ChatController {
             @ApiResponse(responseCode = "MESSAGE_404", description = "채팅 메시지가 없습니다.")
     })
     @GetMapping("/room/card")
-    public CustomResponse<ChatResDTO.ChatRoomCardDTO> getRoomCard(@RequestParam Long roomId,
+    public CustomResponse<ChatResDTO.ChatRoomCardDto> getRoomCard(@RequestParam Long roomId,
                                                                   @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
-        ChatResDTO.ChatRoomCardDTO chatRoom = chatRoomQueryService.getChatRoomCard(roomId, walletAddress);
+        ChatResDTO.ChatRoomCardDto chatRoom = chatRoomQueryService.getChatRoomCard(roomId, walletAddress);
         return CustomResponse.onSuccess(SuccessCode.OK, chatRoom);
     }
 
     @Operation(summary = "채팅방 목록 조회", description = "채팅방 전체 목록 조회하기 ")
     @GetMapping("/room/list")
-    public CustomResponse<List<ChatResDTO.ChatRoomCardDTO>> getRoomCardList(@Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
-        List<ChatResDTO.ChatRoomCardDTO> chatRooms = chatRoomQueryService.getChatRoomCards(walletAddress);
+    public CustomResponse<List<ChatResDTO.ChatRoomCardDto>> getRoomCardList(@Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
+        List<ChatResDTO.ChatRoomCardDto> chatRooms = chatRoomQueryService.getChatRoomCards(walletAddress);
         return CustomResponse.onSuccess(SuccessCode.OK, chatRooms);
     }
 

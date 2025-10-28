@@ -1,5 +1,6 @@
 package kpaas.dogcat.domain.chat.service.command;
 
+import kpaas.dogcat.domain.chat.dto.ChatReqDto;
 import kpaas.dogcat.domain.chat.service.query.ChatRoomQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
@@ -34,26 +35,27 @@ public class ChatRoomCommandService {
     private final AuthCommandService authCommandService;
     private final AdoptQueryService adoptQueryService;
 
-    public ChatResDTO.ChatRoomCreatedDTO createRoom(String initiatorId, String targetId, Long adoptId, String roomName) {
-        log.info("[ 채팅방 생성 - 입양 채팅 신청자 = {}, 입양 공고 작성자 = {}, adoptId = {} ]", initiatorId, targetId, adoptId);
+    public ChatResDTO.ChatRoomCreatedDto createRoom(String initiatorId, ChatReqDto.ChatRoomCreateDto dto) {
         // 사용자 & 입양 공고 검증
         Member initiator = authCommandService.findById(initiatorId);    // 입양원하는 사용자
-        Member target = authCommandService.findById(targetId);          // 입양 공고 작성자
-        Adopt adopt = adoptQueryService.findById(adoptId);
+        Adopt adopt = adoptQueryService.findById(dto.getAdoptId());
+        Member target = authCommandService.findById(adopt.getWriter().getId());          // 입양 공고 작성자
+        log.info("[ 채팅방 생성 - 입양 채팅 신청자 = {}, 입양 공고 작성자 = {}, adoptId = {} ]",
+                initiatorId, target.getId(), adopt.getId());
 
         // 중복방 체크하고 없으면 생성, 있으면 기존 채팅방 반환
-        Optional<ChatRoom> existingRoom = chatRoomQueryService.findExistingRoom(initiatorId, targetId, adoptId);
-        if(targetId.equals(initiator.getId())) {
+        Optional<ChatRoom> existingRoom = chatRoomQueryService.findExistingRoom(initiatorId, target.getId(), adopt.getId());
+        if(target.getId().equals(initiator.getId())) {
             throw new CustomException(ErrorCode.CHAT_CANNOT_WITH_SELF);
         }
         if(existingRoom.isPresent()) {
             ChatRoom chatRoom = existingRoom.get();
-            return new ChatResDTO.ChatRoomCreatedDTO(chatRoom.getId(), chatRoom.getRoomName());
+            return new ChatResDTO.ChatRoomCreatedDto(chatRoom.getId(), chatRoom.getRoomName());
         }
         ChatRoom chatRoom = ChatRoom.builder()
                 .adopt(adopt)
                 .initiatorId(initiatorId)
-                .targetId(targetId)
+                .targetId(target.getId())
                 .roomName(adopt.getTitle())
                 .roomStatus(RoomStatus.OPEN)
                 .build();
@@ -66,6 +68,6 @@ public class ChatRoomCommandService {
         );
         chatParticipantCommandService.saveAllParticipants(participants);
 
-        return new ChatResDTO.ChatRoomCreatedDTO(chatRoom.getId(), chatRoom.getRoomName());
+        return new ChatResDTO.ChatRoomCreatedDto(chatRoom.getId(), chatRoom.getRoomName());
     }
 }

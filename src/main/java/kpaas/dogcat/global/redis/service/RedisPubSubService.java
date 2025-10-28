@@ -3,7 +3,7 @@ package kpaas.dogcat.global.redis.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kpaas.dogcat.domain.chat.dto.ChatReqDTO;
+import kpaas.dogcat.domain.chat.dto.ChatReqDto;
 import kpaas.dogcat.domain.chat.service.command.ChatMessageCommandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class RedisPubSubService implements MessageListener {
 
         try {
             // 구독하고 있는 입장은 역직렬화해야하므로 readValue
-            ChatReqDTO.ChatMessageReqDTO messageReqDTO = objectMapper.readValue(payload, ChatReqDTO.ChatMessageReqDTO.class);
+            ChatReqDto.ChatMessageReqDto messageReqDTO = objectMapper.readValue(payload, ChatReqDto.ChatMessageReqDto.class);
             log.info("메시지 역직렬화 성공 - 방: {}, 발신자: {}, 내용: {}",
                     messageReqDTO.getRoomId(), messageReqDTO.getChatSenderId(), messageReqDTO.getMessage());
 

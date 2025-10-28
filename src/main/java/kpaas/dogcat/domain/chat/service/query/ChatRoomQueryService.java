@@ -39,7 +39,7 @@ public class ChatRoomQueryService {
     }
 
     // 개별 채팅방 카드 (이름, 메세지, 미읽음 수) 조회 -> 알림 보낼때 재활용할 생각
-    public ChatResDTO.ChatRoomCardDTO getChatRoomCard(Long roomId, String memberId) {
+    public ChatResDTO.ChatRoomCardDto getChatRoomCard(Long roomId, String memberId) {
         ChatRoom chatRoom = getChatRoom(roomId);
 
         log.info("[ 채팅방 카드 조회 - 사용자 = {}, 채팅방 = {} ]", memberId, roomId);
@@ -48,7 +48,7 @@ public class ChatRoomQueryService {
         Long unreadCount = chatMessageQueryService.getUnreadCount(chatRoom, loginMember);
         ChatMessage latestMessage = chatMessageQueryService.getLatestMessage(chatRoom);
 
-        return new ChatResDTO.ChatRoomCardDTO(
+        return new ChatResDTO.ChatRoomCardDto(
                 chatRoom.getId(),
                 chatRoom.getRoomName(),
                 targetMember.getNickname(),
@@ -58,7 +58,7 @@ public class ChatRoomQueryService {
 
 
     // 채팅방 카드 리스트(이름, 메세지, 미읽음 수) 조회
-    public List<ChatResDTO.ChatRoomCardDTO> getChatRoomCards(String memberId) {
+    public List<ChatResDTO.ChatRoomCardDto> getChatRoomCards(String memberId) {
         log.info("[ 채팅방 카드 리스트 조회 - 사용자 = {} ]", memberId);
         List<ChatRoom> rooms = chatRoomRepository.findRoomIdsByMemberId(memberId);
 

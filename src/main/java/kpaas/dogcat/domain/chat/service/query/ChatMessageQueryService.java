@@ -1,6 +1,5 @@
 package kpaas.dogcat.domain.chat.service.query;
 
-import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
 import kpaas.dogcat.domain.adopt.entity.Adopt;
 import kpaas.dogcat.domain.adopt.service.AdoptQueryService;
 import kpaas.dogcat.domain.chat.dto.ChatResDTO;
@@ -49,7 +48,7 @@ public class ChatMessageQueryService {
     }
 
     /** 메시지 리스트 조회 */
-    public List<ChatResDTO.ChatMessageResDTO> getChatMessages(Long roomId, String memberId) {
+    public List<ChatResDTO.ChatMessageResDto> getChatMessages(Long roomId, String memberId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOTFOUND));
 
@@ -67,7 +66,7 @@ public class ChatMessageQueryService {
 
         // 전체 메시지 조회
         List<ChatMessage> chatMessages = chatMessageRepository.findAllByRoomIdWithMember(roomId);
-        List<ChatResDTO.ChatMessageResDTO> result = new ArrayList<>();
+        List<ChatResDTO.ChatMessageResDto> result = new ArrayList<>();
 
         for (ChatMessage msg : chatMessages) {
             boolean isRead;
@@ -81,7 +80,7 @@ public class ChatMessageQueryService {
                 isRead = true;
             }
 
-            result.add(ChatResDTO.ChatMessageResDTO.builder()
+            result.add(ChatResDTO.ChatMessageResDto.builder()
                     .messageId(msg.getId())
                     .senderId(msg.getMember().getId())
                     .senderName(msg.getMember().getNickname())

@@ -1,6 +1,6 @@
 package kpaas.dogcat.domain.chat.service.command;
 
-import kpaas.dogcat.domain.chat.dto.ChatReqDTO;
+import kpaas.dogcat.domain.chat.dto.ChatReqDto;
 import kpaas.dogcat.domain.chat.dto.ChatResDTO;
 import kpaas.dogcat.domain.chat.entity.ChatMessage;
 import kpaas.dogcat.domain.chat.entity.ChatParticipant;
@@ -35,7 +35,7 @@ public class ChatMessageCommandService {
     private final ChatReadStatusRepository chatReadStatusRepository;
     private final ChatMessageQueryService chatMessageQueryService;
 
-    public void saveMessage(ChatReqDTO.ChatMessageReqDTO chatMessageReqDTO) {
+    public void saveMessage(ChatReqDto.ChatMessageReqDto chatMessageReqDTO) {
         //채팅방 조회
         ChatRoom chatRoom = chatRoomRepository.findById(chatMessageReqDTO.getRoomId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOTFOUND));
@@ -70,9 +70,9 @@ public class ChatMessageCommandService {
     }
 
     /** 메세지 조회 및 읽음 처리 */
-    public List<ChatResDTO.ChatMessageResDTO> enterRoom(Long roomId, String memberId) {
+    public List<ChatResDTO.ChatMessageResDto> enterRoom(Long roomId, String memberId) {
         log.info("[ 채팅방 입장 - 사용자 = {}, 채팅방 = {} ]", memberId, roomId);
-        List<ChatResDTO.ChatMessageResDTO> chatMessages = chatMessageQueryService.getChatMessages(roomId, memberId);
+        List<ChatResDTO.ChatMessageResDto> chatMessages = chatMessageQueryService.getChatMessages(roomId, memberId);
         markAsReadCount(roomId, memberId);
         return chatMessages;
     }
