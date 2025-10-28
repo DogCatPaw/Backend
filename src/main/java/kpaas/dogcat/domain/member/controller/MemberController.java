@@ -36,8 +36,19 @@ public class MemberController {
         return CustomResponse.onSuccess(SuccessCode.CREATED, signupResponseDTO);
     }
 
+    @Operation(summary = "내 프로필 조회(마이페이지)", description = "마이페이지 상단의 내 프로필 정보를 조회하는 API입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON201", description = "성공입니다"),
+            @ApiResponse(responseCode = "MEMBER_404", description = "회원이 없습니다.")
+    })
+    @GetMapping("/member/profile")
+    public CustomResponse<MemberResDto.ProfileResDto> getProfile(
+            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress){
+        return CustomResponse.onSuccess(SuccessCode.OK, memberQueryService.getProfile(walletAddress));
+    }
+
     @Operation(summary = "작성한 일지 조회(마이페이지)", description = "일상일지 / 입양 후기 일지 모두 조회하는 API입니다.")
-    @GetMapping("/member")
+    @GetMapping("/member/stories")
     public CustomResponse<MemberResDto.StoriesListDto> getStories(
             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
             @RequestParam(required = false) Long cursor,

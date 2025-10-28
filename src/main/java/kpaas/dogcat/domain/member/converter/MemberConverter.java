@@ -29,6 +29,17 @@ public class MemberConverter {
                 .build();
     }
 
+    public MemberResDto.ProfileResDto toProfileResDto(Member member) {
+        return MemberResDto.ProfileResDto.builder()
+                .walletAddress(member.getId())
+                .profileImage(member.getProfileUrl())
+                .username(member.getUsername())
+                .nickname(member.getNickname())
+                .phoneNumber(member.getPhoneNumber())
+                .createdAt(member.getCreatedAt())
+                .build();
+    }
+
     public MemberResDto.StoryDto toStoryDto(Story story,
                                             Long likeCount,
                                             Long commentCount) {

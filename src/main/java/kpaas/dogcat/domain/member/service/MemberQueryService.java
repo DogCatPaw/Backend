@@ -34,6 +34,13 @@ public class MemberQueryService {
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
     }
 
+    public MemberResDto.ProfileResDto getProfile(String walletAddress) {
+        log.info("[ 마이페이지 상단 프로필 조회 ]");
+        Member member = findById(walletAddress);
+
+        return memberConverter.toProfileResDto(member);
+    }
+
     public MemberResDto.StoriesListDto getStories(String walletAddress, Long cursor, int size) {
         log.info("[ 마이페이지 스토리 조회 ]");
         List<Story> stories = storyRepository.findStoriesByWalletAddress(walletAddress, cursor, size);
