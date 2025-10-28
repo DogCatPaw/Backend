@@ -18,6 +18,7 @@ public class DonationScheduler {
     @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
     @Transactional
     public void closeExpiredDonations() {
+        log.info("[ 후원 공고 마감 스케줄러 시작 ]");
         donationCommandService.closeDonation();
     }
 
@@ -25,6 +26,7 @@ public class DonationScheduler {
     @Scheduled(cron = "0 0 0 20 * ?", zone = "Asia/Seoul")
     @Transactional
     public void settleDonations() {
+        log.info("[ 정산 스케줄러 시작 ]");
         donationCommandService.settleDonation();
     }
 }

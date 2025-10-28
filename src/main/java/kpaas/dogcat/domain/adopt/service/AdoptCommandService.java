@@ -1,23 +1,23 @@
 package kpaas.dogcat.domain.adopt.service;
 
 import kpaas.dogcat.domain.adopt.converter.AdoptConverter;
-import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
-import kpaas.dogcat.domain.adopt.repository.AdoptRepository;
 import kpaas.dogcat.domain.adopt.dto.AdoptReqDto;
 import kpaas.dogcat.domain.adopt.dto.AdoptResDto;
 import kpaas.dogcat.domain.adopt.entity.Adopt;
+import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
+import kpaas.dogcat.domain.adopt.repository.AdoptRepository;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.member.service.MemberQueryService;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.pet.service.PetQueryService;
 import kpaas.dogcat.global.apiPayload.code.CustomException;
 import kpaas.dogcat.global.apiPayload.code.ErrorCode;
-import kpaas.dogcat.global.objectStorage.ObjectStorageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -55,6 +55,8 @@ public class AdoptCommandService {
             throw new CustomException(ErrorCode.ADOPTION_ADOPTING);
         } else if (adopt.getStatus() == AdoptionStatus.ADOPTED) {
             throw new CustomException(ErrorCode.ADOPTION_COMPLETED);
+        } else if (adopt.getStatus() == AdoptionStatus.CLOSED) {
+            throw new CustomException(ErrorCode.ADOPTION_CLOSED);
         }
         Member adopter = memberQueryService.findById(adopterId);
         if (adopter.equals(adopt.getWriter())) {
@@ -66,6 +68,7 @@ public class AdoptCommandService {
         adopt.apply(adopter);
         pet.changeOwner(adopter);
         adopt.updateStatus(AdoptionStatus.ADOPTED);
+        log.info("[ 입양 완료 - 입양글: {}, 펫: {}, 상태: {} ]", adopt.getId(), pet.getId(), adopt.getStatus());
 
         return adoptConverter.toDelegateDto(adopt, adopterId);
     }
@@ -92,5 +95,20 @@ public class AdoptCommandService {
         adoption.update(dto);
         log.info("[ 입양 공고 수정 완료 - 입양글: {}, 작성자: {}, 펫: {} ]",
                 adoption.getId(), adoption.getWriter().getId(), adoption.getPet().getId());
+    }
+
+    public void closeAdoption() {
+        List<Adopt> openAdoptions = adoptRepository.findByStatus(AdoptionStatus.ACTIVE);
+        LocalDate today = LocalDate.now();
+
+        // 마감일이 지난 공고 상태를 CLOSED로 변경
+        for (Adopt adoption : openAdoptions) {
+            if (today.isAfter(adoption.getDeadline())) {
+                adoption.updateStatus(AdoptionStatus.CLOSED);
+                log.info("[ 마감일 지난 입양 공고 마감 처리 완료 - ID: {} ]", adoption.getId());
+            }
+        }
+        adoptRepository.saveAll(openAdoptions);
+        log.info("[ 압양 공고 마감 처리 완료 ]");
     }
 }

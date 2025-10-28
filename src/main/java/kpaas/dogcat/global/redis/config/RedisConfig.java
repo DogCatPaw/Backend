@@ -80,6 +80,4 @@ public class RedisConfig {
     public MessageListenerAdapter listenerAdapter(RedisPubSubService redisPubSubService) {
         return new MessageListenerAdapter(redisPubSubService, "onMessage");
     }
-
-
 }

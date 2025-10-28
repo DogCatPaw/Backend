@@ -87,9 +87,10 @@ public class AdoptController {
             @ApiResponse(responseCode = "ADOPTION404", description = "해당되는 입양 공고가 없습니다."),
             @ApiResponse(responseCode = "ADOPTION400", description = "입양 절차 진행중입니다."),
             @ApiResponse(responseCode = "ADOPTION400", description = "입양 완료된 공고입니다."),
+            @ApiResponse(responseCode = "ADOPTION400", description = "입양 마감된 공고입니다."),
             @ApiResponse(responseCode = "ADOPTION400", description = "자기 자신이 입양할 수 없습니다.")
     })
-    @PostMapping("/{adoptionId}/complete")
+    @PatchMapping("/{adoptionId}/delegate")
     public CustomResponse<AdoptResDto.DelegateDto> delegate(@PathVariable Long adoptionId,
                                                             @Parameter(hidden = true) @CurrentWalletAddress String walletAddress) {
         return CustomResponse.onSuccess(SuccessCode.OK, adoptCommandService.delegate(adoptionId, walletAddress));
