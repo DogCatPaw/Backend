@@ -54,7 +54,7 @@ public class DailyStoryController {
     @Operation(summary = "메인화면 - 일상 일지 목록 조회", description = "일지 메인 화면의 일지 목록을 조회합니다.")
     @GetMapping("/stories")
     public CustomResponse<DailyStoryResDto.StoriesListDto> getStories(
-            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
+            @RequestParam(required = false) String walletAddress,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue = "9") int size){

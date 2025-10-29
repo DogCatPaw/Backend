@@ -54,10 +54,10 @@ public class ReviewController {
     @Operation(summary = "메인화면 - 입양 후기 목록 조회", description = "입양 후기 일지 메인 화면의 목록을 조회합니다.")
     @GetMapping("/reviews")
     public CustomResponse<ReviewResDto.ReviewListDto> search(
-            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
+            @RequestParam(required = false) String walletAddress,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Long cursorId,
-            @RequestParam(defaultValue = "9") int size) {
+            @RequestParam(defaultValue = "9") int size){
         String memberId = (walletAddress != null) ? walletAddress : null;
         ReviewResDto.ReviewListDto searchResult = reviewQueryService.search(keyword, cursorId, size, memberId);
         return CustomResponse.onSuccess(SuccessCode.OK, searchResult);
