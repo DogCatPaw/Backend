@@ -101,6 +101,6 @@ public class ChatMessageQueryService {
         if (adopt == null) {
             throw new CustomException(ErrorCode.ADOPTION_NOTFOUND);
         }
-        return adoptQueryService.getAdoptionForChatting(adopt);
+        return adoptQueryService.getAdoptionForChatting(adopt, chatRoom.getInitiatorId());
     }
 }

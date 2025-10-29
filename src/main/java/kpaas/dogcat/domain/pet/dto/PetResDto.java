@@ -44,6 +44,7 @@ public class PetResDto {
         private Long adoptId;
         private String did;
         private String writerWallet;
+        private String adopterWallet;
         private String petProfile;
         private String petName;
         private int old;

@@ -36,11 +36,12 @@ public class PetConverter {
                 .build();
     }
 
-    public PetResDto.PetChatDto toPetChatDto(Pet pet) {
+    public PetResDto.PetChatDto toPetChatDto(Pet pet, String initiatorId) {
         return PetResDto.PetChatDto.builder()
                 .petId(pet.getId())
                 .adoptId(pet.getAdopt().getId())
                 .writerWallet(pet.getMember().getId())
+                .adopterWallet(initiatorId)
                 .did(pet.getDid())
                 .petProfile(pet.getPetProfile())
                 .petName(pet.getPetName())

@@ -45,10 +45,10 @@ public class AdoptQueryService {
         return adoptRepository.findById(adoptId).orElseThrow(() -> new CustomException(ErrorCode.ADOPTION_NOTFOUND));
     }
 
-    public PetResDto.PetChatDto getAdoptionForChatting(Adopt adopt) {
-        log.info("[ 채팅방 상단 입양 공고 조회 ]");
+    public PetResDto.PetChatDto getAdoptionForChatting(Adopt adopt, String initiatorId) {
+        log.info("[ 채팅방 상단 입양 공고 조회 - 작성자: {}, 신청자: {} ]", adopt.getWriter(), initiatorId);
         Pet pet = adopt.getPet();
-        return petConverter.toPetChatDto(pet);
+        return petConverter.toPetChatDto(pet, initiatorId);
     }
 
     public AdoptResDto.HomeDto getHomeData() {
