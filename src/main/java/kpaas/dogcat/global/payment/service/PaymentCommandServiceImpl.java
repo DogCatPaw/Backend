@@ -50,7 +50,8 @@ public class PaymentCommandServiceImpl {
         Item item = itemRepository.findById(dto.getItemId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOTFOUND));
 
-        String orderId = memberId + "order-" + UUID.randomUUID();
+        String shortMemberId = memberId.length() > 10 ? memberId.substring(0, 10) : memberId;
+        String orderId = shortMemberId + "-order-" + UUID.randomUUID();
         String orderName = item.getItemName() + " 1건";
         Payment payment = paymentConverter.toPayment(orderId, orderName, item, member);
         Payment savedPayment = paymentRepository.save(payment);
