@@ -76,6 +76,7 @@ public class AdoptResDto {
         private String title;
         private String content;
         private String images;
+        private String writerWallet;
 
         private String did;
         private String petProfile;

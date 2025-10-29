@@ -43,6 +43,7 @@ public class PetResDto {
         private Long petId;
         private Long adoptId;
         private String did;
+        private String writerWallet;
         private String petProfile;
         private String petName;
         private int old;

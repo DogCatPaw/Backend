@@ -76,6 +76,7 @@ public class AdoptConverter {
 
     public AdoptResDto.AdoptDetailDto toAdoptDetailDto(Adopt adopt) {
         return AdoptResDto.AdoptDetailDto.builder()
+                .writerWallet(adopt.getWriter().getId())
                 .title(adopt.getTitle())
                 .content(adopt.getContent())
                 .images(adopt.getImages())

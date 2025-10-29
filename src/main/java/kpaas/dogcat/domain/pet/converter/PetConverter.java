@@ -40,6 +40,7 @@ public class PetConverter {
         return PetResDto.PetChatDto.builder()
                 .petId(pet.getId())
                 .adoptId(pet.getAdopt().getId())
+                .writerWallet(pet.getMember().getId())
                 .did(pet.getDid())
                 .petProfile(pet.getPetProfile())
                 .petName(pet.getPetName())
