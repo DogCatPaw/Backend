@@ -16,7 +16,6 @@ public class DonationScheduler {
 
     // 매일 자정에 마감된 후원글 상태 변경
     @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
-    @Transactional
     public void closeExpiredDonations() {
         log.info("[ 후원 공고 마감 스케줄러 시작 ]");
         donationCommandService.closeDonation();
@@ -24,7 +23,6 @@ public class DonationScheduler {
 
     // 매월 20일 정각에 정산 금액 지급
     @Scheduled(cron = "0 0 0 20 * ?", zone = "Asia/Seoul")
-    @Transactional
     public void settleDonations() {
         log.info("[ 정산 스케줄러 시작 ]");
         donationCommandService.settleDonation();
