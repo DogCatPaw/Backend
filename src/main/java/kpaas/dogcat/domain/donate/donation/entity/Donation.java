@@ -7,6 +7,7 @@ import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.pet.entity.Pet;
+import kpaas.dogcat.global.enums.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,6 +43,11 @@ public class Donation {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private DonationStatus status = DonationStatus.ACTIVE;       // 후원 상태
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    @Column(nullable = false)
+    private PostType postType = PostType.DONATION;
 
     @Column(nullable = false)
     private String content;

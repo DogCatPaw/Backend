@@ -51,4 +51,21 @@ public class DonationQueryDslImpl implements DonationQueryDsl {
                 .limit(size)
                 .fetch();
     }
+
+    @Override
+    public List<Donation> findDonationsByWalletAddress(String walletAddress, Long cursor, int size) {
+        QDonation donation = QDonation.donation;
+
+        var query = jpaQueryFactory
+                .selectFrom(donation)
+                .where(donation.member.id.eq(walletAddress))
+                .orderBy(donation.id.desc())
+                .limit(size);
+
+        if (cursor != null) {
+            query.where(donation.id.lt(cursor));
+        }
+
+        return query.fetch();
+    }
 }

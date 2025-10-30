@@ -63,4 +63,21 @@ public class AdoptQueryDslImpl implements AdoptQueryDsl {
                 .limit(size)
                 .fetch();
     }
+
+    @Override
+    public List<Adopt> findAdoptsByWalletAddress(String walletAddress, Long cursor, int size) {
+        QAdopt adopt = QAdopt.adopt;
+
+        var query = jpaQueryFactory
+                .selectFrom(adopt)
+                .where(adopt.writer.id.eq(walletAddress))
+                .orderBy(adopt.id.desc())
+                .limit(size);
+
+        if (cursor != null) {
+            query.where(adopt.id.lt(cursor));
+        }
+
+        return query.fetch();
+    }
 }

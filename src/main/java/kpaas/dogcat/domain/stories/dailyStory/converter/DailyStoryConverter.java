@@ -32,6 +32,7 @@ public class DailyStoryConverter {
                 .title(savedStory.getTitle())
                 .images(savedStory.getImages())
                 .content(savedStory.getContent())
+                .postType(savedStory.getPostType())
                 .build();
     }
 

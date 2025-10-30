@@ -1,9 +1,12 @@
 package kpaas.dogcat.domain.member.converter;
 
+import kpaas.dogcat.domain.adopt.entity.Adopt;
+import kpaas.dogcat.domain.donate.donation.entity.Donation;
 import kpaas.dogcat.domain.member.dto.MemberReqDto;
 import kpaas.dogcat.domain.member.dto.MemberResDto;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.stories.story.entity.Story;
+import kpaas.dogcat.global.enums.PostType;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -44,10 +47,27 @@ public class MemberConverter {
                                             Long likeCount,
                                             Long commentCount) {
         return MemberResDto.StoryDto.builder()
-                .storyId(story.getId())
+                .postId(story.getId())
                 .title(story.getTitle())
                 .likes(likeCount)
                 .comments(commentCount)
+                .type(story.getPostType())
+                .build();
+    }
+
+    public MemberResDto.StoryDto toStoryDtoFromAdopt(Adopt adopt) {
+        return MemberResDto.StoryDto.builder()
+                .postId(adopt.getId())
+                .title(adopt.getTitle())
+                .type(PostType.ADOPTION)
+                .build();
+    }
+
+    public MemberResDto.StoryDto toStoryDtoFromDonation(Donation donation) {
+        return MemberResDto.StoryDto.builder()
+                .postId(donation.getId())
+                .title(donation.getTitle())
+                .type(PostType.DONATION)
                 .build();
     }
 }

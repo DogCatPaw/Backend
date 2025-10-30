@@ -1,8 +1,5 @@
 package kpaas.dogcat.domain.donate.donation.repository;
 
-import kpaas.dogcat.domain.adopt.entity.Adopt;
-import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
-import kpaas.dogcat.domain.adopt.enums.Region;
 import kpaas.dogcat.domain.donate.donation.entity.Donation;
 import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import kpaas.dogcat.domain.pet.enums.Breed;
@@ -14,4 +11,6 @@ public interface DonationQueryDsl {
                                    Breed breed,
                                    DonationStatus status,
                                    String keyword);
+
+    List<Donation> findDonationsByWalletAddress(String walletAddress, Long cursor, int size);
 }

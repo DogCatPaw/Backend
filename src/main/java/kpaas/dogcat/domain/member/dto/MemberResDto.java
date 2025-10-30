@@ -1,5 +1,6 @@
 package kpaas.dogcat.domain.member.dto;
 
+import kpaas.dogcat.global.enums.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,10 +25,11 @@ public class MemberResDto {
     @NoArgsConstructor
     @Builder
     public static class StoryDto {
-        private Long storyId;
+        private Long postId;
         private String title;
         private Long comments;
         private Long likes;
+        private PostType type;
     }
 
     @Data

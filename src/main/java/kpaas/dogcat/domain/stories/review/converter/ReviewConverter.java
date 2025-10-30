@@ -5,6 +5,7 @@ import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.stories.review.dto.ReviewReqDTO;
 import kpaas.dogcat.domain.stories.review.dto.ReviewResDto;
 import kpaas.dogcat.domain.stories.review.entity.Review;
+import kpaas.dogcat.global.enums.PostType;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class ReviewConverter {
                 .adoptionAgency(dto.getAdoptionAgency())
                 .adoptionDate(dto.getAdoptionDate())    //입양일
                 .createdAt(LocalDateTime.now())         //후기 작성일
+                .postType(PostType.REVIEW)
                 .build();
     }
 

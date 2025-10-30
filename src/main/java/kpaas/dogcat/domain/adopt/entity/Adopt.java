@@ -7,6 +7,7 @@ import kpaas.dogcat.domain.adopt.enums.Region;
 import kpaas.dogcat.domain.chat.entity.ChatRoom;
 import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.pet.entity.Pet;
+import kpaas.dogcat.global.enums.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -60,6 +61,11 @@ public class Adopt {
     private LocalDateTime createdAt;
 
     private LocalDateTime appliedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    @Column(nullable = false)
+    private PostType postType = PostType.ADOPTION;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)

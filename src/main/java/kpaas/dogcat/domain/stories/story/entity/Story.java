@@ -5,6 +5,7 @@ import kpaas.dogcat.domain.member.entity.Member;
 import kpaas.dogcat.domain.pet.entity.Pet;
 import kpaas.dogcat.domain.stories.comment.entity.Comment;
 import kpaas.dogcat.domain.stories.like.entity.Like;
+import kpaas.dogcat.global.enums.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,6 +51,14 @@ public class Story {
 
     @Column(nullable = false, length = 2000)
     private String images;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PostType postType;
+
+    protected void setPostType(PostType postType) {
+        this.postType = postType;
+    }
 
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();

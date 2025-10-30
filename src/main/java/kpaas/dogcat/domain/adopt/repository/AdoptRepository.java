@@ -2,8 +2,6 @@ package kpaas.dogcat.domain.adopt.repository;
 
 import kpaas.dogcat.domain.adopt.entity.Adopt;
 import kpaas.dogcat.domain.adopt.enums.AdoptionStatus;
-import kpaas.dogcat.domain.donate.donation.entity.Donation;
-import kpaas.dogcat.domain.donate.donation.enums.DonationStatus;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +23,6 @@ public interface AdoptRepository extends JpaRepository<Adopt, Long>, AdoptQueryD
     List<Adopt> findByAdopterIdAndIdLessThanOrderByIdDesc(String adopterId, Long cursor, Pageable pageable);
 
     List<Adopt> findByStatus(AdoptionStatus adoptionStatus);
+
+//    List<Adopt> findAdoptionsByWalletAddress(String walletAddress, Long cursor, int size);
 }

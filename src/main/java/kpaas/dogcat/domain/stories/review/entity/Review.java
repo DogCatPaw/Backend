@@ -1,10 +1,9 @@
 package kpaas.dogcat.domain.stories.review.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
+import jakarta.persistence.*;
 import kpaas.dogcat.domain.stories.story.entity.Story;
+import kpaas.dogcat.global.enums.PostType;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -18,8 +17,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @SuperBuilder
 @EntityListeners(AuditingEntityListener.class)
-@DiscriminatorValue("ADOPTION")
+@DiscriminatorValue("REVIEW")
 public class Review extends Story {
+
+    @PrePersist
+    public void prePersist() { setPostType(PostType.REVIEW); }
 
     @Column(nullable = false)
     private String adoptionAgency;

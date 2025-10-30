@@ -14,4 +14,6 @@ public interface AdoptQueryDsl {
                                 Region region,
                                 String district,
                                 String keyword);
+
+    List<Adopt> findAdoptsByWalletAddress(String walletAddress, Long cursor, int size);
 }

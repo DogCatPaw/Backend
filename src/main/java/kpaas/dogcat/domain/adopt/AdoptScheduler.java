@@ -14,8 +14,8 @@ public class AdoptScheduler {
 
     private final AdoptCommandService adoptCommandService;
 
-//    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
+//    @Scheduled(fixedRate = 60000)
     public void closeExpiredAdoption() {
         log.info("[ 입양 공고 마감 스케줄러 시작 ]");
         adoptCommandService.closeAdoption();

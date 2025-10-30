@@ -1,6 +1,7 @@
 package kpaas.dogcat.domain.stories.dailyStory.dto;
 
 import kpaas.dogcat.domain.pet.enums.Breed;
+import kpaas.dogcat.global.enums.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class DailyStoryResDto {
         private String title;
         private String images;
         private String content;
+        private PostType postType;
     }
 
     @Data

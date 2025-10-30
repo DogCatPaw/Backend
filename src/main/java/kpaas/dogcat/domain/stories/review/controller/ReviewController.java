@@ -32,7 +32,7 @@ public class ReviewController {
     })
     @PostMapping()
     public CustomResponse<ReviewResDto.WriteReviewResDto> create(
-            @CurrentWalletAddress String walletAddress,
+            @Parameter(hidden = true) @CurrentWalletAddress String walletAddress,
             @RequestBody ReviewReqDTO.WriteReviewDTO dto){
         ReviewResDto.WriteReviewResDto createdReview = reviewCommandService.writeReview(walletAddress, dto);
         return CustomResponse.onSuccess(SuccessCode.CREATED, createdReview);
