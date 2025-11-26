@@ -1,0 +1,56 @@
+package kpaas.dogcat.domain.stories.like.service;
+
+import kpaas.dogcat.domain.member.entity.Member;
+import kpaas.dogcat.domain.member.repository.MemberRepository;
+import kpaas.dogcat.domain.stories.like.converter.LikeConverter;
+import kpaas.dogcat.domain.stories.like.dto.LikeResDTO;
+import kpaas.dogcat.domain.stories.like.entity.Like;
+import kpaas.dogcat.domain.stories.story.entity.Story;
+import kpaas.dogcat.domain.stories.like.repository.LikeRepository;
+import kpaas.dogcat.domain.stories.story.repository.StoryRepository;
+import kpaas.dogcat.global.apiPayload.code.CustomException;
+import kpaas.dogcat.global.apiPayload.code.ErrorCode;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Slf4j
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class LikeCommandService {
+
+    private final StoryRepository storyRepository;
+    private final MemberRepository memberRepository;
+    private final LikeRepository likeRepository;
+    private final LikeQueryService likeQueryService;
+    private final LikeConverter likeConverter;
+
+    public LikeResDTO createLike(Long storyId, String memberId) {
+        log.info("[ 좋아요 누르기 - 스토리: {} ]", storyId);
+        Story story = storyRepository.findById(storyId)
+                .orElseThrow(() -> new CustomException(ErrorCode.DAILYSTORY_NOTFOUND));
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOTFOUND));
+
+        boolean alreadyLike = isAlreadyLike(story, member);
+        Long likeCounts = likeQueryService.getLikeCount(storyId);
+
+        return likeConverter.toLikeResDTO(storyId, memberId, likeCounts, !alreadyLike);
+    }
+
+    public boolean isAlreadyLike(Story story, Member member) {
+        boolean alreadyLike = likeRepository.existsByStoryIdAndMemberId(story.getId(), member.getId());
+        if (alreadyLike) {
+            likeRepository.deleteByStoryIdAndMemberId(story.getId(), member.getId());
+            log.info("[ 좋아요 누르기 취소 ]");
+        } else {
+            Like savedLike = likeConverter.toLike(story, member);
+            likeRepository.save(savedLike);
+            log.info("[ 좋아요 누르기 완료 ]");
+        }
+        return alreadyLike;
+    }
+}

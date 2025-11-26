@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-api-server
+  namespace: petdid-network
+  labels:
+    app: spring-api-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-api-server
+  template:
+    metadata:
+      labels:
+        app: spring-api-server
+    spec:
+      containers:
+      - name: spring-api
+        image: dogcatpaw-registry.kr.ncr.ntruss.com/dogcatpaw_chat:test
+        command: ["java"]
+        args: [
+          "-jar",
+          "/.00000000-0000-0000-0000-000000000000/cache/build/build/libs/dogcat-0.0.1-SNAPSHOT.jar",
+          "--spring.config.additional-location=/config/"
+        ]
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: dev
+        - name: SPRING_DATASOURCE_URL
+          valueFrom:
+            secretKeyRef:
+              key: SPRING_DATASOURCE_URL
+              name: app-secrets
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: SPRING_DATASOURCE_USERNAME
+              name: app-secrets
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: SPRING_DATASOURCE_PASSWORD
+              name: app-secrets
+        - name: SPRING_DATA_REDIS_HOST
+          valueFrom:
+            secretKeyRef:
+              key: SPRING_DATA_REDIS_HOST
+              name: app-secrets
+        - name: SPRING_DATA_REDIS_PORT
+          valueFrom:
+            secretKeyRef:
+              key: SPRING_DATA_REDIS_PORT
+              name: app-secrets
+        - name: SPRING_DATA_REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: SPRING_DATA_REDIS_PASSWORD
+              name: app-secrets
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: JWT_SECRET
+              name: app-secrets
+        - name: NCP_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              key: NCP_ACCESS_KEY
+              name: app-secrets
+        - name: NCP_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: NCP_SECRET_KEY
+              name: app-secrets
+        - name: TOSS_PAYMENT_CLIENT_KEY
+          valueFrom:
+            secretKeyRef:
+              key: TOSS_PAYMENT_CLIENT_KEY
+              name: app-secrets
+        - name: TOSS_PAYMENT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: TOSS_PAYMENT_SECRET_KEY
+              name: app-secrets
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        volumeMounts:
+        - mountPath: /config
+          name: config-volume
+      imagePullSecrets:
+      - name: ncr-secret
+      volumes:
+      - configMap:
+          name: spring-config
+        name: config-volume

@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-config
+  namespace: petdid-network
+data:
+  application-dev.yml: |
+    spring:
+      datasource:
+        url: ${SPRING_DATASOURCE_URL}
+        username: ${SPRING_DATASOURCE_USERNAME}
+        password: ${SPRING_DATASOURCE_PASSWORD}
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      data:
+        redis:
+          host: ${SPRING_DATA_REDIS_HOST}
+          port: ${SPRING_DATA_REDIS_PORT}
+          password: ${SPRING_DATA_REDIS_PASSWORD}
+
+    jwt:
+      secret: ${JWT_SECRET}
+      time:
+        access-expiration: 3600000
+        refresh-expiration: 2592000000
+        
+    ncp:
+      storage:
+        region: kr-standard
+        endpoint: https://kr.object.ncloudstorage.com
+        bucket-name: dogcatpaw-backend
+        access-key: ${NCP_ACCESS_KEY}
+        secret-key: ${NCP_SECRET_KEY}
+        
+    toss:
+      client-key: ${TOSS_PAYMENT_CLIENT_KEY}
+      secret-key: ${TOSS_PAYMENT_SECRET_KEY}

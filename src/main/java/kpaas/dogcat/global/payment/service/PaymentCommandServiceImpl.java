@@ -1,0 +1,145 @@
+package kpaas.dogcat.global.payment.service;
+
+import kpaas.dogcat.domain.member.service.MemberQueryService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
+import kpaas.dogcat.global.apiPayload.code.CustomException;
+import kpaas.dogcat.global.apiPayload.code.ErrorCode;
+import kpaas.dogcat.domain.donate.item.Item;
+import kpaas.dogcat.domain.donate.item.ItemRepository;
+import kpaas.dogcat.domain.member.entity.Member;
+import kpaas.dogcat.domain.member.repository.MemberRepository;
+import kpaas.dogcat.global.payment.PaymentConfig;
+import kpaas.dogcat.global.payment.converter.PaymentConverter;
+import kpaas.dogcat.global.payment.dto.PaymentReqDTO;
+import kpaas.dogcat.global.payment.dto.PaymentResDTO;
+import kpaas.dogcat.global.payment.entity.Payment;
+import kpaas.dogcat.global.payment.enums.OrderStatus;
+import kpaas.dogcat.global.payment.repository.PaymentRepository;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class PaymentCommandServiceImpl {
+
+    private final PaymentRepository paymentRepository;
+    private final MemberRepository memberRepository;
+    private final MemberQueryService memberQueryService;
+    private final ItemRepository itemRepository;
+    private final PaymentConverter paymentConverter;
+    private final RestTemplate restTemplate;
+    private final PaymentConfig paymentConfig;
+
+    public PaymentResDTO.PrepareDTO preparePayment(PaymentReqDTO.PrepareDTO dto, String memberId) {
+        log.info("[ 결제 준비 시작 - 회원ID: {}, ItemId: {} ]", memberId, dto.getItemId());
+
+        Member member = memberQueryService.findById(memberId);
+        Item item = itemRepository.findById(dto.getItemId())
+                .orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOTFOUND));
+
+        String shortMemberId = memberId.length() > 10 ? memberId.substring(0, 10) : memberId;
+        String orderId = shortMemberId + "-order-" + UUID.randomUUID();
+        String orderName = item.getItemName() + " 1건";
+        Payment payment = paymentConverter.toPayment(orderId, orderName, item, member);
+        Payment savedPayment = paymentRepository.save(payment);
+        log.info("[ 결제 준비 완료 - 회원ID: {}, orderId: {}, 결제금액: {} ]", memberId, orderId, savedPayment.getTotalAmount());
+
+        return paymentConverter.toPrepareDTO(savedPayment);
+    }
+
+    public PaymentResDTO.ApproveDTO approvePayment(PaymentReqDTO.ApproveDTO dto, String memberId) {
+        log.info("[ 결제 승인 시작 - 회원ID: {}, orderId: {} ]", memberId, dto.getOrderId());
+
+        Member member = memberQueryService.findById(memberId);
+        Payment payment = paymentRepository.findByOrderId(dto.getOrderId())
+                .orElseThrow(() -> new CustomException(ErrorCode.PAYMENT_NOTFOUND));
+
+        // 결제 금액 확인
+        if(!dto.getFinalAmount().equals(payment.getTotalAmount())) {
+            throw new CustomException(ErrorCode.PAYMENT_AMOUNT_MISMATCH);
+        }
+
+        // 결제 승인 확인
+        try {
+            Map<String, Object> body = new HashMap<>();
+            body.put("paymentKey", dto.getPaymentKey());
+            body.put("orderId", dto.getOrderId());
+            body.put("amount", dto.getFinalAmount());
+
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, getHeaders());
+            ResponseEntity<PaymentResDTO.TossResponseDTO> responseEntity
+                    = restTemplate.postForEntity(paymentConfig.getURL(), entity, PaymentResDTO.TossResponseDTO.class);
+            PaymentResDTO.TossResponseDTO responseDto = getPaymentResponseDto(responseEntity);
+
+            log.info("[ 결제 승인 완료 - 회원ID: {}, orderId: {}, 결제금액: {} ]", memberId, dto.getOrderId(), responseDto.getTotalAmount());
+            payment.updateStatus(OrderStatus.DONE);
+            paymentRepository.save(payment);
+            member.chargeBone(responseDto.getTotalAmount());
+            memberRepository.save(member);
+
+            return paymentConverter.toApproveDTO(responseDto, payment);
+
+        } catch (HttpClientErrorException e) {
+            log.error("[TOSS 4xx 오류] {}", e.getResponseBodyAsString());
+            throw new CustomException(ErrorCode.PAYMENT_ABORTED);
+        } catch (HttpServerErrorException e) {
+            log.error("[TOSS 5xx 서버 오류] {}", e.getResponseBodyAsString());
+            throw new CustomException(ErrorCode.PAYMENT_UNSPECIFIED_ERROR);
+        } catch (CustomException e) {
+            log.warn("[비즈니스 예외] {}", e.getCode().getMessage());
+            throw e;
+        }
+    }
+
+    private HttpHeaders getHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth(paymentConfig.getSecretKey(), "");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        return headers;
+    }
+
+    private PaymentResDTO.TossResponseDTO getPaymentResponseDto(ResponseEntity<PaymentResDTO.TossResponseDTO> responseEntity) {
+        PaymentResDTO.TossResponseDTO responseDto = responseEntity.getBody();
+
+        if (responseDto == null) {
+            throw new CustomException(ErrorCode.PAYMENT_PROCESSING_ERROR);
+        }
+
+        // 상태가 DONE이 아닌 경우 결제된 상태 X
+        if(!responseDto.getStatus().equals("DONE"))  {
+            switch (responseDto.getStatus()) {
+                case "WAITING_FOR_DEPOSIT":
+                    throw new CustomException(ErrorCode.PAYMENT_WAITING_FOR_DEPOSIT);
+                case "IN_PROGRESS":
+                    throw new CustomException(ErrorCode.PAYMENT_IN_PROGRESS);
+                case "CANCELED":
+                    throw new CustomException(ErrorCode.PAYMENT_CANCELED);
+                case "PARTIAL_CANCELED":
+                    throw new CustomException(ErrorCode.PAYMENT_PARTIAL_CANCELED);
+                case "ABORTED":
+                    throw new CustomException(ErrorCode.PAYMENT_ABORTED);
+                case "EXPIRED":
+                    throw new CustomException(ErrorCode.PAYMENT_EXPIRED);
+                default:
+                    throw new CustomException(ErrorCode.PAYMENT_UNSPECIFIED_ERROR);
+            }
+        }
+        return responseDto;
+    }
+
+}

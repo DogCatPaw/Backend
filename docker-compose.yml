@@ -1,0 +1,41 @@
+services:
+  app:
+    build: .
+    image: agigora/dogcat
+    container_name: dogcat-app
+    ports:
+      - "8081:8080"
+    env_file:
+      - src/main/resources/.env
+    depends_on:
+      - mysql
+      - redis
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    container_name: dogcat-mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    env_file:
+      - src/main/resources/.env
+    ports:
+      - "3307:3306"   # 로컬에서 직접 접속할 때만 필요
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    container_name: dogcat-redis
+    env_file:
+      - src/main/resources/.env
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+    ports:
+      - "6380:6379"   # 로컬 테스트할 때만 필요
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  redis_data:

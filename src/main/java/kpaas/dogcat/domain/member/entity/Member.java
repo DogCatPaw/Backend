@@ -1,0 +1,101 @@
+package kpaas.dogcat.domain.member.entity;
+
+import jakarta.persistence.*;
+import kpaas.dogcat.domain.adopt.entity.Adopt;
+import kpaas.dogcat.domain.donate.donation.entity.Donation;
+import kpaas.dogcat.domain.donate.donationList.entity.DonationList;
+import kpaas.dogcat.domain.member.enums.Gender;
+import kpaas.dogcat.domain.member.enums.Role;
+import kpaas.dogcat.global.payment.entity.Payment;
+import kpaas.dogcat.domain.pet.entity.Pet;
+import kpaas.dogcat.global.apiPayload.code.CustomException;
+import kpaas.dogcat.global.apiPayload.code.ErrorCode;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
+public class Member {
+
+    // 지갑 주소 기본키
+    @Id @Column(nullable = false, unique = true)
+    private String id;
+
+    @Column(nullable = false)
+    private String username;
+
+    @Column(nullable = false, unique = true)
+    private String nickname;
+
+    private String profileUrl;
+
+    @Column(nullable = false)
+    private Gender gender;
+
+    @Column(nullable = false)
+    private int old;
+
+    @Column(nullable = false)
+    private String phoneNumber;
+
+    @Builder.Default
+    private Integer boneBalance = 0;    // 보유한 뼈다귀 수량, 1뼈다귀 = 1000원
+
+    @Builder.Default
+    private Integer settledBalance = 0; // 정산된 후원금
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<Pet> pets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Payment> payments;
+
+    public void chargeBone(Integer amount) {
+        if (!amount.equals(1000) && !amount.equals(5000)
+                && !amount.equals(10000) && !amount.equals(20000)) {
+            throw new CustomException(ErrorCode.INSUFFICIENT_BALANCE);
+        }
+        this.boneBalance += amount;
+    }
+
+    public Integer decreaseBone(Integer amount) {
+        if (this.boneBalance < amount) {
+            throw new CustomException(ErrorCode.BONE_NOT_ENOUGH);
+        }
+        this.boneBalance -= amount;
+        return boneBalance;
+    }
+
+    public void settleBone(Integer amount) {
+        this.settledBalance += amount;
+    }
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Donation> donations;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DonationList> donationListList;
+
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Adopt> adopts;
+
+}
